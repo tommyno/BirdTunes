@@ -1,6 +1,7 @@
 import { useFetchSpecies } from "hooks/useFetchSpecies";
 import { useFetchStation } from "hooks/useFetchStation";
 import Head from "next/head";
+import { timeAgo } from "utils/date";
 
 export default function Home() {
   // Fetch station data
@@ -48,6 +49,7 @@ export default function Home() {
                   {species.commonName} ({species.scientificName})
                 </h3>
                 <p>{species.detections.total} observasjoner</p>
+                <p>Hørt for {timeAgo(species.latestDetectionAt)}</p>
                 <img src={species.imageUrl} alt={species.commonName} />
               </div>
             ))}
