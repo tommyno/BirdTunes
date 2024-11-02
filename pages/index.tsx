@@ -20,6 +20,13 @@ export default function Home() {
     error: speciesError,
   } = useFetchSpecies();
 
+  // Sort by latest detection
+  const speciesLatest = [...speciesData].sort(
+    (a, b) =>
+      new Date(b.latestDetectionAt).getTime() -
+      new Date(a.latestDetectionAt).getTime()
+  );
+
   return (
     <>
       <Head>
@@ -35,7 +42,6 @@ export default function Home() {
 
         {!isLoadingStation && (
           <div>
-            <h2>Totalt</h2>
             <h3>{stationData?.detections || 0} observasjoner </h3>
             <h3>{stationData?.species || 0} ulike arter</h3>
             {stationError && <p>{stationError.toString()}</p>}
@@ -44,9 +50,9 @@ export default function Home() {
 
         {!isLoadingSpecies && (
           <div>
-            <h2>Arter</h2>
+            <h2>Sist observerte arter</h2>
             <BirdCardGrid>
-              {speciesData?.map((species) => (
+              {speciesLatest?.map((species) => (
                 <BirdCard data={species} key={species.id} />
               ))}
             </BirdCardGrid>
