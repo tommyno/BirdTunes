@@ -17,9 +17,22 @@ export const BirdCard: React.FC<Props> = ({ data }) => {
 
       <div className={styles.latin}>{data.scientificName}</div>
 
-      <p>{data.detections.total} observasjoner</p>
+      <p>
+        {data.detections.total} observasjon
+        {data.detections.total > 1 ? "er" : ""}
+      </p>
 
       <p>Hørt for {timeAgo(data.latestDetectionAt)}</p>
+
+      <p>
+        <a
+          href={`https://snl.no/${data.commonName.toLowerCase()}`}
+          target="_blank"
+          rel="noreferrer"
+        >
+          Store norske leksikon
+        </a>
+      </p>
     </div>
   );
 };
