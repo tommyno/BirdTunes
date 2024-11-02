@@ -5,48 +5,8 @@ body {
   position: relative;
 }
 
-// Global smooth scroll
-* {
-  scroll-behavior: smooth;
-}
-
-// Re-enable list style
-ul.list {
-  list-style: disc;
-  padding-left: 1em;
-
-  li {
-    margin-bottom: 0.5em;
-  }
-}
-
-ol.list {
-  list-style: none;
-  counter-reset: counter;
-
-  li {
-    counter-increment: counter;
-    position: relative;
-    padding-left: 1em;
-    margin-bottom: 0.5em;
-
-    &:before {
-      content: counter(counter) ". ";
-      position: absolute;
-      left: 0;
-    }
-  }
-}
-
-// Helpers
-.center {
-  text-align: center;
-  margin-left: center;
-  margin-right: center;
-}
-
-// SVG
-svg {
-  max-width: 100%;
-  height: auto;
+.wrap {
+  margin: 0 auto;
+  max-width: 1200px;
+  padding: 0 var(--spacing-3);
 }

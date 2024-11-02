@@ -1,3 +1,5 @@
+import { BirdCard } from "components/BirdCard";
+import { BirdCardGrid } from "components/BirdCardGrid";
 import { useFetchSpecies } from "hooks/useFetchSpecies";
 import { useFetchStation } from "hooks/useFetchStation";
 import Head from "next/head";
@@ -28,7 +30,7 @@ export default function Home() {
         />
       </Head>
 
-      <div>
+      <div className="wrap">
         <h1>Fuglesang</h1>
 
         {!isLoadingStation && (
@@ -43,16 +45,12 @@ export default function Home() {
         {!isLoadingSpecies && (
           <div>
             <h2>Arter</h2>
-            {speciesData?.map((species) => (
-              <div key={species.id}>
-                <h3>
-                  {species.commonName} ({species.scientificName})
-                </h3>
-                <p>{species.detections.total} observasjoner</p>
-                <p>Hørt for {timeAgo(species.latestDetectionAt)}</p>
-                <img src={species.imageUrl} alt={species.commonName} />
-              </div>
-            ))}
+            <BirdCardGrid>
+              {speciesData?.map((species) => (
+                <BirdCard data={species} key={species.id} />
+              ))}
+            </BirdCardGrid>
+
             {speciesError && <p>{speciesError.toString()}</p>}
           </div>
         )}

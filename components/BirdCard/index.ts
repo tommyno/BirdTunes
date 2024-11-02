@@ -1,0 +1,1 @@
+export { BirdCard } from './BirdCard';

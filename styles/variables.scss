@@ -4,6 +4,7 @@
   // Colors
   --color-white: #ffffff;
   --color-black: #1D1D1F;
+  --color-gray: #757575;
 
   // Spacing
   --spacing-1: 4px;
@@ -18,16 +19,8 @@
   --spacing-10: 80px;
   --spacing-11: 120px;
 
-  // Font sizes
-  --font-size-huge: 2.75rem; // 44px; 
-  --font-size-large: 2.25rem; // 36px; 
-  --font-size-medium: 1.5rem; // 24px
-  --font-size-default: 1.25rem; // 20px
-  --font-size-default-admin: 1rem; // 16px
-  --font-size-small: 0.875rem; // 14px
-
   // Gaps and gutters
-  --spacing-gap: var(--spacing-4);
+  --gap: var(--spacing-4);
   --gutter: var(--spacing-4);
 
   // Animations
@@ -36,15 +29,9 @@
 
   // Border
   --border-radius: var(--spacing-3);
-  --border-radius-small: var(--spacing-2);
 
   // Shadow
   --shadow-1: 0px 1.5px 3px 0px rgba(16, 24, 40, 0.06);
   --shadow-2: 0px 1.5px 4.5px 0px rgba(16, 24, 40, 0.1);
   --shadow-xs: 0px 1px 2px 0px rgba(16, 24, 40, 0.05);
-
-  // Page widths
-  --page-width-small: 440px;
-  --page-width-medium: 768px;
-  --page-width-large: 1024px;
 }

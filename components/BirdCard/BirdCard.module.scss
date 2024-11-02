@@ -1,0 +1,18 @@
+.wrap {
+  text-align: center;
+}
+
+.image {
+  border-radius: var(--border-radius);
+  margin: 0 auto;
+}
+
+.title {
+  margin: var(--spacing-2) 0 0;
+  font-size: 2rem;
+}
+
+.latin {
+  color: gray;
+  font-style: italic;
+}

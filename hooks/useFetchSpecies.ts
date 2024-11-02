@@ -1,7 +1,7 @@
 import { API_BASE_URL, STATION_ID } from "constants/birdweather";
 import { useEffect, useState } from "react";
 
-type Species = {
+export type Species = {
   id: number;
   commonName: string;
   scientificName: string;

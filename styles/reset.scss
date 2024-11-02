@@ -40,7 +40,7 @@ picture,
 video,
 canvas,
 svg {
-  display: inline-block;
+  display: block;
   max-width: 100%;
   height: auto;
 }
@@ -53,30 +53,4 @@ button,
 textarea,
 select {
   font: inherit;
-}
-
-/*
-  9. Create a root stacking context
-*/
-#root,
-#__next {
-  isolation: isolate;
-}
-
-// Remove list styling
-ul,
-ol {
-  list-style: none;
-  padding: 0;
-}
-
-// Default link reset
-a {
-  color: inherit;
-  text-decoration: none;
-  cursor: pointer;
-}
-
-summary {
-  cursor: pointer;
 }
