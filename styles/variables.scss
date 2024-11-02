@@ -1,0 +1,50 @@
+// Global variables
+:root {
+
+  // Colors
+  --color-white: #ffffff;
+  --color-black: #1D1D1F;
+
+  // Spacing
+  --spacing-1: 4px;
+  --spacing-2: 8px;
+  --spacing-3: 12px;
+  --spacing-4: 16px;
+  --spacing-5: 24px;
+  --spacing-6: 32px;
+  --spacing-7: 40px;
+  --spacing-8: 56px;
+  --spacing-9: 64px;
+  --spacing-10: 80px;
+  --spacing-11: 120px;
+
+  // Font sizes
+  --font-size-huge: 2.75rem; // 44px; 
+  --font-size-large: 2.25rem; // 36px; 
+  --font-size-medium: 1.5rem; // 24px
+  --font-size-default: 1.25rem; // 20px
+  --font-size-default-admin: 1rem; // 16px
+  --font-size-small: 0.875rem; // 14px
+
+  // Gaps and gutters
+  --spacing-gap: var(--spacing-4);
+  --gutter: var(--spacing-4);
+
+  // Animations
+  --transition: 0.1s cubic-bezier(0, 0, 0.3, 0.9);
+  --transition-other: 0.1s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+
+  // Border
+  --border-radius: var(--spacing-3);
+  --border-radius-small: var(--spacing-2);
+
+  // Shadow
+  --shadow-1: 0px 1.5px 3px 0px rgba(16, 24, 40, 0.06);
+  --shadow-2: 0px 1.5px 4.5px 0px rgba(16, 24, 40, 0.1);
+  --shadow-xs: 0px 1px 2px 0px rgba(16, 24, 40, 0.05);
+
+  // Page widths
+  --page-width-small: 440px;
+  --page-width-medium: 768px;
+  --page-width-large: 1024px;
+}
