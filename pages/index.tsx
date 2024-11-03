@@ -41,7 +41,7 @@ export default function Home() {
         <h1>Fuglesang</h1>
 
         {!isLoadingStation && (
-          <div>
+          <div style={{ margin: "16px 0" }}>
             <h3>{stationData?.detections || 0} observasjoner </h3>
             <h3>{stationData?.species || 0} ulike arter</h3>
             {stationError && <p>{stationError.toString()}</p>}
@@ -50,7 +50,7 @@ export default function Home() {
 
         {!isLoadingSpecies && (
           <div>
-            <h2>Sist observerte arter</h2>
+            <h2 className="h3">Sist observerte arter</h2>
             <BirdCardGrid>
               {speciesLatest?.map((species) => (
                 <BirdCard data={species} key={species.id} />

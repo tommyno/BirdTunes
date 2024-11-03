@@ -2,4 +2,8 @@
   display: grid;
   gap: var(--spacing-7) var(--spacing-5);
   grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+
+  @media (max-width: 600px) {
+    grid-template-columns: repeat(2, 1fr);
+  }
 }
