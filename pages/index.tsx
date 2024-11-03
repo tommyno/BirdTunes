@@ -67,13 +67,13 @@ export default function Home() {
             onClick={() => handleSortBy("active")}
             isActive={sort === "active"}
           >
-            Sist observert
+            Sist hørt
           </Button>
           <Button
             onClick={() => handleSortBy("observations")}
             isActive={sort === "observations"}
           >
-            Antall besøk
+            Flest besøk
           </Button>
         </div>
 
