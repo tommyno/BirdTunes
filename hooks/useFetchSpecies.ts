@@ -40,7 +40,7 @@ export const useFetchSpecies = (): Props => {
       setError(null);
       let allResults: Species[] = [];
       let currentPage = 1;
-      const url = `${API_BASE_URL}/stations/${STATION_ID}/species?locale=no`;
+      const url = `${API_BASE_URL}/stations/${STATION_ID}/species?locale=no&period=all`;
 
       try {
         // We're unable to fetch more than 100 results per page, so we're looping through all pages to get all results
