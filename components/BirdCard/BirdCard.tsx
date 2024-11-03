@@ -11,7 +11,14 @@ type Props = {
 export const BirdCard: React.FC<Props> = ({ data }) => {
   return (
     <div className={styles.wrap}>
-      <img src={data.imageUrl} alt={data.commonName} className={styles.image} />
+      <img
+        src={data.imageUrl}
+        alt={data.commonName}
+        className={styles.image}
+        loading="lazy"
+        width={400}
+        height={400}
+      />
 
       <h3 className={styles.title}>{data.commonName}</h3>
 
