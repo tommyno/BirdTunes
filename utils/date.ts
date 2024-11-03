@@ -20,3 +20,10 @@ export const timeAgo = (date: string) => {
     return `${days} dag${days !== 1 ? "er" : ""} siden`;
   }
 };
+
+// Returns today's date in ISO format, ex: 2024-02-19
+export const todayIso = () => {
+  const today = new Date();
+  const formattedDate = today.toISOString().split("T")[0];
+  return formattedDate;
+};
