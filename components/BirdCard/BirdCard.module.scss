@@ -23,9 +23,9 @@
 }
 
 .latin {
-  color: gray;
+  color: var(--color-gray);
   font-style: italic;
-  margin-bottom: var(--spacing-2);
+  margin: var(--spacing-1) 0 var(--spacing-1);
 
   a {
     text-decoration: underline;
