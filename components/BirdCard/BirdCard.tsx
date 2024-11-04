@@ -11,14 +11,22 @@ type Props = {
 export const BirdCard: React.FC<Props> = ({ data }) => {
   return (
     <div className={styles.wrap}>
-      <img
-        src={data.imageUrl}
-        alt={data.commonName}
-        className={styles.image}
-        loading="lazy"
-        width={400}
-        height={400}
-      />
+      <div
+        className={styles.imageWrap}
+        style={{ backgroundColor: `${data.color}40` }} // Reduce intensity of color
+      >
+        <img
+          src={data.imageUrl}
+          alt={data.commonName}
+          className={`${styles.image} fade-in-image fade-in-image-remove`}
+          loading="lazy"
+          width={400}
+          height={400}
+          onLoad={(e) =>
+            e.currentTarget.classList.remove("fade-in-image-remove")
+          }
+        />
+      </div>
 
       <h3 className={styles.title}>{data.commonName}</h3>
 

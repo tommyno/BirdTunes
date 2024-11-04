@@ -1,9 +1,15 @@
 .wrap {
   text-align: center;
+
+}
+
+.imageWrap {
+  border-radius: var(--border-radius);
+  overflow: hidden;
 }
 
 .image {
-  border-radius: var(--border-radius);
+
   margin: 0 auto;
 }
 

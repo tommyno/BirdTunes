@@ -11,3 +11,13 @@ body {
   padding: 0 var(--gap);
   text-align: center;
 }
+
+// Fade in image when loaded
+.fade-in-image {
+  transition: opacity 0.2s ease;
+  will-change: opacity;
+}
+
+.fade-in-image-remove {
+  opacity: 0;
+}
