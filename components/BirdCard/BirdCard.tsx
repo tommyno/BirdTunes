@@ -30,7 +30,16 @@ export const BirdCard: React.FC<Props> = ({ data }) => {
 
       <h3 className={styles.title}>{data.commonName}</h3>
 
-      <div className={styles.latin}>{data.scientificName}</div>
+      <div className={styles.latin}>
+        <a
+          href={`https://snl.no/${data.commonName.toLowerCase()}`}
+          target="_blank"
+          rel="noreferrer"
+          title="Gå til Store norske leksikon"
+        >
+          {data.scientificName}
+        </a>
+      </div>
 
       <p>
         {data.detections.total} observasjon
@@ -38,16 +47,6 @@ export const BirdCard: React.FC<Props> = ({ data }) => {
       </p>
 
       <p>Hørt for {timeAgo(data.latestDetectionAt)}</p>
-
-      <p>
-        <a
-          href={`https://snl.no/${data.commonName.toLowerCase()}`}
-          target="_blank"
-          rel="noreferrer"
-        >
-          Store norske leksikon
-        </a>
-      </p>
     </div>
   );
 };

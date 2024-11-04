@@ -25,4 +25,12 @@
 .latin {
   color: gray;
   font-style: italic;
+  margin-bottom: var(--spacing-2);
+
+  a {
+    text-decoration: underline;
+    text-underline-offset: 2px;
+    text-decoration-thickness: 0.5px;
+    color: inherit
+  }
 }
