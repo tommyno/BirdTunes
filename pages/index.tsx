@@ -49,6 +49,12 @@ export default function Home() {
           name="description"
           content="Lyttestasjon for fugler i nærområdet"
         />
+        <meta property="og:title" content="Fuglesang" />
+        <meta
+          property="og:description"
+          content="Lyttestasjon for fugler i nærområdet"
+        />
+        <meta property="og:image" content="/bluetit.jpg" />
       </Head>
 
       <div className="wrap">
