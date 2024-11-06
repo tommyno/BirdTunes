@@ -6,11 +6,25 @@
 .imageWrap {
   border-radius: var(--border-radius);
   overflow: hidden;
+  position: relative;
 }
 
 .image {
-
   margin: 0 auto;
+}
+
+.observations {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--spacing-1);
+  padding: var(--spacing-1) var(--spacing-2);
+  font-size: 0.875rem;
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  background: #ffffff98;
+  border-top-left-radius: var(--border-radius);
 }
 
 .title {

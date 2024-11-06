@@ -26,6 +26,11 @@ export const BirdCard: React.FC<Props> = ({ data }) => {
             e.currentTarget.classList.remove("fade-in-image-remove")
           }
         />
+
+        <div className={styles.observations}>
+          <img src="/icons/eye.svg" alt="" />
+          {data.detections.total}
+        </div>
       </div>
 
       <h3 className={styles.title}>{data.commonName}</h3>
@@ -40,11 +45,6 @@ export const BirdCard: React.FC<Props> = ({ data }) => {
           {data.scientificName}
         </a>
       </div>
-
-      <p>
-        {data.detections.total} observasjon
-        {data.detections.total > 1 ? "er" : ""}
-      </p>
 
       <p>Hørt for {timeAgo(data.latestDetectionAt)}</p>
     </div>
