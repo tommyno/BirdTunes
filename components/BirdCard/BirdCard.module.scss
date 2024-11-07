@@ -21,8 +21,8 @@
   padding: var(--spacing-1) var(--spacing-2);
   font-size: 0.875rem;
   position: absolute;
-  bottom: 0;
-  right: 0;
+  bottom: -1px;
+  right: -1px;
   background: var(--color-white);
   border-top-left-radius: var(--border-radius);
 }
