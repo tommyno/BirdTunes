@@ -1,5 +1,5 @@
 body {
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  font-family: var(--font-default);
   font-size: 1rem;
   font-weight: normal;
 }
@@ -9,7 +9,7 @@ h1,
   font-size: 3rem;
   line-height: normal;
   text-wrap: balance;
-  font-family: Georgia, Times, Times New Roman, serif;
+  font-family: var(--font-decorative);
   font-weight: 600;
   line-height: 1.1;
 }
@@ -34,18 +34,4 @@ h3,
 p,
 .p {
   line-height: 1.4;
-}
-
-strong,
-.strong {
-  font-weight: bold;
-}
-
-.centered {
-  text-align: center;
-}
-
-small,
-.small {
-  font-size: 0.875rem;
 }

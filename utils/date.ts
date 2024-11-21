@@ -1,4 +1,4 @@
-// Output relative time, ex: 12 minutter siden / 16 timer siden / 2 dager siden
+// Return relative time, ex: 12 minutter siden / 16 timer siden / 2 dager siden
 export const timeAgo = (date: string) => {
   if (!date) {
     return;

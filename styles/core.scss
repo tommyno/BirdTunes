@@ -3,12 +3,13 @@ body {
   min-width: 320px;
   vertical-align: baseline;
   position: relative;
+  color: var(--color-black);
 }
 
 .wrap {
   margin: 0 auto;
   max-width: 1200px;
-  padding: 0 var(--gap);
+  padding: var(--gap) var(--gap) var(--spacing-7) var(--gap);
   text-align: center;
 }
 

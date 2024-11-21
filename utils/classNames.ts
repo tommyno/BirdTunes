@@ -1,9 +1,14 @@
-// Usage example:
-// const buttonClass = classNames(
-//   styles.button, // Always include
-//   { [styles.active]: !!isActive } // Conditionally include
-// );
-// <Button className={buttonClass} />
+/*
+Usage example:
+
+const buttonClass = classNames(
+  styles.button, // Always include
+  { [styles.active]: !!isActive } // Conditionally include .active class
+);
+
+<Button className={buttonClass} />
+
+*/
 
 export const classNames = (
   ...args: Array<string | { [key: string]: boolean }>
