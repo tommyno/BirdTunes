@@ -4,21 +4,12 @@ import { Button } from "components/Button";
 import { Spinner } from "components/Spinner";
 import { STATION_ID } from "constants/birdweather";
 import { useFetchSpecies } from "hooks/useFetchSpecies";
-import { useFetchStation } from "hooks/useFetchStation";
 import Head from "next/head";
 import { useSearchParams } from "next/navigation";
 import { useRouter } from "next/router";
-import { useEffect } from "react";
 
 export default function Home() {
   const router = useRouter();
-
-  // Fetch station data
-  const {
-    data: stationData,
-    isLoading: isLoadingStation,
-    error: stationError,
-  } = useFetchStation();
 
   // Fetch species data
   const searchParams = useSearchParams();
@@ -54,6 +45,12 @@ export default function Home() {
     router.push({ query: { ...router.query, sort: sortBy } });
   };
 
+  // Find total detections
+  const totalDetections = speciesData.reduce(
+    (total, species) => total + species.detections.total,
+    0
+  );
+
   return (
     <>
       <Head>
@@ -73,11 +70,11 @@ export default function Home() {
       <div className="wrap">
         <h1>Fuglesang</h1>
 
-        {!isLoadingStation && (
+        {!isLoadingSpecies && (
           <div style={{ margin: "16px 0" }}>
-            <p>{stationData?.detections || 0} observasjoner </p>
-            <p>{stationData?.species || 0} ulike arter</p>
-            {stationError && <p>{stationError.toString()}</p>}
+            <p>{totalDetections} observasjoner </p>
+            <p>{speciesData?.length || 0} ulike arter</p>
+            {speciesError && <p>{speciesError.toString()}</p>}
           </div>
         )}
 
@@ -111,7 +108,7 @@ export default function Home() {
           </div>
         )}
 
-        {isLoadingStation && <Spinner />}
+        {isLoadingSpecies && <Spinner />}
       </div>
     </>
   );
