@@ -1,4 +1,4 @@
-import { API_BASE_URL, STATION_ID } from "constants/birdweather";
+import { API_BASE_URL } from "constants/birdweather";
 import { useEffect, useState } from "react";
 
 export type Species = {
@@ -29,7 +29,13 @@ type PageData = {
   success: boolean;
 };
 
-export const useFetchSpecies = (): Props => {
+type FetchSpeciesOptions = {
+  station?: string | number;
+  locale?: string;
+  period?: string;
+};
+
+export const useFetchSpecies = (options?: FetchSpeciesOptions): Props => {
   const [data, setData] = useState<Species[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<Error | null>(null);
@@ -40,12 +46,25 @@ export const useFetchSpecies = (): Props => {
       setError(null);
       let allResults: Species[] = [];
       let currentPage = 1;
-      const url = `${API_BASE_URL}/stations/${STATION_ID}/species?locale=no&period=all`;
+
+      const station = options?.station;
+      const locale = options?.locale;
+      const period = options?.period;
+
+      if (!station) {
+        setError(new Error("Station ID is required"));
+        setIsLoading(false);
+        return;
+      }
+
+      const baseUrl = `${API_BASE_URL}/stations/${station}/species`;
+      const url = `${baseUrl}?locale=${locale}&period=${period}`;
 
       try {
         // We're unable to fetch more than 100 results per page, so we're looping through all pages to get all results
         while (true) {
           const response = await fetch(`${url}&page=${currentPage}`);
+
           if (!response.ok) {
             throw new Error(`Error: ${response.status} ${response.statusText}`);
           }
@@ -56,7 +75,6 @@ export const useFetchSpecies = (): Props => {
           if (pageData?.species?.length < 100) {
             break; // Exit loop when the last page is reached (less than 100 results on the page)
           }
-
           currentPage++;
         }
 
@@ -69,7 +87,7 @@ export const useFetchSpecies = (): Props => {
     };
 
     fetchAllPages();
-  }, []);
+  }, [options?.station, options?.locale, options?.period]);
 
   return { data, isLoading, error };
 };

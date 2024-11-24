@@ -2,12 +2,17 @@ import { BirdCard } from "components/BirdCard";
 import { BirdCardGrid } from "components/BirdCardGrid";
 import { Button } from "components/Button";
 import { Spinner } from "components/Spinner";
+import { STATION_ID } from "constants/birdweather";
 import { useFetchSpecies } from "hooks/useFetchSpecies";
 import { useFetchStation } from "hooks/useFetchStation";
 import Head from "next/head";
+import { useSearchParams } from "next/navigation";
 import { useRouter } from "next/router";
+import { useEffect } from "react";
 
 export default function Home() {
+  const router = useRouter();
+
   // Fetch station data
   const {
     data: stationData,
@@ -16,11 +21,20 @@ export default function Home() {
   } = useFetchStation();
 
   // Fetch species data
+  const searchParams = useSearchParams();
+  const station = searchParams.get("station") || STATION_ID;
+  const locale = searchParams.get("locale") || "no";
+  const period = searchParams.get("period") || "all";
+
   const {
     data: speciesData,
     isLoading: isLoadingSpecies,
     error: speciesError,
-  } = useFetchSpecies();
+  } = useFetchSpecies({
+    station,
+    locale: locale,
+    period: period,
+  });
 
   // Sort by latest detection (active species)
   const speciesActive = [...speciesData].sort(
@@ -35,7 +49,6 @@ export default function Home() {
   );
 
   // Toggle different views
-  const router = useRouter();
   const { sort = "active" } = router.query;
   const handleSortBy = (sortBy: string) => {
     router.push({ query: { ...router.query, sort: sortBy } });
