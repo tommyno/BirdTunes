@@ -20,9 +20,9 @@ Update `constants/birdweather.ts` if you want to change the default station.
 
 ## Planned updates
 
-- Support other stations (?stationId=xxxx)
+- ✅ Support other stations (?stationId=xxxx)
 - Support multiple languages (?lang=en)
-- Full screen view of birds, with additional data
+- Full screen bird-view, with additional data
 - Show and play recorded bird samples
 - Filter: Search
 - Filter: Today / Last 24 hours
