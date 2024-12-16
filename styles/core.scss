@@ -1,4 +1,14 @@
 // Globals
+html {
+  scroll-behavior: smooth;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+}
+
 body {
   min-width: 320px;
   vertical-align: baseline;
@@ -21,4 +31,28 @@ body {
 
 .fade-in-image-remove {
   opacity: 0;
+}
+
+.link {
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  text-decoration-thickness: 0.5px;
+  color: inherit;
+}
+
+.footer {
+  padding: var(--spacing-7) 0 var(--spacing-2);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
 }

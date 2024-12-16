@@ -109,6 +109,18 @@ export default function Home() {
         )}
 
         {isLoadingSpecies && <Spinner />}
+
+        {!isLoadingSpecies && (
+          <div className="footer">
+            <div></div>
+            <a href="#" className="link">
+              Til toppen ↑
+            </a>
+            <a href="https://github.com/tommyno/fuglesang" className="link">
+              Github ↗
+            </a>
+          </div>
+        )}
       </div>
     </>
   );
