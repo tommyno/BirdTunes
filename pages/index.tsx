@@ -10,31 +10,31 @@ import { useRouter } from "next/router";
 
 export default function Home() {
   const router = useRouter();
-
-  // Fetch species data
   const searchParams = useSearchParams();
-  const station = searchParams.get("station") || STATION_ID;
-  const locale = searchParams.get("locale") || "no";
-  const period = searchParams.get("period") || "all";
+  const isReady = router.isReady && searchParams !== null;
+
+  // Only get params after router is ready
+  const station = isReady ? searchParams.get("station") || STATION_ID : null;
+  const locale = isReady ? searchParams.get("locale") || "no" : null;
+  const period = isReady ? searchParams.get("period") || "all" : null;
 
   const {
-    data: speciesData,
+    data: speciesData = [],
     isLoading: isLoadingSpecies,
     error: speciesError,
   } = useFetchSpecies({
     station,
-    locale: locale,
-    period: period,
+    locale,
+    period,
+    enabled: isReady,
   });
 
-  // Sort by latest detection (active species)
+  // Ensure speciesData exists before sorting
   const speciesActive = [...speciesData].sort(
     (a, b) =>
       new Date(b.latestDetectionAt).getTime() -
       new Date(a.latestDetectionAt).getTime()
   );
-
-  // Sort by total detections
   const speciesObservations = [...speciesData].sort(
     (a, b) => b.detections.total - a.detections.total
   );
@@ -46,7 +46,7 @@ export default function Home() {
   };
 
   // Find total detections
-  const totalDetections = speciesData.reduce(
+  const totalDetections = speciesData?.reduce(
     (total, species) => total + species.detections.total,
     0
   );

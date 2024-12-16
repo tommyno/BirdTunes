@@ -29,13 +29,22 @@ type PageData = {
   success: boolean;
 };
 
-type FetchSpeciesOptions = {
-  station?: string | number;
-  locale?: string;
-  period?: string;
+type FetchSpeciesParams = {
+  station: string | null;
+  locale: string | null;
+  period: string | null;
+  enabled?: boolean;
 };
 
-export const useFetchSpecies = (options?: FetchSpeciesOptions): Props => {
+export function useFetchSpecies({
+  station,
+  locale,
+  period,
+  enabled = true,
+}: FetchSpeciesParams) {
+  // Delay fetch until query params are ready
+  const shouldFetch = enabled && station && locale && period;
+
   const [data, setData] = useState<Species[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<Error | null>(null);
@@ -47,12 +56,8 @@ export const useFetchSpecies = (options?: FetchSpeciesOptions): Props => {
       let allResults: Species[] = [];
       let currentPage = 1;
 
-      const station = options?.station;
-      const locale = options?.locale;
-      const period = options?.period;
-
-      if (!station) {
-        setError(new Error("Station ID is required"));
+      if (!shouldFetch) {
+        setError(new Error("Invalid parameters"));
         setIsLoading(false);
         return;
       }
@@ -87,7 +92,7 @@ export const useFetchSpecies = (options?: FetchSpeciesOptions): Props => {
     };
 
     fetchAllPages();
-  }, [options?.station, options?.locale, options?.period]);
+  }, [shouldFetch]);
 
   return { data, isLoading, error };
-};
+}
