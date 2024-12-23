@@ -6,6 +6,8 @@ This is an experimental project to discover and track the birds in our garden. I
 
 https://fuglesang.vercel.app
 
+Add ?station=xxxx to use your own Bordweather statiom. 
+
 ## Current setup
 
 A Raspberry Pi 5 and an outdoors microphone to listen to the enviroment, and AI-powered bird sound recognition from [BirdNet Sound ID](https://birdnet.cornell.edu/). The data is handled by [BirdNET-PI](https://github.com/Nachtzuster/BirdNET-Pi) and uploaded to [Birdweather](https://app.birdweather.com/) for additional verification.
@@ -20,7 +22,7 @@ Update `constants/birdweather.ts` if you want to change the default station.
 
 ## Planned updates
 
-- ✅ Support other stations (?stationId=xxxx)
+- ✅ Support other stations (?station=xxxx)
 - Support multiple languages (?lang=en)
 - Full screen bird-view, with additional data
 - Show and play recorded bird samples
