@@ -6,7 +6,7 @@ This is an experimental project to discover and track the birds in our garden. I
 
 https://fuglesang.vercel.app
 
-Add ?station=xxxx to use your own Bordweather statiom. 
+Add ?station=xxxx to use your own Birdweather station. 
 
 ## Current setup
 
