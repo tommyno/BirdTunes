@@ -6,7 +6,7 @@ This is an experimental project to discover and track the birds in our garden. I
 
 https://fuglesang.vercel.app
 
-Add ?station=xxxx to use your own Birdweather station. 
+Add ?station=xxxx to use your own Birdweather station.
 
 ## Current setup
 
@@ -24,8 +24,8 @@ Update `constants/birdweather.ts` if you want to change the default station.
 
 - ✅ Support other stations (?station=xxxx)
 - Support multiple languages (?lang=en)
-- Full screen bird-view, with additional data
-- Show and play recorded bird samples
+- ✅ Full screen bird-view, with additional data
+- ✅ Show and play recorded bird samples
 - Filter: Search
 - Filter: Today / Last 24 hours
 - Filter: Sort by newest detected species (firstDetectedAt)

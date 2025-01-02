@@ -1,0 +1,32 @@
+.player {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--spacing-2);
+}
+
+.playButton {
+  all: unset;
+  cursor: pointer;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--color-winter);
+  border-radius: 50%;
+  transition: transform 0.1s ease;
+
+  &:hover {
+    transform: scale(1.1);
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--color-winter);
+    outline-offset: 2px;
+  }
+
+  img {
+    width: 16px;
+    height: 16px;
+  }
+}

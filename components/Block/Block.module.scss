@@ -1,0 +1,36 @@
+.block {
+  display: block;
+}
+
+// Modifiers
+
+.-center {
+  text-align: center;
+  margin-left: center;
+  margin-right: center;
+}
+
+// Generate sizes
+@for $i from 1 through 11 {
+  .-top-#{$i} {
+    margin-top: var(--spacing-#{$i});
+  }
+}
+
+@for $i from 1 through 11 {
+  .-right-#{$i} {
+    margin-right: var(--spacing-#{$i});
+  }
+}
+
+@for $i from 1 through 11 {
+  .-bottom-#{$i} {
+    margin-bottom: var(--spacing-#{$i});
+  }
+}
+
+@for $i from 1 through 11 {
+  .-left-#{$i} {
+    margin-left: var(--spacing-#{$i});
+  }
+}

@@ -5,8 +5,8 @@ import { API_BASE_URL, STATION_ID } from "constants/birdweather";
 export type Detection = {
   id: number;
   timestamp: string; // ISO date string
-  species: {
-    soundscape: string;
+  soundscape: {
+    url: string;
   };
 };
 

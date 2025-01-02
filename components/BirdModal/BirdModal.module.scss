@@ -14,3 +14,11 @@
   margin-bottom: var(--spacing-5);
   text-align: center;
 }
+
+.detection {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--spacing-2);
+  margin-bottom: var(--spacing-3);
+}
