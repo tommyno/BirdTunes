@@ -18,12 +18,6 @@ export type Species = {
   latestDetectionAt: string; // ISO date string
 };
 
-type Props = {
-  data: Species[];
-  isLoading: boolean;
-  error: Error | null;
-};
-
 type PageData = {
   species: Species[];
   success: boolean;

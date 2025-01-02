@@ -27,3 +27,24 @@ export const todayIso = () => {
   const formattedDate = today.toISOString().split("T")[0];
   return formattedDate;
 };
+
+// Ex: 11.09.2024 14:20:46
+export const dateDetailed = (date?: string) => {
+  if (!date) {
+    return;
+  }
+  const dateObject = new Date(date);
+
+  const options: Intl.DateTimeFormatOptions = {
+    day: "2-digit",
+    month: "2-digit",
+    year: "numeric",
+    timeZone: "Europe/Oslo",
+  };
+
+  return (
+    dateObject.toLocaleDateString("no", options) +
+    " " +
+    dateObject.toLocaleTimeString("no")
+  );
+};

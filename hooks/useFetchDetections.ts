@@ -2,19 +2,22 @@ import { useEffect, useState } from "react";
 
 import { API_BASE_URL, STATION_ID } from "constants/birdweather";
 
-type StationStats = {
-  detections: number;
-  species: number;
+export type Detection = {
+  id: number;
+  timestamp: string; // ISO date string
+  species: {
+    soundscape: string;
+  };
 };
 
 type Props = {
-  data: StationStats | null;
+  data: Detection[] | null;
   isLoading: boolean;
   error: Error | null;
 };
 
-export const useFetchStation = (): Props => {
-  const [data, setData] = useState<StationStats | null>(null);
+export const useFetchDetections = (speciesId: number): Props => {
+  const [data, setData] = useState<Detection[] | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<Error | null>(null);
 
@@ -22,14 +25,14 @@ export const useFetchStation = (): Props => {
     const fetchData = async () => {
       setIsLoading(true);
 
-      const url = `${API_BASE_URL}/stations/${STATION_ID}/stats?period=all`;
+      const url = `${API_BASE_URL}/stations/${STATION_ID}/detections?limit=5&speciesId=${speciesId}&locale=no&order=desc`;
       try {
         const response = await fetch(url);
         if (!response.ok) {
           throw new Error(`Error: ${response.status} ${response.statusText}`);
         }
         const data = await response.json();
-        setData(data);
+        setData(data?.detections);
       } catch (err) {
         setError(err as Error);
       } finally {

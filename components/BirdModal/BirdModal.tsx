@@ -1,9 +1,10 @@
 import { Species } from "hooks/useFetchSpecies";
+
 import { Modal } from "components/Modal/Modal";
 import styles from "./BirdModal.module.scss";
-import { Flow } from "components/Flow";
-import { Flex } from "components/Flex";
-import { timeAgo } from "utils/date";
+import { dateDetailed } from "utils/date";
+import { useFetchDetections } from "hooks/useFetchDetections";
+import { Spinner } from "components/Spinner";
 
 type BirdModalProps = {
   bird: Species;
@@ -12,6 +13,8 @@ type BirdModalProps = {
 };
 
 export function BirdModal({ bird, isOpen, onClose }: BirdModalProps) {
+  const { data, isLoading, error } = useFetchDetections(bird.id);
+
   return (
     <Modal isOpen={isOpen} onClose={onClose}>
       <div className={styles.content}>
@@ -41,8 +44,16 @@ export function BirdModal({ bird, isOpen, onClose }: BirdModalProps) {
           </p>
 
           <p>{bird.detections.total} observasjoner</p>
+        </div>
 
-          <p>Hørt for {timeAgo(bird.latestDetectionAt)}</p>
+        <div className={styles.detections}>
+          <h2 className="h4">Siste {data?.length} observasjoner</h2>
+          {isLoading && <Spinner />}
+          {data?.map((detection) => (
+            <div key={detection.id}>
+              <p>{dateDetailed(detection.timestamp)}</p>
+            </div>
+          ))}
         </div>
       </div>
     </Modal>
