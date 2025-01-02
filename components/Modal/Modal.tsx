@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import styles from "./Modal.module.scss";
 import { classNames } from "utils/classNames";
+import useBodyFreeze from "utils/useBodyFreeze";
 
 type ModalProps = {
   isOpen: boolean;
@@ -11,6 +12,8 @@ type ModalProps = {
 export const Modal: React.FC<ModalProps> = ({ isOpen, onClose, children }) => {
   const [isVisible, setIsVisible] = useState(false);
   const modalRef = useRef<HTMLDivElement>(null);
+
+  useBodyFreeze(isOpen);
 
   useEffect(() => {
     setIsVisible(isOpen);
