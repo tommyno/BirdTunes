@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-
+import React, { useState, useEffect } from "react";
+import { useRouter } from "next/router";
 import styles from "./Settings.module.scss";
 import { Species } from "hooks/useFetchSpecies";
 import { Input } from "components/Input/Input";
@@ -7,16 +7,21 @@ import { Input } from "components/Input/Input";
 type Props = {
   speciesData?: Species[];
   speciesError?: Error | null;
-  onFilterChange: (filter: string) => void;
 };
 
-export const Settings: React.FC<Props> = ({
-  speciesData,
-  speciesError,
-  onFilterChange,
-}) => {
+export const Settings: React.FC<Props> = ({ speciesData, speciesError }) => {
+  const router = useRouter();
   const [isOpen, setIsOpen] = useState(false);
   const [inputValue, setInputValue] = useState("");
+
+  // Initialize input value from URL on mount
+  useEffect(() => {
+    const searchParam = router.query.search as string;
+    if (searchParam) {
+      setInputValue(searchParam);
+      setIsOpen(true);
+    }
+  }, [router.query.search]);
 
   const totalDetections = speciesData?.reduce(
     (total, species) => total + species.detections.total,
@@ -26,7 +31,15 @@ export const Settings: React.FC<Props> = ({
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
     setInputValue(value);
-    onFilterChange(value);
+
+    // Update URL with search param
+    const query = { ...router.query };
+    if (value) {
+      query.search = value;
+    } else {
+      delete query.search;
+    }
+    router.push({ query }, undefined, { shallow: true });
   };
 
   const handleToggleSettings = () => {
@@ -36,7 +49,9 @@ export const Settings: React.FC<Props> = ({
     // Reset filter when closing
     if (!newIsOpen) {
       setInputValue("");
-      onFilterChange("");
+      const query = { ...router.query };
+      delete query.search;
+      router.push({ query }, undefined, { shallow: true });
     }
   };
 

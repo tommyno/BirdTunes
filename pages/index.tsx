@@ -19,6 +19,7 @@ export default function Home() {
   const station = isReady ? searchParams.get("station") || STATION_ID : null;
   const locale = isReady ? searchParams.get("locale") || "no" : null;
   const period = isReady ? searchParams.get("period") || "all" : null;
+  const searchFilter = isReady ? searchParams.get("search") : "";
 
   const {
     data: speciesData = [],
@@ -44,13 +45,6 @@ export default function Home() {
   const { sort = "active" } = router.query;
   const handleSortBy = (sortBy: string) => {
     router.push({ query: { ...router.query, sort: sortBy } });
-  };
-
-  // Inline search
-  const [searchFilter, setSearchFilter] = useState("");
-
-  const handleSearchFilterChange = (value: string) => {
-    setSearchFilter(value.toLowerCase());
   };
 
   const filteredSpecies = useMemo(() => {
@@ -85,11 +79,7 @@ export default function Home() {
         <h1>Fuglesang</h1>
 
         {!isLoadingSpecies && (
-          <Settings
-            speciesData={speciesData}
-            speciesError={speciesError}
-            onFilterChange={handleSearchFilterChange}
-          />
+          <Settings speciesData={speciesData} speciesError={speciesError} />
         )}
 
         <div style={{ margin: "16px 0 24px" }}>
