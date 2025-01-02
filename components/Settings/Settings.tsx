@@ -65,7 +65,13 @@ export const Settings: React.FC<Props> = ({ speciesData, speciesError }) => {
         </div>
       )}
 
-      {isOpen && <Input value={inputValue} handleChange={handleInputChange} />}
+      {isOpen && (
+        <Input
+          value={inputValue}
+          handleChange={handleInputChange}
+          autoFocus={true}
+        />
+      )}
 
       <button
         className={styles.button}
