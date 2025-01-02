@@ -19,7 +19,9 @@ export default function Home() {
   const station = isReady ? searchParams.get("station") || STATION_ID : null;
   const locale = isReady ? searchParams.get("locale") || "no" : null;
   const period = isReady ? searchParams.get("period") || "all" : null;
-  const searchFilter = isReady ? searchParams.get("search") : "";
+  const searchFilter = isReady
+    ? searchParams.get("search")?.toString()?.toLowerCase()
+    : "";
 
   const {
     data: speciesData = [],
