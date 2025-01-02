@@ -27,13 +27,17 @@
   border-radius: var(--border-radius);
   box-shadow: var(--shadow-2);
   outline: none;
-  max-height: 90vh;
   transform: scale(0.9);
   transition: transform 0.1s ease;
   position: relative;
   overflow: hidden;
   display: flex;
   flex-direction: column;
+  max-height: 90dvh;
+
+  @supports not (max-height: 90dvh) {
+    max-height: 90vh;
+  }
 
   .modalVisible & {
     transform: scale(1);
