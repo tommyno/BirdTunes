@@ -1,0 +1,60 @@
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.1s ease, visibility 0.1s ease;
+  background: #314023ee;
+  backdrop-filter: blur(2px);
+
+  &.modalVisible {
+    opacity: 1;
+    visibility: visible;
+  }
+}
+
+.wrap {
+  margin: var(--gap);
+  padding: var(--spacing-3);
+  background-color: var(--color-white);
+  border-radius: var(--border-radius);
+  box-shadow: var(--shadow-2);
+  outline: none;
+  max-height: 90vh;
+  transform: scale(0.9);
+  transition: transform 0.1s ease;
+  position: relative;
+
+  .modalVisible & {
+    transform: scale(1);
+  }
+}
+
+.closeButton {
+  all: unset;
+  line-height: 1;
+  cursor: pointer;
+  padding: var(--spacing-2);
+  position: absolute;
+  top: -6px;
+  right: -6px;
+  z-index: 9;
+  border-radius: 50%;
+  background-color: var(--color-winter);
+
+  &:hover,
+  &:focus {
+    background-color: var(--color-gray);
+  }
+}
+
+.content {
+  overflow-y: auto;
+}

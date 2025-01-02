@@ -29,7 +29,6 @@ export default function Home() {
     enabled: isReady,
   });
 
-  // Ensure speciesData exists before sorting
   const speciesActive = [...speciesData].sort(
     (a, b) =>
       new Date(b.latestDetectionAt).getTime() -
@@ -46,7 +45,7 @@ export default function Home() {
   };
 
   // Find total detections
-  const totalDetections = speciesData?.reduce(
+  const totalDetections = speciesData.reduce(
     (total, species) => total + species.detections.total,
     0
   );

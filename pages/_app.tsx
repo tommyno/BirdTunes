@@ -1,8 +1,8 @@
 import type { AppProps } from "next/app";
 import Head from "next/head";
+import { ModalProvider } from "contexts/ModalContext";
 
 import "/styles/index.scss";
-
 export default function App({ Component, pageProps }: AppProps) {
   return (
     <>
@@ -11,7 +11,9 @@ export default function App({ Component, pageProps }: AppProps) {
         <meta charSet="utf-8" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <Component {...pageProps} />
+      <ModalProvider>
+        <Component {...pageProps} />
+      </ModalProvider>
     </>
   );
 }
