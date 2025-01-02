@@ -31,6 +31,9 @@
   transform: scale(0.9);
   transition: transform 0.1s ease;
   position: relative;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
 
   .modalVisible & {
     transform: scale(1);
@@ -43,8 +46,8 @@
   cursor: pointer;
   padding: var(--spacing-2);
   position: absolute;
-  top: -6px;
-  right: -6px;
+  top: var(--spacing-5);
+  right: var(--spacing-5);
   z-index: 9;
   border-radius: 50%;
   background-color: var(--color-winter);
@@ -57,4 +60,6 @@
 
 .content {
   overflow-y: auto;
+  flex: 1;
+  -webkit-overflow-scrolling: touch;
 }
