@@ -1,12 +1,14 @@
 import { BirdCard } from "components/BirdCard";
 import { BirdCardGrid } from "components/BirdCardGrid";
 import { Button } from "components/Button";
+import { Settings } from "components/Settings";
 import { Spinner } from "components/Spinner";
 import { STATION_ID } from "constants/birdweather";
 import { useFetchSpecies } from "hooks/useFetchSpecies";
 import Head from "next/head";
 import { useSearchParams } from "next/navigation";
 import { useRouter } from "next/router";
+import { useState, useMemo } from "react";
 
 export default function Home() {
   const router = useRouter();
@@ -44,11 +46,24 @@ export default function Home() {
     router.push({ query: { ...router.query, sort: sortBy } });
   };
 
-  // Find total detections
-  const totalDetections = speciesData.reduce(
-    (total, species) => total + species.detections.total,
-    0
-  );
+  // Inline search
+  const [searchFilter, setSearchFilter] = useState("");
+
+  const handleSearchFilterChange = (value: string) => {
+    setSearchFilter(value.toLowerCase());
+  };
+
+  const filteredSpecies = useMemo(() => {
+    const speciesList =
+      sort === "observations" ? speciesObservations : speciesActive;
+    if (!searchFilter) return speciesList;
+
+    return speciesList?.filter(
+      (species) =>
+        species.commonName.toLowerCase().includes(searchFilter) ||
+        species.scientificName.toLowerCase().includes(searchFilter)
+    );
+  }, [sort, speciesObservations, speciesActive, searchFilter]);
 
   return (
     <>
@@ -70,11 +85,11 @@ export default function Home() {
         <h1>Fuglesang</h1>
 
         {!isLoadingSpecies && (
-          <div style={{ margin: "16px 0" }}>
-            <p>{totalDetections} observasjoner </p>
-            <p>{speciesData?.length || 0} ulike arter</p>
-            {speciesError && <p>{speciesError.toString()}</p>}
-          </div>
+          <Settings
+            speciesData={speciesData}
+            speciesError={speciesError}
+            onFilterChange={handleSearchFilterChange}
+          />
         )}
 
         <div style={{ margin: "16px 0 24px" }}>
@@ -95,10 +110,7 @@ export default function Home() {
         {!isLoadingSpecies && (
           <div>
             <BirdCardGrid>
-              {(sort === "observations"
-                ? speciesObservations
-                : speciesActive
-              )?.map((species) => (
+              {filteredSpecies?.map((species) => (
                 <BirdCard data={species} key={species.id} />
               ))}
             </BirdCardGrid>
