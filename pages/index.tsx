@@ -74,7 +74,7 @@ export default function Home() {
           property="og:description"
           content="Lyttestasjon for fugler i nærområdet"
         />
-        <meta property="og:image" content="/bluetit.jpg" />
+        <meta property="og:image" content="/open-graph-share.png" />
       </Head>
 
       <div className="wrap">
