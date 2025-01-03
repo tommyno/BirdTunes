@@ -33,10 +33,10 @@
   overflow: hidden;
   display: flex;
   flex-direction: column;
-  max-height: 90dvh;
+  max-height: 96dvh;
 
   @supports not (max-height: 90dvh) {
-    max-height: 90vh;
+    max-height: 96vh;
   }
 
   .modalVisible & {
