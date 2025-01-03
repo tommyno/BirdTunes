@@ -5,10 +5,11 @@ import { Settings } from "components/Settings";
 import { Spinner } from "components/Spinner";
 import { STATION_ID } from "constants/birdweather";
 import { useFetchSpecies } from "hooks/useFetchSpecies";
+import { useFetchStation } from "hooks/useFetchStation";
 import Head from "next/head";
 import { useSearchParams } from "next/navigation";
 import { useRouter } from "next/router";
-import { useState, useMemo } from "react";
+import { useMemo } from "react";
 
 export default function Home() {
   const router = useRouter();
@@ -16,7 +17,7 @@ export default function Home() {
   const isReady = router.isReady && searchParams !== null;
 
   // Only get params after router is ready
-  const station = isReady ? searchParams.get("station") || STATION_ID : null;
+  const stationId = isReady ? searchParams.get("station") || STATION_ID : null;
   const locale = isReady ? searchParams.get("locale") || "no" : null;
   const period = isReady ? searchParams.get("period") || "all" : null;
   const searchFilter = isReady
@@ -28,11 +29,13 @@ export default function Home() {
     isLoading: isLoadingSpecies,
     error: speciesError,
   } = useFetchSpecies({
-    station,
+    stationId,
     locale,
     period,
     enabled: isReady,
   });
+
+  const { data: stationData } = useFetchStation(stationId);
 
   const speciesActive = [...speciesData].sort(
     (a, b) =>
@@ -84,7 +87,8 @@ export default function Home() {
           <Settings
             speciesData={speciesData}
             speciesError={speciesError}
-            station={station}
+            stationId={stationId}
+            stationName={stationData?.name}
           />
         )}
 
@@ -107,10 +111,7 @@ export default function Home() {
           <div>
             <BirdCardGrid>
               {filteredSpecies?.map((species) => (
-                <BirdCard
-                  key={species.id}
-                  data={{ ...species, stationId: station }}
-                />
+                <BirdCard key={species.id} data={{ ...species, stationId }} />
               ))}
             </BirdCardGrid>
 

@@ -8,13 +8,15 @@ import Link from "next/link";
 type Props = {
   speciesData?: Species[];
   speciesError?: Error | null;
-  station?: string | null;
+  stationId?: string | null;
+  stationName?: string | null;
 };
 
 export const Settings: React.FC<Props> = ({
   speciesData,
   speciesError,
-  station,
+  stationId,
+  stationName,
 }) => {
   const router = useRouter();
   const [isOpen, setIsOpen] = useState(false);
@@ -68,13 +70,13 @@ export const Settings: React.FC<Props> = ({
           <p>
             {totalDetections} observasjoner · {speciesData?.length || 0} arter
           </p>
-          {station && (
+          {stationId && (
             <p>
               <Link
                 className="link"
-                href={`https://app.birdweather.com/stations/${station}`}
+                href={`https://app.birdweather.com/stations/${stationId}`}
               >
-                Lyttestasjon #{station}
+                {stationName}
               </Link>
             </p>
           )}

@@ -24,20 +24,20 @@ type PageData = {
 };
 
 type FetchSpeciesParams = {
-  station: string | null;
+  stationId: string | null;
   locale: string | null;
   period: string | null;
   enabled?: boolean;
 };
 
 export function useFetchSpecies({
-  station,
+  stationId,
   locale,
   period,
   enabled = true,
 }: FetchSpeciesParams) {
   // Delay fetch until query params are ready
-  const shouldFetch = enabled && station && locale && period;
+  const shouldFetch = enabled && stationId && locale && period;
 
   const [data, setData] = useState<Species[]>([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -56,7 +56,7 @@ export function useFetchSpecies({
         return;
       }
 
-      const baseUrl = `${API_BASE_URL}/stations/${station}/species`;
+      const baseUrl = `${API_BASE_URL}/stations/${stationId}/species`;
       const url = `${baseUrl}?locale=${locale}&period=${period}`;
 
       try {
