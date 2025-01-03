@@ -2,7 +2,7 @@
 
 This is an experimental project to discover and track the birds in our garden. It uses a Raspberry Pi to listen and AI-powered bird sound recognition from [BirdNet Sound ID](https://birdnet.cornell.edu/).
 
-<img src="public/open-graph-share.png" alt="Fuglesang preview" style="max-width: 400px" width="100%">
+[![Fuglesang preview](public/open-graph-share.png)](https://fuglesang.vercel.app)
 
 ## Demo
 
