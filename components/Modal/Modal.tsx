@@ -77,9 +77,10 @@ export const Modal: React.FC<ModalProps> = ({ isOpen, onClose, children }) => {
 
   if (!isOpen && !isVisible) return null;
 
-  const overlayClass = classNames(styles.overlay, {
-    [styles.modalVisible]: isVisible,
-  });
+  const overlayClass = classNames(
+    styles.overlay,
+    isVisible && styles.modalVisible
+  );
 
   return (
     <div

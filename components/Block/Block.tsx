@@ -35,11 +35,11 @@ export const Block = ({
 }: Props) => {
   const blockClass = classNames(
     styles.block,
-    { [styles[`-top-${top}`]]: !!top },
-    { [styles[`-right-${right}`]]: !!right },
-    { [styles[`-bottom-${bottom}`]]: !!bottom },
-    { [styles[`-left-${left}`]]: !!left },
-    { [styles["-center"]]: !!center }
+    top && styles[`-top-${top}`],
+    right && styles[`-right-${right}`],
+    bottom && styles[`-bottom-${bottom}`],
+    left && styles[`-left-${left}`],
+    center && styles["-center"]
   );
 
   return (

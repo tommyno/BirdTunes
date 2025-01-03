@@ -16,9 +16,7 @@ export const Button: React.FC<Props> = ({
   children,
   isActive,
 }) => {
-  const buttonClass = classNames(styles.button, {
-    [styles.isActive]: !!isActive,
-  });
+  const buttonClass = classNames(styles.button, isActive && styles.isActive);
 
   return (
     <button onClick={onClick} title={title} className={buttonClass}>

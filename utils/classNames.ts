@@ -2,20 +2,16 @@
 Usage example:
 
 const buttonClass = classNames(
-  styles.button, // Always include
-  { [styles.active]: !!isActive } // Conditionally include .active class
+  styles.button,
+  isActive && styles.active,
+  color && styles[`-color-${color}`]
 );
 
 <Button className={buttonClass} />
-
 */
 
 export const classNames = (
-  ...args: Array<string | { [key: string]: boolean }>
+  ...args: Array<string | false | null | undefined>
 ): string => {
-  return args
-    .flatMap((arg) =>
-      typeof arg === "string" ? arg : Object.keys(arg).filter((key) => arg[key])
-    )
-    .join(" ");
+  return args.filter(Boolean).join(" ");
 };
