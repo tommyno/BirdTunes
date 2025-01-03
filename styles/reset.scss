@@ -32,3 +32,10 @@ select {
 a {
   color: inherit;
 }
+
+button {
+  all: unset;
+  background: none;
+  border: none;
+  cursor: pointer;
+}

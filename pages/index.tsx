@@ -1,6 +1,7 @@
 import { BirdCard } from "components/BirdCard";
 import { BirdCardGrid } from "components/BirdCardGrid";
 import { Button } from "components/Button";
+import { LastUpdated } from "components/LastUpdated";
 import { Settings } from "components/Settings";
 import { Spinner } from "components/Spinner";
 import { STATION_ID } from "constants/birdweather";
@@ -114,7 +115,6 @@ export default function Home() {
                 <BirdCard key={species.id} data={{ ...species, stationId }} />
               ))}
             </BirdCardGrid>
-
             {speciesError && <p>{speciesError.toString()}</p>}
           </div>
         )}
@@ -133,6 +133,8 @@ export default function Home() {
           </div>
         )}
       </div>
+
+      <LastUpdated />
     </>
   );
 }

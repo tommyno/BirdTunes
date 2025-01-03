@@ -1,0 +1,1 @@
+export { LastUpdated } from './LastUpdated';

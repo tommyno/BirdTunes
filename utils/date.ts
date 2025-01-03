@@ -48,3 +48,14 @@ export const dateDetailed = (date?: string) => {
     dateObject.toLocaleTimeString("no")
   );
 };
+
+// Ex: 14:20:46
+export const timeDetailedNow = () => {
+  const dateObject = new Date();
+  return dateObject.toLocaleTimeString("no", {
+    hour: "2-digit",
+    minute: "2-digit",
+    second: "2-digit",
+    hour12: false,
+  });
+};

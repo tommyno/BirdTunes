@@ -47,7 +47,10 @@ body {
   align-items: center;
 }
 
-
 .color-muted {
   color: var(--color-gray);
+}
+
+.no-wrap {
+  white-space: nowrap;
 }
