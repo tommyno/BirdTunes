@@ -9,13 +9,16 @@ import { AudioPlayer } from "components/AudioPlayer";
 import { Block } from "components/Block";
 
 type BirdModalProps = {
-  bird: Species;
+  data: Species & { stationId: string | null };
   isOpen: boolean;
   onClose: () => void;
 };
 
-export function BirdModal({ bird, isOpen, onClose }: BirdModalProps) {
-  const { data, isLoading, error } = useFetchDetections(bird.id);
+export function BirdModal({ data: bird, isOpen, onClose }: BirdModalProps) {
+  const { data, isLoading, error } = useFetchDetections({
+    speciesId: bird.id,
+    stationId: bird.stationId,
+  });
 
   return (
     <Modal isOpen={isOpen} onClose={onClose}>
@@ -54,6 +57,9 @@ export function BirdModal({ bird, isOpen, onClose }: BirdModalProps) {
           </Block>
 
           {isLoading && <Spinner />}
+
+          {error && <p>Det skjedde en feil ved henting av data.</p>}
+
           {data?.map((detection) => (
             <div key={detection.id} className={styles.detection}>
               {detection?.soundscape?.url && (

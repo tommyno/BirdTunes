@@ -107,7 +107,10 @@ export default function Home() {
           <div>
             <BirdCardGrid>
               {filteredSpecies?.map((species) => (
-                <BirdCard data={species} key={species.id} />
+                <BirdCard
+                  key={species.id}
+                  data={{ ...species, stationId: station }}
+                />
               ))}
             </BirdCardGrid>
 

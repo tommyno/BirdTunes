@@ -16,7 +16,18 @@ type Props = {
   error: Error | null;
 };
 
-export const useFetchDetections = (speciesId: number): Props => {
+type FetchDetectionsProps = {
+  speciesId: number;
+  stationId: string | null;
+};
+
+export const useFetchDetections = ({
+  speciesId,
+  stationId,
+}: FetchDetectionsProps): Props => {
+  // Delay fetch until query params are ready
+  const shouldFetch = speciesId && stationId;
+
   const [data, setData] = useState<Detection[] | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<Error | null>(null);
@@ -25,7 +36,13 @@ export const useFetchDetections = (speciesId: number): Props => {
     const fetchData = async () => {
       setIsLoading(true);
 
-      const url = `${API_BASE_URL}/stations/${STATION_ID}/detections?limit=5&speciesId=${speciesId}&locale=no&order=desc`;
+      if (!shouldFetch) {
+        setError(new Error("Invalid parameters"));
+        setIsLoading(false);
+        return;
+      }
+
+      const url = `${API_BASE_URL}/stations/${stationId}/detections?limit=5&speciesId=${speciesId}&locale=no&order=desc`;
       try {
         const response = await fetch(url);
         if (!response.ok) {
@@ -41,7 +58,7 @@ export const useFetchDetections = (speciesId: number): Props => {
     };
 
     fetchData();
-  }, []);
+  }, [shouldFetch]);
 
   return { data, isLoading, error };
 };

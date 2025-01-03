@@ -35,7 +35,7 @@ export function ModalProvider({ children }: { children: React.ReactNode }) {
       {children}
       {modalState.type === "bird" && (
         <BirdModal
-          bird={modalState.props}
+          data={modalState.props}
           isOpen={!!modalState.props}
           onClose={closeModal}
         />
