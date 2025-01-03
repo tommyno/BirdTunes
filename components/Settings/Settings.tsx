@@ -3,13 +3,19 @@ import { useRouter } from "next/router";
 import styles from "./Settings.module.scss";
 import { Species } from "hooks/useFetchSpecies";
 import { Input } from "components/Input/Input";
+import Link from "next/link";
 
 type Props = {
   speciesData?: Species[];
   speciesError?: Error | null;
+  station?: string | null;
 };
 
-export const Settings: React.FC<Props> = ({ speciesData, speciesError }) => {
+export const Settings: React.FC<Props> = ({
+  speciesData,
+  speciesError,
+  station,
+}) => {
   const router = useRouter();
   const [isOpen, setIsOpen] = useState(false);
   const [inputValue, setInputValue] = useState("");
@@ -59,8 +65,20 @@ export const Settings: React.FC<Props> = ({ speciesData, speciesError }) => {
     <div className={styles.wrap}>
       {!isOpen && (
         <div>
-          <p>{totalDetections} observasjoner </p>
-          <p>{speciesData?.length || 0} ulike arter</p>
+          <p>
+            {totalDetections} observasjoner · {speciesData?.length || 0} arter
+          </p>
+          {station && (
+            <p>
+              <Link
+                className="link"
+                href={`https://app.birdweather.com/stations/${station}`}
+              >
+                Lyttestasjon #{station}
+              </Link>
+            </p>
+          )}
+
           {speciesError && <p>{speciesError.toString()}</p>}
         </div>
       )}

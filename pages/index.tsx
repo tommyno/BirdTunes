@@ -81,7 +81,11 @@ export default function Home() {
         <h1>Fuglesang</h1>
 
         {!isLoadingSpecies && (
-          <Settings speciesData={speciesData} speciesError={speciesError} />
+          <Settings
+            speciesData={speciesData}
+            speciesError={speciesError}
+            station={station}
+          />
         )}
 
         <div style={{ margin: "16px 0 24px" }}>
