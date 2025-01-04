@@ -109,13 +109,16 @@ export default function Home() {
         </div>
 
         {!isLoadingSpecies && (
-          <div>
+          <div style={{ position: "relative" }}>
             <BirdCardGrid>
               {filteredSpecies?.map((species) => (
                 <BirdCard key={species.id} data={{ ...species, stationId }} />
               ))}
             </BirdCardGrid>
+
             {speciesError && <p>{speciesError.toString()}</p>}
+
+            <LastUpdated />
           </div>
         )}
 
@@ -133,8 +136,6 @@ export default function Home() {
           </div>
         )}
       </div>
-
-      <LastUpdated />
     </>
   );
 }

@@ -1,18 +1,20 @@
 .wrap {
-  position: fixed;
-  display: flex;
+  position: sticky;
+  bottom: var(--spacing-2);
+  margin-top: var(--spacing-5);
+}
+
+.content {
+  display: inline-flex;
   align-items: center;
   justify-content: center;
   gap: var(--spacing-1);
-  bottom: var(--spacing-2);
-  left: 50%;
-  transform: translateX(-50%);
-  padding: var(--spacing-2);
-  background-color: var(--color-white);
+  padding: var(--spacing-2) var(--spacing-3);
+  background-color: rgba(255, 255, 255, 0.8);
   border-radius: var(--border-radius);
+  backdrop-filter: blur(3px);
 }
 
 .button {
   width: 24px;
-
 }

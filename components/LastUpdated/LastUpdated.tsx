@@ -14,14 +14,16 @@ export const LastUpdated: React.FC = () => {
 
   return (
     <div className={styles.wrap}>
-      <p className="no-wrap">Sist oppdatert: {time}</p>
-      <button
-        className={styles.button}
-        title="Refresh"
-        onClick={() => router.reload()}
-      >
-        <img src="/icons/refresh.svg" alt="Refresh" />
-      </button>
+      <div className={styles.content}>
+        <p className="no-wrap">Sist oppdatert: {time}</p>
+        <button
+          className={styles.button}
+          title="Refresh"
+          onClick={() => router.reload()}
+        >
+          <img src="/icons/refresh.svg" alt="Refresh" />
+        </button>
+      </div>
     </div>
   );
 };
