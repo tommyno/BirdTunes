@@ -34,14 +34,3 @@ Update `constants/birdweather.ts` if you want to change the default station.
 - Replace current [V1 REST API](https://app.birdweather.com/api/v1]:) with new [GraphQL API](https://app.birdweather.com/api/index.html)?
 
 Feel free to add suggestions, pull requests or fork this repo and customize it to your own needs.
-
-<!-- Option 1: Relative path (recommended for GitHub) -->
-
-![Fuglesang preview](public/open-graph-share.png)
-
-<!-- Option 2: Absolute path to GitHub raw content -->
-
-![Fuglesang preview](https://raw.githubusercontent.com/tommyno/fuglesang/main/public/open-graph-share.png)
-
-<!-- Option 3: HTML for more control -->
-<img src="public/open-graph-share.png" alt="Fuglesang preview" width="600">
