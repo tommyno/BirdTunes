@@ -75,6 +75,8 @@ export const Settings: React.FC<Props> = ({
               <Link
                 className="link"
                 href={`https://app.birdweather.com/stations/${stationId}`}
+                target="_blank"
+                rel="noopener noreferrer"
               >
                 {stationName}
               </Link>
