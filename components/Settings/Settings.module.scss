@@ -12,3 +12,11 @@
   top: 50%;
   transform: translateY(-50%);
 }
+
+.form {
+  display: flex;
+  gap: var(--spacing-2);
+  align-items: center;
+  justify-content: center;
+  margin-top: var(--spacing-3);
+}
