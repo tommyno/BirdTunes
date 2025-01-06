@@ -34,6 +34,12 @@ export const Settings: React.FC<Props> = ({
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
+    // If station id is the same as the current station id, don't do anything
+    if (inputValue === stationId) {
+      setIsEditMode(false);
+      return;
+    }
+
     const query = { ...router.query, station: inputValue };
 
     await router.replace({ query }, undefined, { shallow: false });
@@ -79,6 +85,7 @@ export const Settings: React.FC<Props> = ({
               value={inputValue}
               handleChange={handleInputChange}
               width="small"
+              type="number"
             />
 
             <Button type="submit">Lagre</Button>

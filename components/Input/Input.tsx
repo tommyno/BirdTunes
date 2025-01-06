@@ -9,6 +9,7 @@ type Props = {
   autoFocus?: boolean;
   placeholder?: string;
   width?: "full" | "small";
+  type?: "text" | "number";
 };
 
 export const Input: React.FC<Props> = ({
@@ -17,6 +18,7 @@ export const Input: React.FC<Props> = ({
   autoFocus,
   placeholder,
   width = "full",
+  type = "text",
 }) => {
   const inputClass = classNames(
     styles.input,
@@ -25,7 +27,7 @@ export const Input: React.FC<Props> = ({
 
   return (
     <input
-      type="text"
+      type={type}
       placeholder={placeholder}
       onChange={handleChange}
       value={value}
