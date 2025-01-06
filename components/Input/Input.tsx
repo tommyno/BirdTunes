@@ -12,11 +12,11 @@ export const Input: React.FC<Props> = ({ value, handleChange, autoFocus }) => {
   return (
     <input
       type="text"
-      placeholder="Søk arter"
+      placeholder="Søk"
       onChange={handleChange}
       value={value}
       className={styles.input}
-      aria-label="Søk arter"
+      aria-label="Søk"
       autoFocus={autoFocus}
     />
   );

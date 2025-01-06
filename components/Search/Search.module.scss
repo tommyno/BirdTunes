@@ -1,0 +1,14 @@
+.wrap {
+  margin: var(--spacing-4) 0;
+  position: relative;
+}
+
+.button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  position: absolute;
+  right: var(--spacing-2);
+  top: 50%;
+  transform: translateY(-50%);
+}

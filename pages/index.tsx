@@ -2,6 +2,7 @@ import { BirdCard } from "components/BirdCard";
 import { BirdCardGrid } from "components/BirdCardGrid";
 import { Button } from "components/Button";
 import { LastUpdated } from "components/LastUpdated";
+import { Search } from "components/Search";
 import { Settings } from "components/Settings";
 import { Spinner } from "components/Spinner";
 import { STATION_ID } from "constants/birdweather";
@@ -21,6 +22,8 @@ export default function Home() {
   const stationId = isReady ? searchParams.get("station") || STATION_ID : null;
   const locale = isReady ? searchParams.get("locale") || "no" : null;
   const period = isReady ? searchParams.get("period") || "all" : null;
+  const sort = isReady ? searchParams.get("sort") || "active" : null;
+
   const searchFilter = isReady
     ? searchParams.get("search")?.toString()?.toLowerCase()
     : "";
@@ -47,10 +50,25 @@ export default function Home() {
     (a, b) => b.detections.total - a.detections.total
   );
 
-  // Toggle different views
-  const { sort = "active" } = router.query;
+  // Toggle different views/sortings
   const handleSortBy = (sortBy: string) => {
-    router.push({ query: { ...router.query, sort: sortBy } });
+    const { query } = router;
+    const updatedQuery = { ...query, sort: sortBy } as {
+      [key: string]: string | string[];
+    };
+
+    // Remove search param when no longer in search view
+    if (sortBy !== "search") {
+      delete updatedQuery["search"];
+    }
+
+    router.replace(
+      {
+        query: updatedQuery,
+      },
+      undefined,
+      { shallow: true }
+    );
   };
 
   const filteredSpecies = useMemo(() => {
@@ -96,7 +114,7 @@ export default function Home() {
         <div style={{ margin: "16px 0 24px" }}>
           <Button
             onClick={() => handleSortBy("active")}
-            isActive={sort === "active"}
+            isActive={sort === "active" || sort === null}
           >
             Sist hørt
           </Button>
@@ -106,7 +124,15 @@ export default function Home() {
           >
             Flest besøk
           </Button>
+          <Button
+            onClick={() => handleSortBy("search")}
+            isActive={sort === "search"}
+          >
+            Søk
+          </Button>
         </div>
+
+        {sort === "search" && <Search />}
 
         {!isLoadingSpecies && (
           <div style={{ position: "relative" }}>
