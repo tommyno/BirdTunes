@@ -30,6 +30,9 @@
 .title {
   margin: var(--spacing-2) 0 0;
   font-size: 2rem;
+  hyphens: auto;
+  word-break: break-word;
+
 
   @media (max-width: 600px) {
     font-size: 1.2rem;
