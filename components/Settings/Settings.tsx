@@ -31,13 +31,16 @@ export const Settings: React.FC<Props> = ({
     setInputValue(value);
   };
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     const query = { ...router.query, station: inputValue };
 
-    router.replace({ query }, undefined, { shallow: true });
+    await router.replace({ query }, undefined, { shallow: false });
     setIsEditMode(false);
+
+    // Hack: refresh page to load new data
+    window.location.reload();
   };
 
   return (
