@@ -1,6 +1,14 @@
 import { Html, Head, Main, NextScript } from "next/document";
 
-export default function Document(props: any) {
+type Props = {
+  __NEXT_DATA__: {
+    query: {
+      lang: string;
+    };
+  };
+};
+
+export default function Document(props: Props) {
   // Get lang from query params
   // Use English as default, unless Norwegian is selected
   // .. these are currently the only two UI languages supported
