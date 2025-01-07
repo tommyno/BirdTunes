@@ -13,6 +13,7 @@ import Head from "next/head";
 import { useSearchParams } from "next/navigation";
 import { useRouter } from "next/router";
 import { useMemo } from "react";
+import { LanguageSwitcher } from "components/LanguageSwitcher";
 
 export default function Home() {
   const router = useRouter();
@@ -103,6 +104,8 @@ export default function Home() {
 
       <div className="wrap">
         <h1>{t("pageTitle")}</h1>
+
+        <LanguageSwitcher />
 
         {!isLoadingSpecies && (
           <Settings

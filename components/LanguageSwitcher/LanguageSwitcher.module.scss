@@ -1,18 +1,19 @@
-.input {
-  width: 100%;
+.wrap {
+  margin-top: var(--spacing-2);
+}
+
+.select {
   padding: var(--spacing-2) var(--spacing-3);
   border: 1px solid var(--color-winter);
   border-radius: var(--border-radius);
   font-family: var(--font-default);
   font-size: 1rem;
+  cursor: pointer;
+  field-sizing: content;
 
   &:focus,
   &:hover {
     outline: none;
     border-color: var(--color-forrest);
   }
-}
-
-.-width-small {
-  width: 100px;
 }
