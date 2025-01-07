@@ -75,7 +75,12 @@ export const Settings: React.FC<Props> = ({
         <>
           <p>
             Stasjon ID fra{" "}
-            <a href="https://app.birdweather.com/" className="link">
+            <a
+              href="https://app.birdweather.com/"
+              className="link"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
               BirdWeather ↗
             </a>
           </p>
