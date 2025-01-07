@@ -14,6 +14,7 @@ import { useSearchParams } from "next/navigation";
 import { useRouter } from "next/router";
 import { useMemo } from "react";
 import { LanguageSwitcher } from "components/LanguageSwitcher";
+import { GetServerSideProps } from "next";
 
 export default function Home() {
   const router = useRouter();
@@ -169,3 +170,17 @@ export default function Home() {
     </>
   );
 }
+
+// Pass language to _document.tsx (to dynamically set html lang attribute)
+export const getServerSideProps: GetServerSideProps<{ lang: string }> = async (
+  context
+) => {
+  // Default to english
+  const { lang = "en" } = context.query;
+  return {
+    props: {
+      // Handle array case if multiple params are sent
+      lang: Array.isArray(lang) ? lang[0] : lang,
+    },
+  };
+};
