@@ -2,10 +2,12 @@ import React, { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import styles from "./LastUpdated.module.scss";
 import { timeDetailedNow } from "utils/date";
+import { useTranslation } from "hooks/useTranslation";
 
 export const LastUpdated: React.FC = () => {
   const router = useRouter();
   const [time, setTime] = useState<string>("");
+  const { t } = useTranslation();
 
   // Avoid hydration error
   useEffect(() => {
@@ -15,7 +17,9 @@ export const LastUpdated: React.FC = () => {
   return (
     <div className={styles.wrap}>
       <div className={styles.content}>
-        <p className="no-wrap">Sist oppdatert: {time}</p>
+        <p className="no-wrap">
+          {t("lastUpdated")}: {time}
+        </p>
         <button
           className={styles.button}
           title="Refresh"

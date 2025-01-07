@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 import styles from "./Modal.module.scss";
 import { classNames } from "utils/classNames";
 import useBodyFreeze from "utils/useBodyFreeze";
+import { useTranslation } from "hooks/useTranslation";
 
 type ModalProps = {
   isOpen: boolean;
@@ -12,6 +13,7 @@ type ModalProps = {
 export const Modal: React.FC<ModalProps> = ({ isOpen, onClose, children }) => {
   const [isVisible, setIsVisible] = useState(false);
   const modalRef = useRef<HTMLDivElement>(null);
+  const { t } = useTranslation();
 
   useBodyFreeze(isOpen);
 
@@ -93,9 +95,10 @@ export const Modal: React.FC<ModalProps> = ({ isOpen, onClose, children }) => {
         <button
           className={styles.closeButton}
           onClick={onClose}
-          aria-label="Lukk vindu"
+          aria-label={t("closeWindow")}
+          title={t("closeWindow")}
         >
-          <img src="/icons/close.svg" alt="Lukk modal" />
+          <img src="/icons/close.svg" alt={t("closeWindow")} />
         </button>
 
         <div className={styles.content}>{children}</div>

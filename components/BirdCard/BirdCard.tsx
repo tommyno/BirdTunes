@@ -3,6 +3,7 @@ import styles from "./BirdCard.module.scss";
 import { Species } from "hooks/useFetchSpecies";
 import { timeAgo } from "utils/date";
 import { useModal } from "contexts/ModalContext";
+import { useTranslation } from "hooks/useTranslation";
 
 type Props = {
   data: Species & { stationId: string | null; lang: string | null };
@@ -10,6 +11,7 @@ type Props = {
 
 export const BirdCard: React.FC<Props> = ({ data }) => {
   const { openModal } = useModal();
+  const { t } = useTranslation();
 
   return (
     <div
@@ -45,16 +47,18 @@ export const BirdCard: React.FC<Props> = ({ data }) => {
 
         <div className={styles.latin}>
           <a
-            href={`https://snl.no/${data.commonName.toLowerCase()}`}
+            href={`${t("wikiUrl")}/${data.commonName.toLowerCase()}`}
             target="_blank"
             rel="noreferrer"
-            title="Gå til Store norske leksikon"
+            title={t("wikiTitle")}
           >
             {data.scientificName}
           </a>
         </div>
 
-        <p>Hørt for {timeAgo(data.latestDetectionAt)}</p>
+        <p>
+          {t("heardFor")} {timeAgo(data.latestDetectionAt)}
+        </p>
       </div>
     </div>
   );

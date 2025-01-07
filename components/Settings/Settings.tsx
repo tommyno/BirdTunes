@@ -4,6 +4,7 @@ import { Species } from "hooks/useFetchSpecies";
 import { Input } from "components/Input/Input";
 import { Button } from "components/Button";
 import router from "next/router";
+import { useTranslation } from "hooks/useTranslation";
 
 type Props = {
   speciesData?: Species[];
@@ -20,6 +21,8 @@ export const Settings: React.FC<Props> = ({
 }) => {
   const [isEditMode, setIsEditMode] = useState(false);
   const [inputValue, setInputValue] = useState(stationId || "");
+
+  const { t } = useTranslation();
 
   const totalDetections = speciesData?.reduce(
     (total, species) => total + species.detections.total,
@@ -56,13 +59,14 @@ export const Settings: React.FC<Props> = ({
           <p>
             <strong>
               <button className="link" onClick={() => setIsEditMode(true)}>
-                {stationName || "Endre stasjon"}
+                {stationName || t("changeStation")}
               </button>
             </strong>
           </p>
 
           <p>
-            {totalDetections} observasjoner · {speciesData?.length || 0} arter
+            {totalDetections} {t("observations")} · {speciesData?.length || 0}{" "}
+            {t("species")}
           </p>
 
           {speciesError && (
@@ -73,7 +77,7 @@ export const Settings: React.FC<Props> = ({
       {isEditMode && (
         <>
           <p>
-            Stasjon ID fra{" "}
+            {t("stationIdFrom")}{" "}
             <a
               href={`https://app.birdweather.com/${
                 speciesError || !stationId ? "" : `/stations/${stationId}`
@@ -94,7 +98,7 @@ export const Settings: React.FC<Props> = ({
               type="number"
             />
 
-            <Button type="submit">Lagre</Button>
+            <Button type="submit">{t("save")}</Button>
           </form>
         </>
       )}

@@ -2,10 +2,12 @@ import React, { useState, useEffect } from "react";
 import { useRouter } from "next/router";
 import styles from "./Search.module.scss";
 import { Input } from "components/Input/Input";
+import { useTranslation } from "hooks/useTranslation";
 
 export const Search: React.FC = () => {
   const router = useRouter();
   const [inputValue, setInputValue] = useState("");
+  const { t } = useTranslation();
 
   // Get search param from URL on mount
   useEffect(() => {
@@ -42,12 +44,12 @@ export const Search: React.FC = () => {
         value={inputValue}
         handleChange={handleInputChange}
         autoFocus={true}
-        placeholder="Søk"
+        placeholder={t("search")}
       />
 
       {inputValue && (
         <button onClick={handleClear} className={styles.button}>
-          <img src="/icons/close.svg" alt="Nullstill" />
+          <img src="/icons/close.svg" alt={t("clearSearch")} />
         </button>
       )}
     </div>

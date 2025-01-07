@@ -8,6 +8,7 @@ import { Spinner } from "components/Spinner";
 import { STATION_ID } from "constants/birdweather";
 import { useFetchSpecies } from "hooks/useFetchSpecies";
 import { useFetchStation } from "hooks/useFetchStation";
+import { useTranslation } from "hooks/useTranslation";
 import Head from "next/head";
 import { useSearchParams } from "next/navigation";
 import { useRouter } from "next/router";
@@ -17,6 +18,7 @@ export default function Home() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const isReady = router.isReady && searchParams !== null;
+  const { t } = useTranslation();
 
   // Only get params after router is ready
   const stationId = isReady ? searchParams.get("station") || STATION_ID : null;
@@ -100,7 +102,7 @@ export default function Home() {
       </Head>
 
       <div className="wrap">
-        <h1>Fuglesang</h1>
+        <h1>{t("pageTitle")}</h1>
 
         {!isLoadingSpecies && (
           <Settings
@@ -116,19 +118,19 @@ export default function Home() {
             onClick={() => handleSortBy("active")}
             isActive={sort === "active" || sort === null}
           >
-            Sist hørt
+            {t("lastHeard")}
           </Button>
           <Button
             onClick={() => handleSortBy("observations")}
             isActive={sort === "observations"}
           >
-            Flest besøk
+            {t("mostVisits")}
           </Button>
           <Button
             onClick={() => handleSortBy("search")}
             isActive={sort === "search"}
           >
-            Søk
+            {t("search")}
           </Button>
         </div>
 
@@ -159,7 +161,7 @@ export default function Home() {
           <div className="footer">
             <div></div>
             <a href="#" className="link">
-              Til toppen ↑
+              {t("toTop")} ↑
             </a>
             <a href="https://github.com/tommyno/fuglesang" className="link">
               Github ↗

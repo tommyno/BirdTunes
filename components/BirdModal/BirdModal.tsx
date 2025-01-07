@@ -7,6 +7,7 @@ import { useFetchDetections } from "hooks/useFetchDetections";
 import { Spinner } from "components/Spinner";
 import { AudioPlayer } from "components/AudioPlayer";
 import { Block } from "components/Block";
+import { useTranslation } from "hooks/useTranslation";
 
 type BirdModalProps = {
   data: Species & { stationId: string | null; lang: string | null };
@@ -15,6 +16,8 @@ type BirdModalProps = {
 };
 
 export function BirdModal({ data: bird, isOpen, onClose }: BirdModalProps) {
+  const { t } = useTranslation();
+
   const { data, isLoading, error } = useFetchDetections({
     speciesId: bird.id,
     stationId: bird.stationId,
@@ -39,22 +42,26 @@ export function BirdModal({ data: bird, isOpen, onClose }: BirdModalProps) {
           <p className="color-muted">
             <em>
               <a
-                href={`https://snl.no/${bird.commonName.toLowerCase()}`}
+                href={`${t("wikiUrl")}/${bird.commonName.toLowerCase()}`}
                 target="_blank"
                 rel="noreferrer"
-                title="Gå til Store norske leksikon"
+                title={t("wikiTitle")}
               >
                 {bird.scientificName}
               </a>
             </em>
           </p>
 
-          <p>{bird.detections.total} observasjoner</p>
+          <p>
+            {bird.detections.total} {t("observations")}
+          </p>
         </div>
 
         <div className={styles.detections}>
           <Block bottom="3">
-            <h2 className="h4">Siste {data?.length} observasjoner</h2>
+            <h2 className="h4">
+              {t("last")} {data?.length} {t("observations")}
+            </h2>
           </Block>
 
           {isLoading && <Spinner />}
