@@ -33,7 +33,7 @@ const languages = [
 
 export const LanguageSwitcher = () => {
   const router = useRouter();
-  const currentLang = router.query.lang || "no";
+  const currentLang = router.query.lang || "en";
 
   const handleLanguageChange = async (
     e: React.ChangeEvent<HTMLSelectElement>

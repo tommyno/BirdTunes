@@ -5,12 +5,12 @@ type TranslationKey = keyof typeof translations;
 
 export const useTranslation = () => {
   const { query } = useRouter();
-  const locale = (query.lang as Locale) || "no";
+  const locale = (query.lang as Locale) || "en";
 
   const t = (key: TranslationKey): string => {
     return (
       translations?.[key]?.[locale] ||
-      translations?.[key]?.["no"] ||
+      translations?.[key]?.["en"] ||
       "[missing translation]"
     );
   };

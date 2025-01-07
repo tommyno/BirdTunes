@@ -23,7 +23,7 @@ export default function Home() {
 
   // Only get params after router is ready
   const stationId = isReady ? searchParams.get("station") || STATION_ID : null;
-  const lang = isReady ? searchParams.get("lang") || "no" : null;
+  const lang = isReady ? searchParams.get("lang") || "en" : null;
   const period = isReady ? searchParams.get("period") || "all" : null;
   const sort = isReady ? searchParams.get("sort") || "active" : null;
 
