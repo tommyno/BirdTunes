@@ -89,21 +89,15 @@ export default function Home() {
   return (
     <>
       <Head>
-        <meta title="Fuglesang" />
-        <meta
-          name="description"
-          content="Lyttestasjon for fugler i nærområdet"
-        />
-        <meta property="og:title" content="Fuglesang" />
-        <meta
-          property="og:description"
-          content="Lyttestasjon for fugler i nærområdet"
-        />
+        <title>BirdTunes</title>
+        <meta name="description" content={t("pageDescription")} />
+        <meta name="og:title" content="BirdTunes" />
+        <meta name="og:description" content={t("pageDescription")} />
         <meta property="og:image" content="/open-graph-share.png" />
       </Head>
 
       <div className="wrap">
-        <h1>{t("pageTitle")}</h1>
+        <h1>BirdTunes</h1>
 
         <LanguageSwitcher />
 

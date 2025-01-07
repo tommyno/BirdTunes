@@ -1,9 +1,9 @@
 export type Locale = "en" | "no";
 
 export const translations = {
-  pageTitle: {
-    en: "Birdtunes",
-    no: "Fuglesang",
+  pageDescription: {
+    en: "Listening station for birds in the area",
+    no: "Lyttestasjon for fugler i nærområdet",
   },
   lastHeard: {
     en: "Last heard",
