@@ -77,4 +77,32 @@ export const translations = {
     en: "Save",
     no: "Lagre",
   },
+  minute: {
+    en: "minute",
+    no: "minutt",
+  },
+  minutes: {
+    en: "minutes",
+    no: "minutter",
+  },
+  hour: {
+    en: "hour",
+    no: "time",
+  },
+  hours: {
+    en: "hours",
+    no: "timer",
+  },
+  day: {
+    en: "day",
+    no: "dag",
+  },
+  days: {
+    en: "days",
+    no: "dager",
+  },
+  ago: {
+    en: "ago",
+    no: "siden",
+  },
 } as const;

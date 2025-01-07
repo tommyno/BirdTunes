@@ -1,7 +1,7 @@
 import { useRouter } from "next/router";
 import { Locale, translations } from "constants/translations";
 
-type TranslationKey = keyof typeof translations;
+export type TranslationKey = keyof typeof translations;
 
 export const useTranslation = () => {
   const { query } = useRouter();

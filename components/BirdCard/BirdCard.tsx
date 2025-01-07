@@ -57,7 +57,7 @@ export const BirdCard: React.FC<Props> = ({ data }) => {
         </div>
 
         <p>
-          {t("heardFor")} {timeAgo(data.latestDetectionAt)}
+          {t("heardFor")} {timeAgo(data.latestDetectionAt, t)}
         </p>
       </div>
     </div>
