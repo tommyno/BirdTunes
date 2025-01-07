@@ -9,7 +9,7 @@ import { AudioPlayer } from "components/AudioPlayer";
 import { Block } from "components/Block";
 
 type BirdModalProps = {
-  data: Species & { stationId: string | null };
+  data: Species & { stationId: string | null; lang: string | null };
   isOpen: boolean;
   onClose: () => void;
 };
@@ -18,6 +18,7 @@ export function BirdModal({ data: bird, isOpen, onClose }: BirdModalProps) {
   const { data, isLoading, error } = useFetchDetections({
     speciesId: bird.id,
     stationId: bird.stationId,
+    lang: bird.lang,
   });
 
   return (

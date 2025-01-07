@@ -23,21 +23,21 @@ type PageData = {
   success: boolean;
 };
 
-type FetchSpeciesParams = {
+type FetchSpeciesProps = {
   stationId: string | null;
-  locale: string | null;
+  lang: string | null;
   period: string | null;
   enabled?: boolean;
 };
 
 export function useFetchSpecies({
   stationId,
-  locale,
+  lang,
   period,
   enabled = true,
-}: FetchSpeciesParams) {
+}: FetchSpeciesProps) {
   // Delay fetch until query params are ready
-  const shouldFetch = enabled && stationId && locale && period;
+  const shouldFetch = enabled && stationId && lang && period;
 
   const [data, setData] = useState<Species[]>([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -56,8 +56,7 @@ export function useFetchSpecies({
         return;
       }
 
-      const baseUrl = `${API_BASE_URL}/stations/${stationId}/species`;
-      const url = `${baseUrl}?locale=${locale}&period=${period}`;
+      const url = `${API_BASE_URL}/stations/${stationId}/species?locale=${lang}&period=${period}`;
 
       try {
         // We're unable to fetch more than 100 results per page, so we're looping through all pages to get all results

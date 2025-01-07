@@ -20,7 +20,7 @@ export default function Home() {
 
   // Only get params after router is ready
   const stationId = isReady ? searchParams.get("station") || STATION_ID : null;
-  const locale = isReady ? searchParams.get("locale") || "no" : null;
+  const lang = isReady ? searchParams.get("lang") || "no" : null;
   const period = isReady ? searchParams.get("period") || "all" : null;
   const sort = isReady ? searchParams.get("sort") || "active" : null;
 
@@ -34,7 +34,7 @@ export default function Home() {
     error: speciesError,
   } = useFetchSpecies({
     stationId,
-    locale,
+    lang,
     period,
     enabled: isReady,
   });
@@ -138,7 +138,10 @@ export default function Home() {
           <div style={{ position: "relative" }}>
             <BirdCardGrid>
               {filteredSpecies?.map((species) => (
-                <BirdCard key={species.id} data={{ ...species, stationId }} />
+                <BirdCard
+                  key={species.id}
+                  data={{ ...species, stationId, lang }}
+                />
               ))}
             </BirdCardGrid>
 

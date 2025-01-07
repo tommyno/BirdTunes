@@ -5,7 +5,7 @@ import { timeAgo } from "utils/date";
 import { useModal } from "contexts/ModalContext";
 
 type Props = {
-  data: Species & { stationId: string | null };
+  data: Species & { stationId: string | null; lang: string | null };
 };
 
 export const BirdCard: React.FC<Props> = ({ data }) => {

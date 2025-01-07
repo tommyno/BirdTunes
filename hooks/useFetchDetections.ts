@@ -19,14 +19,16 @@ type Props = {
 type FetchDetectionsProps = {
   speciesId: number;
   stationId: string | null;
+  lang: string | null;
 };
 
 export const useFetchDetections = ({
   speciesId,
   stationId,
+  lang,
 }: FetchDetectionsProps): Props => {
   // Delay fetch until query params are ready
-  const shouldFetch = speciesId && stationId;
+  const shouldFetch = speciesId && stationId && lang;
 
   const [data, setData] = useState<Detection[] | null>(null);
   const [isLoading, setIsLoading] = useState(true);
@@ -42,7 +44,7 @@ export const useFetchDetections = ({
         return;
       }
 
-      const url = `${API_BASE_URL}/stations/${stationId}/detections?limit=5&speciesId=${speciesId}&locale=no&order=desc`;
+      const url = `${API_BASE_URL}/stations/${stationId}/detections?limit=5&speciesId=${speciesId}&locale=${lang}&order=desc`;
       try {
         const response = await fetch(url);
         if (!response.ok) {
