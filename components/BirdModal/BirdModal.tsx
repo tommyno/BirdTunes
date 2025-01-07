@@ -58,7 +58,11 @@ export function BirdModal({ data: bird, isOpen, onClose }: BirdModalProps) {
 
           {isLoading && <Spinner />}
 
-          {error && <p>Det skjedde en feil ved henting av data.</p>}
+          {error && (
+            <p className="color-red">
+              Det skjedde en feil ved henting av data.
+            </p>
+          )}
 
           {data?.map((detection) => (
             <div key={detection.id} className={styles.detection}>

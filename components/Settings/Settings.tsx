@@ -53,24 +53,23 @@ export const Settings: React.FC<Props> = ({
     <div className={styles.wrap}>
       {!isEditMode && (
         <>
-          {stationId && (
-            <p>
-              <strong>
-                <button className="link" onClick={() => setIsEditMode(true)}>
-                  {stationName}
-                </button>
-              </strong>
-            </p>
-          )}
+          <p>
+            <strong>
+              <button className="link" onClick={() => setIsEditMode(true)}>
+                {stationName || "Endre stasjon"}
+              </button>
+            </strong>
+          </p>
 
           <p>
             {totalDetections} observasjoner · {speciesData?.length || 0} arter
           </p>
 
-          {speciesError && <p>{speciesError.toString()}</p>}
+          {speciesError && (
+            <p className="color-red">{speciesError.toString()}</p>
+          )}
         </>
       )}
-
       {isEditMode && (
         <>
           <p>

@@ -142,7 +142,9 @@ export default function Home() {
               ))}
             </BirdCardGrid>
 
-            {speciesError && <p>{speciesError.toString()}</p>}
+            {speciesError && (
+              <p className="color-red">{speciesError.toString()}</p>
+            )}
 
             <LastUpdated />
           </div>
