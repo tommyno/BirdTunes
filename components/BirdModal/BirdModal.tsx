@@ -53,14 +53,14 @@ export function BirdModal({ data: bird, isOpen, onClose }: BirdModalProps) {
           </p>
 
           <p>
-            {bird.detections.total} {t("observations")}
+            {bird.detections.total} {t("detections")}
           </p>
         </div>
 
         <div className={styles.detections}>
           <Block bottom="3">
             <h2 className="h4">
-              {t("last")} {data?.length} {t("observations")}
+              {t("last")} {data?.length} {t("detections")}
             </h2>
           </Block>
 

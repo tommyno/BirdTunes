@@ -65,7 +65,7 @@ export const Settings: React.FC<Props> = ({
           </p>
 
           <p>
-            {totalDetections} {t("observations")} · {speciesData?.length || 0}{" "}
+            {totalDetections} {t("detections")} · {speciesData?.length || 0}{" "}
             {t("species")}
           </p>
 

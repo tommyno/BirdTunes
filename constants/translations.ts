@@ -41,8 +41,8 @@ export const translations = {
     en: "Heard for",
     no: "Hørt for",
   },
-  observations: {
-    en: "observations",
+  detections: {
+    en: "detections",
     no: "observasjoner",
   },
   last: {
