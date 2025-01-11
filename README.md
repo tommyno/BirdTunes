@@ -1,14 +1,12 @@
-# Fuglesang
+# BirdTunes
 
 This is an experimental project to discover and track the birds in our garden. It uses a Raspberry Pi to listen and AI-powered bird sound recognition from [BirdNet Sound ID](https://birdnet.cornell.edu/).
 
-[![Fuglesang preview](public/open-graph-share.png)](https://fuglesang.vercel.app)
+[![BirdTunes preview](public/open-graph-share.png)](https://birdtunes.net)
 
 ## Demo
 
-https://fuglesang.vercel.app
-
-Add ?station=xxxx to use your own Birdweather station.
+https://birdtunes.net
 
 ## Current setup
 
