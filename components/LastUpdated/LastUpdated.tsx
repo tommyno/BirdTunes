@@ -17,12 +17,18 @@ export const LastUpdated: React.FC = () => {
   return (
     <div className={styles.wrap}>
       <div className={styles.content}>
-        <a href="#">
-          <img src="/icons/arrow-up.svg" alt="Refresh" />
-        </a>
+        <button
+          className={styles.button}
+          title={t("toTop")}
+          onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
+        >
+          <img src="/icons/arrow-up.svg" alt={t("toTop")} />
+        </button>
+
         <p className="no-wrap">
           {t("lastUpdated")} {time}
         </p>
+
         <button
           className={styles.button}
           title="Refresh"
