@@ -30,24 +30,20 @@ export const todayIso = () => {
   return formattedDate;
 };
 
-// Ex: 11.09.2024 14:20:46
+// Ex: 11.09.2024 14:20:46 (use local time, without timezone)
 export const dateDetailed = (date?: string) => {
   if (!date) {
     return;
   }
-  const dateObject = new Date(date);
 
-  const options: Intl.DateTimeFormatOptions = {
-    day: "2-digit",
-    month: "2-digit",
-    year: "numeric",
-  };
+  // Example: "2024-11-02T16:36:35.286+08:00"
 
-  return (
-    dateObject.toLocaleDateString("no", options) +
-    " " +
-    dateObject.toLocaleTimeString("no")
-  );
+  // Parse the ISO string directly to preserve local time
+  const [datePart, timePart] = date.split("T");
+  const [year, month, day] = datePart.split("-");
+  const time = timePart.split(".")[0]; // Gets HH:mm:ss
+
+  return `${day}.${month}.${year} ${time}`;
 };
 
 // Ex: 14:20:46
