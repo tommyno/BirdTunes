@@ -161,7 +161,7 @@ export default function Home() {
             <a href="#" className="link">
               {t("toTop")} ↑
             </a>
-            <a href="https://github.com/tommyno/fuglesang" className="link">
+            <a href="https://github.com/tommyno/birdtunes" className="link">
               Github ↗
             </a>
           </div>
