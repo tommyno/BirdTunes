@@ -45,17 +45,6 @@ export const BirdCard: React.FC<Props> = ({ data }) => {
 
         <h3 className={styles.title}>{data.commonName}</h3>
 
-        <div className={styles.latin}>
-          <a
-            href={`${t("wikiUrl")}/${data.commonName.toLowerCase()}`}
-            target="_blank"
-            rel="noreferrer"
-            title={t("wikiTitle")}
-          >
-            {data.scientificName}
-          </a>
-        </div>
-
         <p>
           {t("heardFor")} {timeAgo(data.latestDetectionAt, t)}
         </p>

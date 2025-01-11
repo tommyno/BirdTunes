@@ -39,19 +39,6 @@
   }
 }
 
-.latin {
-  color: var(--color-gray);
-  font-style: italic;
-  margin: var(--spacing-1) 0 var(--spacing-1);
-
-  a {
-    text-decoration: underline;
-    text-underline-offset: 2px;
-    text-decoration-thickness: 0.5px;
-    color: inherit
-  }
-}
-
 .card {
   cursor: pointer;
   transition: transform 0.2s ease;
