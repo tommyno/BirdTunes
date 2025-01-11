@@ -1,7 +1,14 @@
 .wrap {
   display: grid;
   gap: var(--spacing-7) var(--spacing-5);
-  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  grid-template-columns: repeat(4, minmax(0, 400px));
+  justify-content: center;
+
+
+  @media (max-width: 1000px) {
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--spacing-6) var(--gap);
+  }
 
   @media (max-width: 600px) {
     grid-template-columns: repeat(2, 1fr);

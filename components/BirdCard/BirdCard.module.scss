@@ -28,11 +28,16 @@
 }
 
 .title {
-  margin: var(--spacing-2) 0 0;
-  font-size: 2rem;
+  margin: var(--spacing-2) 0 var(--spacing-1);
+  font-size: 1.8rem;
   hyphens: auto;
   word-break: break-word;
+  font-weight: 600;
 
+
+  @media (max-width: 1000px) {
+    font-size: 1.4rem;
+  }
 
   @media (max-width: 600px) {
     font-size: 1.2rem;
@@ -45,5 +50,11 @@
 
   &:hover {
     transform: translateY(-2px);
+  }
+}
+
+.heardFor {
+  @media (max-width: 600px) {
+    font-size: 0.9rem;
   }
 }
