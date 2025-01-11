@@ -154,19 +154,16 @@ export default function Home() {
         )}
 
         {isLoadingSpecies && <Spinner />}
-
-        {!isLoadingSpecies && (
-          <div className="footer">
-            <div></div>
-            <a href="#" className="link">
-              {t("toTop")} ↑
-            </a>
-            <a href="https://github.com/tommyno/birdtunes" className="link">
-              Github ↗
-            </a>
-          </div>
-        )}
       </div>
+
+      {!isLoadingSpecies && (
+        <div className="footer">
+          <p>BirdTunes</p>
+          <a href="https://github.com/tommyno/birdtunes" className="link">
+            Github ↗
+          </a>
+        </div>
+      )}
     </>
   );
 }

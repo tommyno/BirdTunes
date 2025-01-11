@@ -17,8 +17,11 @@ export const LastUpdated: React.FC = () => {
   return (
     <div className={styles.wrap}>
       <div className={styles.content}>
+        <a href="#">
+          <img src="/icons/arrow-up.svg" alt="Refresh" />
+        </a>
         <p className="no-wrap">
-          {t("lastUpdated")}: {time}
+          {t("lastUpdated")} {time}
         </p>
         <button
           className={styles.button}

@@ -50,8 +50,8 @@ export const translations = {
     no: "Siste",
   },
   lastUpdated: {
-    en: "Last updated",
-    no: "Sist oppdatert",
+    en: "Updated",
+    no: "Oppdatert",
   },
   closeWindow: {
     en: "Close window",

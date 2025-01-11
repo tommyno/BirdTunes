@@ -19,7 +19,7 @@ body {
 .wrap {
   margin: 0 auto;
   max-width: 1700px;
-  padding: var(--gap) var(--gap) var(--spacing-7) var(--gap);
+  padding: var(--gap) var(--gap) var(--spacing-5) var(--gap);
   text-align: center;
 }
 
@@ -41,10 +41,11 @@ body {
 }
 
 .footer {
-  padding: var(--spacing-7) 0 var(--spacing-2);
+  padding: var(--spacing-4) var(--gap);
   display: flex;
   justify-content: space-between;
-  align-items: center;
+  background-color: var(--color-forrest);
+  color: var(--color-white);
 }
 
 .color-muted {
