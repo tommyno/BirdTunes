@@ -9,10 +9,16 @@ type AudioPlayerProps = {
 export const AudioPlayer = ({ url }: AudioPlayerProps) => {
   const { t } = useTranslation();
   const [isPlaying, setIsPlaying] = useState(false);
+  const [isLoaded, setIsLoaded] = useState(false);
   const audioRef = useRef<HTMLAudioElement>(null);
 
   const handlePlayPause = () => {
     if (!audioRef.current) return;
+
+    if (!isLoaded) {
+      audioRef.current.src = url;
+      setIsLoaded(true);
+    }
 
     if (isPlaying) {
       audioRef.current.pause();
@@ -37,7 +43,6 @@ export const AudioPlayer = ({ url }: AudioPlayerProps) => {
       </button>
       <audio
         ref={audioRef}
-        src={url}
         onEnded={() => setIsPlaying(false)}
         onPause={() => setIsPlaying(false)}
         onPlay={() => setIsPlaying(true)}
