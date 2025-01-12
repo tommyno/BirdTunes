@@ -22,31 +22,34 @@ export const AudioPlayer = ({ url }: AudioPlayerProps) => {
 
     if (isPlaying) {
       audioRef.current.pause();
+      audioRef.current.controls = false;
     } else {
+      audioRef.current.controls = true;
       audioRef.current.play();
     }
     setIsPlaying(!isPlaying);
   };
 
   return (
-    <div className={styles.player}>
-      <button
-        onClick={handlePlayPause}
-        className={styles.playButton}
-        aria-label={isPlaying ? t("pause") : t("play")}
-      >
-        {isPlaying ? (
-          <img src="/icons/pause.svg" alt="" />
-        ) : (
-          <img src="/icons/play.svg" alt="" />
+    <>
+      <div className={styles.player}>
+        {!isLoaded && (
+          <button
+            onClick={handlePlayPause}
+            className={styles.playButton}
+            aria-label={isPlaying ? t("pause") : t("play")}
+          >
+            <img src="/icons/play.svg" alt="" />
+          </button>
         )}
-      </button>
-      <audio
-        ref={audioRef}
-        onEnded={() => setIsPlaying(false)}
-        onPause={() => setIsPlaying(false)}
-        onPlay={() => setIsPlaying(true)}
-      />
-    </div>
+
+        <audio
+          ref={audioRef}
+          onEnded={() => setIsPlaying(false)}
+          onPause={() => setIsPlaying(false)}
+          onPlay={() => setIsPlaying(true)}
+        />
+      </div>
+    </>
   );
 };
