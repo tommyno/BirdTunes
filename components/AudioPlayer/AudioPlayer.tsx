@@ -4,9 +4,10 @@ import { useTranslation } from "hooks/useTranslation";
 
 type AudioPlayerProps = {
   url: string;
+  startTime?: number;
 };
 
-export const AudioPlayer = ({ url }: AudioPlayerProps) => {
+export const AudioPlayer = ({ url, startTime = 0 }: AudioPlayerProps) => {
   const { t } = useTranslation();
   const [isPlaying, setIsPlaying] = useState(false);
   const [isLoaded, setIsLoaded] = useState(false);
@@ -17,6 +18,8 @@ export const AudioPlayer = ({ url }: AudioPlayerProps) => {
 
     if (!isLoaded) {
       audioRef.current.src = url;
+      // Set start time to 1 second before the detection
+      audioRef.current.currentTime = startTime > 0 ? startTime - 1 : 0;
       setIsLoaded(true);
     }
 

@@ -7,6 +7,7 @@ export type Detection = {
   timestamp: string; // ISO date string
   soundscape: {
     url: string;
+    startTime: number;
   };
 };
 

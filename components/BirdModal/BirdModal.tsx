@@ -76,7 +76,10 @@ export function BirdModal({ data: bird, isOpen, onClose }: BirdModalProps) {
             <div key={detection.id} className={styles.detection}>
               <p>{dateDetailed(detection.timestamp)}</p>
               {detection?.soundscape?.url && (
-                <AudioPlayer url={detection.soundscape.url} />
+                <AudioPlayer
+                  url={detection.soundscape.url}
+                  startTime={detection.soundscape.startTime}
+                />
               )}
             </div>
           ))}
