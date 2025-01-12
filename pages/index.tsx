@@ -159,7 +159,11 @@ export default function Home() {
       {!isLoadingSpecies && (
         <div className="footer">
           <p>BirdTunes</p>
-          <a href="https://github.com/tommyno/birdtunes" className="link">
+          <a
+            href="https://github.com/tommyno/birdtunes"
+            className="link"
+            target="_blank"
+          >
             Github ↗
           </a>
         </div>

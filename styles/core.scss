@@ -9,6 +9,12 @@ html {
   }
 }
 
+html,
+body,
+#__next {
+  min-height: 100vh;
+}
+
 body {
   min-width: 320px;
   vertical-align: baseline;
@@ -46,6 +52,8 @@ body {
   justify-content: space-between;
   background-color: var(--color-forrest);
   color: var(--color-white);
+  position: sticky;
+  top: 100vh;
 }
 
 .color-muted {
