@@ -1,6 +1,7 @@
 .wrap {
-  margin: var(--spacing-4) 0;
+  margin: var(--spacing-4) auto;
   position: relative;
+  max-width: 400px;
 }
 
 .button {
