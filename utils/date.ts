@@ -23,36 +23,38 @@ export const timeAgo = (date: string, t: (key: TranslationKey) => string) => {
   }
 };
 
-// Returns today's date in ISO format, ex: 2024-02-19
-export const todayIso = () => {
-  const today = new Date();
-  const formattedDate = today.toISOString().split("T")[0];
-  return formattedDate;
-};
-
-// Ex: 11.09.2024 14:20:46 (use local time, without timezone)
-export const dateDetailed = (date?: string) => {
+// Ex: 11. sept 2024 14:20:46 (use local time, without timezone)
+export const dateDetailed = (date?: string, locale?: string | null) => {
   if (!date) {
     return;
   }
 
-  // Example: "2024-11-02T16:36:35.286+08:00"
+  // Remove timezone (to use the local recorded time without converting to UTC)
+  const localDateTime = date.split(/[+]/)[0];
+  const dateObject = new Date(localDateTime);
 
-  // Parse the ISO string directly to preserve local time
-  const [datePart, timePart] = date.split("T");
-  const [year, month, day] = datePart.split("-");
-  const time = timePart.split(".")[0]; // Gets HH:mm:ss
+  // undefined = use the browser's default locale
+  // except for Norwegian
+  const dateLocale = locale === "no" ? "no" : undefined;
 
-  return `${day}.${month}.${year} ${time}`;
-};
-
-// Ex: 14:20:46
-export const timeDetailedNow = () => {
-  const dateObject = new Date();
-  return dateObject.toLocaleTimeString("no", {
+  return new Intl.DateTimeFormat(dateLocale, {
+    year: "numeric",
+    month: "short",
+    day: "2-digit",
     hour: "2-digit",
     minute: "2-digit",
     second: "2-digit",
-    hour12: false,
-  });
+  }).format(dateObject);
+};
+
+// Ex: 14:20:46 or 2:20:46 PM
+export const timeDetailedNow = () => {
+  const dateObject = new Date();
+
+  // undefined = use the browser's default locale
+  return new Intl.DateTimeFormat(undefined, {
+    hour: "2-digit",
+    minute: "2-digit",
+    second: "2-digit",
+  }).format(dateObject);
 };
