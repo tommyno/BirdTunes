@@ -45,9 +45,7 @@ export const BirdCard: React.FC<Props> = ({ data }) => {
 
         <h3 className={styles.title}>{data.commonName}</h3>
 
-        <p className={styles.heardFor}>
-          {t("heardFor")} {timeAgo(data.latestDetectionAt, t)}
-        </p>
+        <p className={styles.heardFor}>{timeAgo(data.latestDetectionAt, t)}</p>
       </div>
     </div>
   );

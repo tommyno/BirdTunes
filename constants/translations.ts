@@ -37,10 +37,6 @@ export const translations = {
     en: "Go to Wikipedia",
     no: "Gå til Store norske leksikon",
   },
-  heardFor: {
-    en: "Heard for",
-    no: "Hørt for",
-  },
   detections: {
     en: "detections",
     no: "observasjoner",
