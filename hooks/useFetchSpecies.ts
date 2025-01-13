@@ -64,7 +64,10 @@ export function useFetchSpecies({
           const response = await fetch(`${url}&page=${currentPage}`);
 
           if (!response.ok) {
-            throw new Error(`Error: ${response.status} ${response.statusText}`);
+            const errorResponse = await response?.json();
+            throw new Error(
+              `Error: ${response.status} ${errorResponse?.message}`
+            );
           }
 
           const pageData: PageData = await response.json();
