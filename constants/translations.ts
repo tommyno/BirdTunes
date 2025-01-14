@@ -14,8 +14,8 @@ export const translations = {
     no: "Flest besøk",
   },
   search: {
-    en: "Search",
-    no: "Søk",
+    en: "Search species",
+    no: "Søk arter",
   },
   toTop: {
     en: "To the top",
