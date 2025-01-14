@@ -101,4 +101,12 @@ export const translations = {
     en: "ago",
     no: "siden",
   },
+  detectedSeconds: {
+    en: "Detection started at",
+    no: "Fuglen oppdaget ved",
+  },
+  seconds: {
+    en: "seconds",
+    no: "sekunder",
+  },
 } as const;

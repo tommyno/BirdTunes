@@ -18,8 +18,6 @@ export const AudioPlayer = ({ url, startTime = 0 }: AudioPlayerProps) => {
 
     if (!isLoaded) {
       audioRef.current.src = url;
-      // Set start time to 1 second before the detection
-      audioRef.current.currentTime = startTime > 0 ? startTime - 1 : 0;
       setIsLoaded(true);
     }
 
@@ -45,7 +43,6 @@ export const AudioPlayer = ({ url, startTime = 0 }: AudioPlayerProps) => {
             <img src="/icons/play.svg" alt="" />
           </button>
         )}
-
         <audio
           ref={audioRef}
           onEnded={() => setIsPlaying(false)}
@@ -53,6 +50,11 @@ export const AudioPlayer = ({ url, startTime = 0 }: AudioPlayerProps) => {
           onPlay={() => setIsPlaying(true)}
         />
       </div>
+      {isLoaded && (
+        <p>
+          {t("detectedSeconds")} {startTime} {t("seconds")}
+        </p>
+      )}
     </>
   );
 };
