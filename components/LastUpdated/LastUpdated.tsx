@@ -4,14 +4,14 @@ import styles from "./LastUpdated.module.scss";
 import { timeDetailedNow } from "utils/date";
 import { useTranslation } from "hooks/useTranslation";
 
-export const LastUpdated: React.FC = () => {
+export const LastUpdated: React.FC<{ lang?: string | null }> = ({ lang }) => {
   const router = useRouter();
   const [time, setTime] = useState<string>("");
   const { t } = useTranslation();
 
   // Avoid hydration error
   useEffect(() => {
-    setTime(timeDetailedNow());
+    setTime(timeDetailedNow(lang));
   }, []);
 
   return (

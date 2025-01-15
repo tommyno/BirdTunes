@@ -48,11 +48,14 @@ export const dateDetailed = (date?: string, locale?: string | null) => {
 };
 
 // Ex: 14:20:46 or 2:20:46 PM
-export const timeDetailedNow = () => {
+export const timeDetailedNow = (locale?: string | null) => {
   const dateObject = new Date();
 
   // undefined = use the browser's default locale
-  return new Intl.DateTimeFormat(undefined, {
+  // except for Norwegian
+  const dateLocale = locale === "no" ? "no" : undefined;
+
+  return new Intl.DateTimeFormat(dateLocale, {
     hour: "2-digit",
     minute: "2-digit",
     second: "2-digit",

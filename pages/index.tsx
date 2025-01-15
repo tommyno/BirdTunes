@@ -149,7 +149,7 @@ export default function Home() {
               <p className="color-red">{speciesError.toString()}</p>
             )}
 
-            <LastUpdated />
+            <LastUpdated lang={lang} />
           </div>
         )}
 
