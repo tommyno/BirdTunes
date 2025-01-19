@@ -1,82 +1,91 @@
+// Define the shape of our audio processor object
 type AudioProcessor = {
-  readonly context: AudioContext;
-  readonly gain: GainNode;
-  readonly analyser: AnalyserNode;
-  setGain: (value: number) => void;
-  getGain: () => number;
-  startAutoGain: () => void;
-  stopAutoGain: () => void;
+  readonly context: AudioContext; // Web Audio context for processing
+  readonly gain: GainNode; // Node that controls volume
+  readonly analyser: AnalyserNode; // Node that analyzes audio data
+  setGain: (value: number) => void; // Manually set gain value
+  getGain: () => number; // Get current gain value
+  startAutoGain: () => void; // Start automatic gain adjustment
+  stopAutoGain: () => void; // Stop automatic gain adjustment
 };
 
+// Configuration options for creating an audio processor
 type CreateAudioProcessorProps = {
-  audioElement: HTMLAudioElement;
-  initialGain?: number;
-  minGain?: number;
-  maxGain?: number;
-  targetLevel?: number; // Target dB level we want to achieve
+  audioElement: HTMLAudioElement; // The audio element to process
+  initialGain?: number; // Starting gain value
+  minGain?: number; // Minimum allowed gain
+  maxGain?: number; // Maximum allowed gain
+  targetLevel?: number; // Target loudness level in decibels (dB)
 };
 
-// Track connected audio elements to prevent duplicate connections
+// Store processors in a WeakMap to prevent memory leaks and duplicate connections
 const audioProcessors = new WeakMap<HTMLAudioElement, AudioProcessor>();
 
 export const createAudioProcessor = ({
   audioElement,
   initialGain = 1,
   minGain = 1,
-  maxGain = 50, // Maximum gain multiplier
-  targetLevel = -10, // Target level in dB
+  maxGain = 75, // Maximum gain multiplier (75x amplification)
+  targetLevel = -10, // Target level in dB (-10 is a good balance between loudness and avoiding distortion)
 }: CreateAudioProcessorProps): AudioProcessor => {
-  // Return existing processor if already connected
+  // Return existing processor if we've already set one up for this audio element
   const existing = audioProcessors.get(audioElement);
   if (existing) {
     existing.setGain(initialGain);
     return existing;
   }
 
-  // Create new audio processing chain
+  // Set up the Web Audio processing chain
   const context = new AudioContext();
   const source = context.createMediaElementSource(audioElement);
   const analyser = context.createAnalyser();
   const gain = context.createGain();
 
-  // Configure analyser
-  analyser.fftSize = 2048;
-  analyser.smoothingTimeConstant = 0.8;
+  // Configure the analyzer for audio level detection
+  analyser.fftSize = 2048; // Size of FFT for analysis (larger = more precise but slower)
+  analyser.smoothingTimeConstant = 0.7; // How smooth the analysis is (0 = no smoothing, 1 = maximum smoothing)
 
-  // Connect the audio graph: source -> analyser -> gain -> destination
+  // Connect the audio nodes in sequence: source -> analyser -> gain -> speakers
   source.connect(analyser);
   analyser.connect(gain);
   gain.connect(context.destination);
 
+  // Track the animation frame for auto-gain updates
   let autoGainRAF: number | null = null;
 
+  // Function that continuously updates the gain based on audio levels
   const updateGain = () => {
+    // Get audio data from analyzer
     const dataArray = new Float32Array(analyser.frequencyBinCount);
     analyser.getFloatTimeDomainData(dataArray);
 
-    // Calculate RMS (Root Mean Square) value
+    // Calculate RMS (Root Mean Square) to get average audio level
     let sum = 0;
     for (let i = 0; i < dataArray.length; i++) {
       sum += dataArray[i] * dataArray[i];
     }
     const rms = Math.sqrt(sum / dataArray.length);
 
-    // Convert to dB
-    const db = 20 * Math.log10(rms);
+    // Convert RMS to decibels (dB)
+    // Use max to prevent -Infinity when signal is very quiet
+    const db = 20 * Math.log10(Math.max(rms, 1e-6));
 
-    // Calculate required gain to reach target level
+    // Calculate how much gain we need to reach target level
     const dbDiff = targetLevel - db;
     const newGain = Math.min(
       maxGain,
       Math.max(minGain, Math.pow(10, dbDiff / 20))
     );
 
-    // Smooth gain changes
-    gain.gain.value = gain.gain.value * 0.95 + newGain * 0.05;
+    // Smooth gain changes to prevent sudden volume jumps
+    // 85% previous value, 15% new value for smooth transitions
+    gain.gain.value = gain.gain.value * 0.85 + newGain * 0.15;
 
+    // Schedule next update
     autoGainRAF = requestAnimationFrame(updateGain);
   };
 
+  // Create the processor interface
   const processor: AudioProcessor = {
     context,
     gain,
@@ -98,7 +107,7 @@ export const createAudioProcessor = ({
     },
   };
 
-  // Store the processor and set initial gain
+  // Store the processor and initialize gain
   audioProcessors.set(audioElement, processor);
   processor.setGain(initialGain);
 
