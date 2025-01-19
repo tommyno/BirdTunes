@@ -15,6 +15,7 @@ import { useRouter } from "next/router";
 import { useMemo } from "react";
 import { LanguageSwitcher } from "components/LanguageSwitcher";
 import { GetServerSideProps } from "next";
+import { StationSearch } from "components/StationSearch";
 
 export default function Home() {
   const router = useRouter();
@@ -99,6 +100,8 @@ export default function Home() {
 
       <div className="wrap">
         <h1>BirdTunes</h1>
+
+        <StationSearch />
 
         <LanguageSwitcher />
 
