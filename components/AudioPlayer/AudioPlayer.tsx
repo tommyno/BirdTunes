@@ -51,8 +51,10 @@ export const AudioPlayer = ({ url, startTime = 0 }: AudioPlayerProps) => {
         />
       </div>
       {isLoaded && (
-        <p>
-          {t("detectedSeconds")} {startTime} {t("seconds")}
+        <p className="color-muted">
+          <small>
+            {t("detectedSeconds")} {startTime} {t("seconds")}
+          </small>
         </p>
       )}
     </>
