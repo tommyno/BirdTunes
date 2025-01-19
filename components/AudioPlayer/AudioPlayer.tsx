@@ -21,8 +21,9 @@ export const AudioPlayer = ({ url, startTime = 0 }: AudioPlayerProps) => {
     if (audioRef.current && !processorRef.current) {
       processorRef.current = createAudioProcessor({
         audioElement: audioRef.current,
-        initialGain: 4,
       });
+
+      processorRef.current.startAutoGain();
     }
   }, []);
 
