@@ -1,6 +1,7 @@
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import styles from "./AudioPlayer.module.scss";
 import { useTranslation } from "hooks/useTranslation";
+import { amplifyMedia } from "utils/audio";
 
 type AudioPlayerProps = {
   url: string;
@@ -12,6 +13,13 @@ export const AudioPlayer = ({ url, startTime = 0 }: AudioPlayerProps) => {
   const [isPlaying, setIsPlaying] = useState(false);
   const [isLoaded, setIsLoaded] = useState(false);
   const audioRef = useRef<HTMLAudioElement>(null);
+  const processorRef = useRef<ReturnType<typeof amplifyMedia> | null>(null);
+
+  useEffect(() => {
+    if (audioRef.current && !processorRef.current) {
+      processorRef.current = amplifyMedia(audioRef.current, 4);
+    }
+  }, []);
 
   const handlePlayPause = () => {
     if (!audioRef.current) return;
@@ -34,22 +42,25 @@ export const AudioPlayer = ({ url, startTime = 0 }: AudioPlayerProps) => {
   return (
     <>
       <div className={styles.player}>
-        {!isLoaded && (
-          <button
-            onClick={handlePlayPause}
-            className={styles.playButton}
-            aria-label={isPlaying ? t("pause") : t("play")}
-          >
-            <img src="/icons/play.svg" alt="" />
-          </button>
-        )}
+        <button
+          onClick={handlePlayPause}
+          className={styles.playButton}
+          aria-label={isPlaying ? t("pause") : t("play")}
+        >
+          <img
+            src={isPlaying ? "/icons/close.svg" : "/icons/play.svg"}
+            alt=""
+          />
+        </button>
         <audio
           ref={audioRef}
+          crossOrigin="anonymous"
           onEnded={() => setIsPlaying(false)}
           onPause={() => setIsPlaying(false)}
           onPlay={() => setIsPlaying(true)}
         />
       </div>
+
       {isLoaded && (
         <p className="color-muted">
           <small>
