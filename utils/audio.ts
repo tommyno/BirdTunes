@@ -1,49 +1,50 @@
 type AudioProcessor = {
-  context: AudioContext;
-  source: MediaElementAudioSourceNode;
-  gain: GainNode;
-  media: HTMLAudioElement;
-  amplify: (multiplier: number) => void;
-  getAmpLevel: () => number;
+  readonly context: AudioContext;
+  readonly gain: GainNode;
+  setGain: (value: number) => void;
+  getGain: () => number;
 };
 
-// Keep track of audio elements that have been connected
-const connectedElements = new WeakMap<HTMLAudioElement, AudioProcessor>();
+type CreateAudioProcessorProps = {
+  audioElement: HTMLAudioElement;
+  initialGain?: number;
+};
 
-export function amplifyMedia(
-  mediaElem: HTMLAudioElement,
-  multiplier: number
-): AudioProcessor {
-  // Check if this audio element is already connected
-  const existing = connectedElements.get(mediaElem);
+// Track connected audio elements to prevent duplicate connections
+const audioProcessors = new WeakMap<HTMLAudioElement, AudioProcessor>();
+
+export const createAudioProcessor = ({
+  audioElement,
+  initialGain = 1,
+}: CreateAudioProcessorProps): AudioProcessor => {
+  // Return existing processor if already connected
+  const existing = audioProcessors.get(audioElement);
   if (existing) {
-    existing.amplify(multiplier);
+    existing.setGain(initialGain);
     return existing;
   }
 
   // Create new audio processing chain
-  const context = new (window.AudioContext ||
-    (window as any).webkitAudioContext)();
-  const result: AudioProcessor = {
-    context,
-    source: context.createMediaElementSource(mediaElem),
-    gain: context.createGain(),
-    media: mediaElem,
-    amplify: function (multiplier: number) {
-      this.gain.gain.value = multiplier;
-    },
-    getAmpLevel: function () {
-      return this.gain.gain.value;
-    },
-  };
+  const context = new AudioContext();
+  const source = context.createMediaElementSource(audioElement);
+  const gain = context.createGain();
 
   // Connect the audio graph
-  result.source.connect(result.gain);
-  result.gain.connect(context.destination);
-  result.amplify(multiplier);
+  source.connect(gain);
+  gain.connect(context.destination);
 
-  // Store the connection
-  connectedElements.set(mediaElem, result);
+  const processor: AudioProcessor = {
+    context,
+    gain,
+    setGain: (value) => {
+      gain.gain.value = value;
+    },
+    getGain: () => gain.gain.value,
+  };
 
-  return result;
-}
+  // Store the processor and set initial gain
+  audioProcessors.set(audioElement, processor);
+  processor.setGain(initialGain);
+
+  return processor;
+};

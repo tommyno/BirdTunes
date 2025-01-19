@@ -1,7 +1,7 @@
 import { useState, useRef, useEffect } from "react";
 import styles from "./AudioPlayer.module.scss";
 import { useTranslation } from "hooks/useTranslation";
-import { amplifyMedia } from "utils/audio";
+import { createAudioProcessor } from "utils/audio";
 
 type AudioPlayerProps = {
   url: string;
@@ -13,11 +13,16 @@ export const AudioPlayer = ({ url, startTime = 0 }: AudioPlayerProps) => {
   const [isPlaying, setIsPlaying] = useState(false);
   const [isLoaded, setIsLoaded] = useState(false);
   const audioRef = useRef<HTMLAudioElement>(null);
-  const processorRef = useRef<ReturnType<typeof amplifyMedia> | null>(null);
+  const processorRef = useRef<ReturnType<typeof createAudioProcessor> | null>(
+    null
+  );
 
   useEffect(() => {
     if (audioRef.current && !processorRef.current) {
-      processorRef.current = amplifyMedia(audioRef.current, 4);
+      processorRef.current = createAudioProcessor({
+        audioElement: audioRef.current,
+        initialGain: 4,
+      });
     }
   }, []);
 
