@@ -1,5 +1,6 @@
 import { useRouter } from "next/router";
 import styles from "./LanguageSwitcher.module.scss";
+import { Fragment } from "react";
 
 // This list is identical to Birdweather's language list
 const languages = [
@@ -60,12 +61,12 @@ export const LanguageSwitcher = () => {
         className={styles.select}
       >
         {languages.map((lang, index) => (
-          <>
+          <Fragment key={lang.code}>
             {index === 2 && <hr />}
             <option key={lang.code} value={lang.code}>
               {lang.name}
             </option>
-          </>
+          </Fragment>
         ))}
       </select>
     </div>
