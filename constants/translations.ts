@@ -9,7 +9,7 @@ export const translations = {
   lastHeard: {
     en: "Last heard",
     no: "Sist hørt",
-    sv: "Senast hörd",
+    sv: "Senast hörda",
   },
   mostVisits: {
     en: "Most visits",
