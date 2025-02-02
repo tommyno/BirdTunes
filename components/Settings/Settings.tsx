@@ -58,8 +58,12 @@ export const Settings: React.FC<Props> = ({
         <>
           <p>
             <strong>
-              <button className="link" onClick={() => setIsEditMode(true)}>
-                {stationName || t("changeStation")}
+              <button
+                className={styles.stationWrap}
+                onClick={() => setIsEditMode(true)}
+              >
+                <span>{stationName || t("changeStation")}</span>
+                <img src="/icons/settings.svg" alt={t("changeStation")} />
               </button>
             </strong>
           </p>

@@ -3,6 +3,18 @@
   position: relative;
 }
 
+.stationWrap {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-2);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  text-decoration-thickness: 0.5px;
+  color: inherit;
+  margin-left: auto;
+  margin-right: auto;
+}
+
 .button {
   background: none;
   border: none;
