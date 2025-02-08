@@ -1,7 +1,11 @@
 .wrap {
   position: sticky;
   bottom: var(--spacing-4);
-  margin-top: var(--spacing-5);
+
+  // Avoid content being hidden behind the home indicator when in standalone mode (iOS)
+  @media all and (display-mode: standalone) {
+    margin-top: var(--spacing-6);
+  }
 }
 
 .content {
