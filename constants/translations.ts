@@ -17,6 +17,11 @@ export const translations = {
     sv: "Flest besök",
   },
   search: {
+    en: "Search",
+    no: "Søk",
+    sv: "Sök",
+  },
+  searchPlaceholder: {
     en: "Search species",
     no: "Søk arter",
     sv: "Sök arter",

@@ -44,7 +44,7 @@ export const Search: React.FC = () => {
         value={inputValue}
         handleChange={handleInputChange}
         autoFocus={true}
-        placeholder={t("search")}
+        placeholder={t("searchPlaceholder")}
       />
 
       {inputValue && (
