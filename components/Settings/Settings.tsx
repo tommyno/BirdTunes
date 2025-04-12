@@ -56,17 +56,15 @@ export const Settings: React.FC<Props> = ({
     <div className={styles.wrap}>
       {!isEditMode && (
         <>
-          <p>
-            <strong>
-              <button
-                className={styles.stationWrap}
-                onClick={() => setIsEditMode(true)}
-              >
-                <span>{stationName || t("changeStation")}</span>
-                <img src="/icons/settings.svg" alt={t("changeStation")} />
-              </button>
-            </strong>
-          </p>
+          <h2 className={styles.title}>
+            <button
+              className={styles.stationWrap}
+              onClick={() => setIsEditMode(true)}
+            >
+              <span>{stationName || t("changeStation")}</span>
+              <img src="/icons/settings.svg" alt={t("changeStation")} />
+            </button>
+          </h2>
 
           <p>
             {totalDetections} {t("detections")} · {speciesData?.length || 0}{" "}

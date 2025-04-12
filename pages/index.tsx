@@ -102,7 +102,7 @@ export default function Home() {
       </Head>
 
       <div className="header">
-        <h1 className="h3">BirdTunes.net</h1>
+        <h1 className="h3">BirdTunes</h1>
         <LanguageSwitcher />
       </div>
 
@@ -163,7 +163,7 @@ export default function Home() {
 
       {!isLoadingSpecies && (
         <div className="footer">
-          <p>BirdTunes.net</p>
+          <p>BirdTunes</p>
           <a
             href="https://github.com/tommyno/birdtunes"
             className="link"

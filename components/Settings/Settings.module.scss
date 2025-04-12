@@ -7,12 +7,23 @@
   display: flex;
   align-items: center;
   gap: var(--spacing-2);
-  text-decoration: underline;
-  text-underline-offset: 2px;
-  text-decoration-thickness: 0.5px;
   color: inherit;
   margin-left: auto;
   margin-right: auto;
+
+  &:hover {
+    text-decoration: underline;
+    text-underline-offset: 2px;
+    text-decoration-thickness: 0.5px;
+  }
+}
+
+.title {
+  font-size: 1.5rem;
+  text-wrap: balance;
+  line-height: 1.1;
+  font-weight: bold;
+  margin-bottom: var(--spacing-2);
 }
 
 .button {
