@@ -3,6 +3,7 @@
   gap: var(--spacing-7) var(--spacing-5);
   grid-template-columns: repeat(4, minmax(0, 400px));
   justify-content: center;
+  margin-bottom: var(--spacing-6);
 
 
   @media (max-width: 1000px) {
