@@ -101,11 +101,12 @@ export default function Home() {
         <meta property="og:image" content="/open-graph-share.png" />
       </Head>
 
-      <div className="wrap">
-        <h1>BirdTunes</h1>
-
+      <div className="header">
+        <h1 className="h3">BirdTunes.net</h1>
         <LanguageSwitcher />
+      </div>
 
+      <div className="wrap">
         {!isLoadingSpecies && (
           <Settings
             speciesData={speciesData}
@@ -162,7 +163,7 @@ export default function Home() {
 
       {!isLoadingSpecies && (
         <div className="footer">
-          <p>BirdTunes</p>
+          <p>BirdTunes.net</p>
           <a
             href="https://github.com/tommyno/birdtunes"
             className="link"
