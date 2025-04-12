@@ -52,6 +52,9 @@ export const Settings: React.FC<Props> = ({
     window.location.reload();
   };
 
+  // Remove "BirdNET-Pi - " from stationName
+  const cleanStationName = stationName?.replace("BirdNET-Pi - ", "");
+
   return (
     <div className={styles.wrap}>
       {!isEditMode && (
@@ -61,7 +64,7 @@ export const Settings: React.FC<Props> = ({
               className={styles.stationWrap}
               onClick={() => setIsEditMode(true)}
             >
-              <span>{stationName || t("changeStation")}</span>
+              <span>{cleanStationName || t("changeStation")}</span>
               <img src="/icons/settings.svg" alt={t("changeStation")} />
             </button>
           </h2>
