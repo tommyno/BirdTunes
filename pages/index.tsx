@@ -87,12 +87,16 @@ export default function Home() {
     );
   }, [sort, speciesObservations, speciesActive, searchFilter]);
 
+  const title = stationData?.name
+    ? `${stationData?.name} | BirdTunes`
+    : "BirdTunes";
+
   return (
     <>
       <Head>
-        <title>BirdTunes</title>
+        <title>{title}</title>
         <meta name="description" content={t("pageDescription")} />
-        <meta name="og:title" content="BirdTunes" />
+        <meta name="og:title" content={title} />
         <meta name="og:description" content={t("pageDescription")} />
         <meta property="og:image" content="/open-graph-share.png" />
       </Head>
