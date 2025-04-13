@@ -87,8 +87,9 @@ export default function Home() {
     );
   }, [sort, speciesObservations, speciesActive, searchFilter]);
 
-  const title = stationData?.name
-    ? `${stationData?.name} | BirdTunes`
+  const cleanStationName = stationData?.name?.replace("BirdNET-Pi - ", "");
+  const title = cleanStationName
+    ? `${cleanStationName} | BirdTunes`
     : "BirdTunes";
 
   return (
