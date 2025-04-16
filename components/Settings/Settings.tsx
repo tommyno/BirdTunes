@@ -70,8 +70,8 @@ export const Settings: React.FC<Props> = ({
           </h2>
 
           <p>
-            {totalDetections} {t("detections")} · {speciesData?.length || 0}{" "}
-            {t("species")}
+            {speciesData?.length || 0} {t("species")} · {totalDetections}{" "}
+            {t("detections")}
           </p>
 
           {speciesError && (
