@@ -118,7 +118,7 @@ export default function Home() {
           />
         )}
 
-        <NewSpecies speciesData={speciesData} />
+        <NewSpecies speciesData={speciesData} stationId={stationId} />
 
         <div style={{ margin: "16px 0 24px" }}>
           <Button
