@@ -15,6 +15,7 @@ import { useRouter } from "next/router";
 import { useMemo } from "react";
 import { LanguageSwitcher } from "components/LanguageSwitcher";
 import { GetServerSideProps } from "next";
+import { NewSpecies } from "components/NewSpecies/NewSpecies";
 
 export default function Home() {
   const router = useRouter();
@@ -115,6 +116,10 @@ export default function Home() {
             stationId={stationId}
             stationName={stationData?.name}
           />
+        )}
+
+        {!isLoadingSpecies && (
+          <NewSpecies speciesData={speciesData} stationId={stationId} />
         )}
 
         <div style={{ margin: "16px 0 24px" }}>
