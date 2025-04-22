@@ -15,9 +15,9 @@ type Props = {
 };
 
 export const NewSpecies: React.FC<Props> = ({ speciesData, stationId }) => {
-  if (!stationId || !speciesData) return null;
-
   const { t } = useTranslation();
+
+  if (!stationId || !speciesData) return null;
 
   // Get species ids from local storage
   const localstoreData = getItem("newSpecies") as BirdnetStation[];
