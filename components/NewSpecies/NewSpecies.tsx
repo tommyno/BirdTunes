@@ -15,7 +15,7 @@ type Props = {
 };
 
 export const NewSpecies: React.FC<Props> = ({ speciesData, stationId }) => {
-  if (!stationId) return null;
+  if (!stationId || !speciesData) return null;
 
   const { t } = useTranslation();
 
@@ -73,11 +73,17 @@ export const NewSpecies: React.FC<Props> = ({ speciesData, stationId }) => {
   return (
     <div className={styles.wrap}>
       <p>
-        {newSpecies.length} {t("newSpecies")} {t("sinceLastVisit")}:
+        {newSpecies.length}{" "}
+        {newSpecies.length === 1 ? t("newSpecie") : t("newSpecies")}{" "}
+        {t("sinceLastVisit")}:
       </p>
-      <div className={styles.list}>
-        {newSpecies.map((species) => (
-          <span key={species.id}>{species.commonName}</span>
+
+      <div>
+        {newSpecies.map((species, index) => (
+          <React.Fragment key={species.id}>
+            {index > 0 && ", "}
+            <strong>{species.commonName}</strong>
+          </React.Fragment>
         ))}
       </div>
     </div>

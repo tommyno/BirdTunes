@@ -118,7 +118,9 @@ export default function Home() {
           />
         )}
 
-        <NewSpecies speciesData={speciesData} stationId={stationId} />
+        {!isLoadingSpecies && (
+          <NewSpecies speciesData={speciesData} stationId={stationId} />
+        )}
 
         <div style={{ margin: "16px 0 24px" }}>
           <Button

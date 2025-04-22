@@ -96,6 +96,11 @@ export const translations = {
     no: "Lagre",
     sv: "Spara",
   },
+  newSpecie: {
+    en: "new species",
+    no: "ny art",
+    sv: "ny art",
+  },
   newSpecies: {
     en: "new species",
     no: "nye arter",
