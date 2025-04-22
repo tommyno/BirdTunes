@@ -5,7 +5,7 @@ import { Fragment } from "react";
 // This list is identical to Birdweather's language list
 const languages = [
   { code: "en", name: "English" },
-  { code: "no", name: "Norwegian" },
+  { code: "no", name: "Norsk" },
   { code: "af", name: "Afrikaans" },
   { code: "ar", name: "Arabic" },
   { code: "zh", name: "Chinese" },
