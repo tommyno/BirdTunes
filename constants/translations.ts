@@ -96,6 +96,16 @@ export const translations = {
     no: "Lagre",
     sv: "Spara",
   },
+  newSpecies: {
+    en: "new species",
+    no: "nye arter",
+    sv: "nya arter",
+  },
+  sinceLastVisit: {
+    en: "since last visit",
+    no: "siden forrige besøk",
+    sv: "sedan förra besök",
+  },
   minute: {
     en: "minute",
     no: "minutt",

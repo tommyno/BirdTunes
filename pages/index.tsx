@@ -15,6 +15,7 @@ import { useRouter } from "next/router";
 import { useMemo } from "react";
 import { LanguageSwitcher } from "components/LanguageSwitcher";
 import { GetServerSideProps } from "next";
+import { NewSpecies } from "components/NewSpecies/NewSpecies";
 
 export default function Home() {
   const router = useRouter();
@@ -116,6 +117,8 @@ export default function Home() {
             stationName={stationData?.name}
           />
         )}
+
+        <NewSpecies speciesData={speciesData} />
 
         <div style={{ margin: "16px 0 24px" }}>
           <Button
