@@ -171,7 +171,7 @@ export const translations = {
   },
   ago: {
     en: "ago",
-    de: "seit",
+    de: "her",
     no: "siden",
     sv: "sedan",
   },
