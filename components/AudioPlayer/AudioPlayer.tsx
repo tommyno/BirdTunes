@@ -16,6 +16,8 @@ export const AudioPlayer = ({ url, startTime = 0 }: AudioPlayerProps) => {
   const processorRef = useRef<ReturnType<typeof createAudioProcessor> | null>(
     null
   );
+  
+  const playerStartedEvent = "audio-player-started";
 
   useEffect(() => {
     if (audioRef.current && !processorRef.current) {
@@ -26,14 +28,34 @@ export const AudioPlayer = ({ url, startTime = 0 }: AudioPlayerProps) => {
       processorRef.current.startAutoGain();
     }
   }, []);
+  
+  // Listen for other players starting
+  useEffect(() => {
+    const handleOtherPlayerStarted = () => {
+      const audio = audioRef.current;
+      if (audio && !audio.paused) {
+        audio.pause();
+      }
+    };
+
+    window.addEventListener(playerStartedEvent, handleOtherPlayerStarted);
+    return () => {
+      window.removeEventListener(playerStartedEvent, handleOtherPlayerStarted);
+    };
+  }, []);
 
   const handlePlayPause = () => {
     if (!audioRef.current) return;
+	
+	if (!isPlaying) {
+      // Notify other players to stop
+      window.dispatchEvent(new Event(playerStartedEvent));
+    }
 
     if (!isLoaded) {
       audioRef.current.src = url;
       setIsLoaded(true);
-    }
+    }	
 
     if (isPlaying) {
       audioRef.current.pause();
