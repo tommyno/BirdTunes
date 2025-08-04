@@ -93,7 +93,7 @@ export const translations = {
   },
   changeStation: {
     en: "Change station",
-    de: "Station ädndern",
+    de: "Station ändern",
     no: "Endre stasjon",
     sv: "Byt station",
   },
@@ -171,7 +171,7 @@ export const translations = {
   },
   ago: {
     en: "ago",
-    de: "seit",
+    de: "her",
     no: "siden",
     sv: "sedan",
   },
