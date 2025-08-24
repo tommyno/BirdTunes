@@ -65,13 +65,13 @@ export const translations = {
     en: "detections",
     de: "Observationen",
     no: "observasjoner",
-    sv: "observationer",
+    sv: "observationerna",
   },
   last: {
     en: "Last",
     de: "Zuletzt",
     no: "Siste",
-    sv: "Sista",
+    sv: "Senaste",
   },
   lastUpdated: {
     en: "Updated",
@@ -131,7 +131,7 @@ export const translations = {
     en: "since last visit",
     de: "seit letztem Besuch",
     no: "siden forrige besøk",
-    sv: "sedan förra besök",
+    sv: "sedan förra besöket",
   },
   minute: {
     en: "minute",
