@@ -1,0 +1,125 @@
+---
+description: Guidelines for writing code for Birdtunes.net
+alwaysApply: true
+---
+
+# Birdtunes.net Development Guidelines
+
+## Project Setup
+
+- **Framework**: Next.js 15.5.2 with React 19.1.1
+- **Language**: TypeScript with strict mode enabled
+
+## Code Style & Architecture
+
+### Component Patterns
+
+- Use functional components with TypeScript
+- Define component props using `type` (not `interface`)
+- Export components using named exports: `export { ComponentName } from "./ComponentName"`
+- Each component should have its own directory with:
+  - `ComponentName.tsx` - main component file
+  - `ComponentName.module.scss` - component styles
+  - `index.ts` - export file
+
+### TypeScript Guidelines
+
+- Use `type` instead of `interface` for all type definitions
+- Use descriptive names for types (e.g., `Props`, `FormData`, `ApiResponse`)
+- Define props inline or as separate types before the component
+- Use strict TypeScript settings - no `any` types
+
+### Naming and Code Structure
+
+- Use `const` for function definitions: `const handleClick = () => {}`
+- Event handlers should be prefixed with "handle": `handleClick`, `handleSubmit`, `handleKeyDown`
+- Use descriptive variable names
+- Use early returns to improve code readability
+
+### Styling
+
+- Use SCSS modules for all component styling
+- Follow CSS custom properties defined in `styles/variables.scss`
+- Don't use arbitrary values for spacing/margin/padding etc, use "--spacing-1" to "spacing-10" as defined in `styles/variables.scss`
+- Don't use arbitrary values for colors, use "--color-[name]" as defined in `styles/variables.scss`
+- Never use Tailwind
+- Use generic naming for most css classes since we're using css modules, ex: "wrap" and "box" and "header"
+- Use camelCase for complex css class names when needed, not dash or underscore
+- Use "-" prefix for modifiers, ex: "-color-red" and "-size-small"
+
+### Component Structure Template
+
+```typescript
+import React from "react";
+import { classNames } from "utils/classNames";
+import styles from "./ComponentName.module.scss";
+
+type Props = {
+  // props definition
+};
+
+export const ComponentName: React.FC<Props> = (
+  {
+    // destructured props
+  }
+) => {
+  // early returns for edge cases
+  if (condition) return null;
+
+  // component logic
+  const handleClick = () => {
+    // event handler logic
+  };
+
+  // className variables
+  const componentClass = classNames(
+    styles.base,
+    condition && styles.modifier,
+    variant && styles[`-variant-${variant}`]
+  );
+
+  return (
+    <element className={componentClass} onClick={handleClick}>
+      {children}
+    </element>
+  );
+};
+```
+
+### Import Organization
+
+1. React imports first
+2. Third-party library imports
+3. Internal utilities and hooks
+4. Component imports
+5. Styles (always last)
+
+### File Organization
+
+- Components go in `components/` directory
+- Utilities in `utils/` directory
+- Hooks in `hooks/` directory
+- Pages in `pages/` directory (Next.js pages routing)
+
+## Best Practices
+
+- Follow DRY principles
+- Prioritize code readability over performance optimization
+- Leave no TODOs or placeholders in production code
+- Include all required imports
+- Ensure all functionality is fully implemented
+- Write self-documenting code with clear variable names
+- Use TypeScript strictly - no implicit any
+- Implement proper error handling
+- Follow the existing patterns established in the codebase
+- Use "// comment" for comments (not: "/_ comment _/")
+
+## Guidelines for AI Assistant
+
+- If you don't know the answer, say so and stop, instead of making things up
+- If a prompt or question is unclear, stop and ask for clarification, before continuing
+
+## API
+
+- Use the Birdweather REST API: https://app.birdweather.com/api/v1
+- If the REST API doesnt support the feature you need, use the GraphQL API: https://app.birdweather.com/api/
