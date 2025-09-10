@@ -9,8 +9,8 @@ import { STATION_ID } from "constants/birdweather";
 import { useFetchSpecies } from "hooks/useFetchSpecies";
 import { useFetchStation } from "hooks/useFetchStation";
 import { useTranslation } from "hooks/useTranslation";
+import { useQueryParams } from "hooks/useQueryParams";
 import Head from "next/head";
-import { useSearchParams } from "next/navigation";
 import { useRouter } from "next/router";
 import { useMemo } from "react";
 import { LanguageSwitcher } from "components/LanguageSwitcher";
@@ -19,19 +19,23 @@ import { NewSpecies } from "components/NewSpecies/NewSpecies";
 
 export default function Home() {
   const router = useRouter();
-  const searchParams = useSearchParams();
-  const isReady = router.isReady && searchParams !== null;
+  const isReady = router.isReady;
   const { t } = useTranslation();
 
-  // Only get params after router is ready
-  const stationId = isReady ? searchParams.get("station") || STATION_ID : null;
-  const lang = isReady ? searchParams.get("lang") || "en" : null;
-  const period = isReady ? searchParams.get("period") || "all" : null;
-  const sort = isReady ? searchParams.get("sort") || "active" : null;
+  // Get query parameters with defaults
+  const [params, { setParams }] = useQueryParams({
+    defaults: {
+      station: STATION_ID,
+      lang: "en",
+      period: "all",
+      sort: "active",
+      search: "",
+    },
+    ready: isReady,
+  });
 
-  const searchFilter = isReady
-    ? searchParams.get("search")?.toString()?.toLowerCase()
-    : "";
+  const { station: stationId, lang, period, sort, search } = params;
+  const searchFilter = search.toLowerCase();
 
   const {
     data: speciesData = [],
@@ -56,24 +60,15 @@ export default function Home() {
   );
 
   // Toggle different views/sortings
-  const handleSortBy = (sortBy: string) => {
-    const { query } = router;
-    const updatedQuery = { ...query, sort: sortBy } as {
-      [key: string]: string | string[];
-    };
+  const handleSortBy = async (sortBy: string) => {
+    const params: Record<string, string | null> = { sort: sortBy };
 
     // Remove search param when no longer in search view
     if (sortBy !== "search") {
-      delete updatedQuery["search"];
+      params.search = null;
     }
 
-    router.replace(
-      {
-        query: updatedQuery,
-      },
-      undefined,
-      { shallow: true }
-    );
+    await setParams(params);
   };
 
   const filteredSpecies = useMemo(() => {

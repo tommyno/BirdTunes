@@ -1,11 +1,15 @@
 import { useRouter } from "next/router";
 import { Locale, translations } from "constants/translations";
+import { getQueryParam } from "hooks/useQueryParams";
 
 export type TranslationKey = keyof typeof translations;
 
 export const useTranslation = () => {
   const { query } = useRouter();
-  const locale = (query.lang as Locale) || "en";
+  const locale = getQueryParam({
+    value: query.lang,
+    defaultValue: "en",
+  }) as Locale;
 
   const t = (key: TranslationKey): string => {
     return (

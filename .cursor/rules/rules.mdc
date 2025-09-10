@@ -112,7 +112,7 @@ export const ComponentName: React.FC<Props> = (
 - Use TypeScript strictly - no implicit any
 - Implement proper error handling
 - Follow the existing patterns established in the codebase
-- Use "// comment" for comments (not: "/_ comment _/")
+- Use "// comment" for comments (not: "/** comment **/")
 
 ## Guidelines for AI Assistant
 

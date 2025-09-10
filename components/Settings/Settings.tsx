@@ -3,8 +3,9 @@ import styles from "./Settings.module.scss";
 import { Species } from "hooks/useFetchSpecies";
 import { Input } from "components/Input/Input";
 import { Button } from "components/Button";
-import router from "next/router";
+import { useRouter } from "next/router";
 import { useTranslation } from "hooks/useTranslation";
+import { setQueryParams } from "hooks/useQueryParams";
 
 type Props = {
   speciesData?: Species[];
@@ -19,6 +20,7 @@ export const Settings: React.FC<Props> = ({
   stationId,
   stationName,
 }) => {
+  const router = useRouter();
   const [isEditMode, setIsEditMode] = useState(false);
   const [inputValue, setInputValue] = useState(stationId || "");
 
@@ -43,9 +45,11 @@ export const Settings: React.FC<Props> = ({
       return;
     }
 
-    const query = { ...router.query, station: inputValue };
-
-    await router.replace({ query }, undefined, { shallow: false });
+    await setQueryParams({
+      router,
+      params: { station: inputValue },
+      options: { shallow: false },
+    });
     setIsEditMode(false);
 
     // Hack: refresh page to load new data
