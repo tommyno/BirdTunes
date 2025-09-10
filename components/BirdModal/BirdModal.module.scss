@@ -18,10 +18,51 @@
 }
 
 .detection {
+  margin-bottom: var(--spacing-3);
+  padding: var(--spacing-2);
+  border-radius: var(--border-radius);
+  background: var(--color-winter);
+  position: relative;
+}
+
+.playButton {
   display: flex;
   align-items: center;
   justify-content: center;
-  flex-wrap: wrap;
-  gap: var(--spacing-2);
-  margin-bottom: var(--spacing-3);
+  position: absolute;
+  right: var(--spacing-2);
+  top: 50%;
+  transform: translateY(-50%);
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: var(--color-forrest);
+  color: var(--color-white);
+  cursor: pointer;
+  transition: all 0.2s ease;
+
+  &:hover {
+    background: #263018;
+    transform: translateY(-50%) scale(1.1);
+  }
+
+  &:focus {
+    outline: 2px solid var(--color-forrest);
+    outline-offset: 2px;
+  }
+
+  img {
+    width: 14px;
+    height: 14px;
+    filter: brightness(0) invert(1);
+  }
+
+  &.-playing {
+    background: var(--color-red);
+
+
+    &:focus {
+      outline-color: var(--color-red);
+    }
+  }
 }

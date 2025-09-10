@@ -5,9 +5,11 @@ import styles from "./BirdModal.module.scss";
 import { dateDetailed } from "utils/date";
 import { useFetchDetections } from "hooks/useFetchDetections";
 import { Spinner } from "components/Spinner";
-import { AudioPlayer } from "components/AudioPlayer";
 import { Block } from "components/Block";
 import { useTranslation } from "hooks/useTranslation";
+import { useModalAudioPlayer } from "hooks/useModalAudioPlayer";
+import { ModalAudioPlayer } from "components/ModalAudioPlayer";
+import { classNames } from "utils/classNames";
 
 type BirdModalProps = {
   data: Species & { stationId: string | null; lang: string | null };
@@ -23,6 +25,17 @@ export function BirdModal({ data: bird, isOpen, onClose }: BirdModalProps) {
     stationId: bird.stationId,
     lang: bird.lang,
   });
+
+  const {
+    currentDetection,
+    isPlaying,
+    playDetection,
+    stopAndClose,
+    audioRef,
+    handleAudioPlay,
+    handleAudioPause,
+    handleAudioEnded,
+  } = useModalAudioPlayer({ detections: data });
 
   return (
     <Modal isOpen={isOpen} onClose={onClose}>
@@ -72,18 +85,46 @@ export function BirdModal({ data: bird, isOpen, onClose }: BirdModalProps) {
             </p>
           )}
 
-          {data?.map((detection) => (
-            <div key={detection.id} className={styles.detection}>
-              <p>{dateDetailed(detection.timestamp, bird?.lang)}</p>
-              {detection?.soundscape?.url && (
-                <AudioPlayer
-                  url={detection.soundscape.url}
-                  startTime={detection.soundscape.startTime}
-                />
-              )}
-            </div>
-          ))}
+          {data?.map((detection) => {
+            const isCurrentlyPlaying =
+              currentDetection?.id === detection.id && isPlaying;
+
+            return (
+              <div key={detection.id} className={styles.detection}>
+                <p>{dateDetailed(detection.timestamp, bird?.lang)}</p>
+                {detection?.soundscape?.url && (
+                  <button
+                    onClick={() => playDetection(detection)}
+                    className={classNames(
+                      styles.playButton,
+                      isCurrentlyPlaying && styles["-playing"]
+                    )}
+                    aria-label={isCurrentlyPlaying ? t("pause") : t("play")}
+                  >
+                    <img
+                      src={
+                        isCurrentlyPlaying
+                          ? "/icons/pause.svg"
+                          : "/icons/play.svg"
+                      }
+                      alt=""
+                    />
+                  </button>
+                )}
+              </div>
+            );
+          })}
         </div>
+
+        <ModalAudioPlayer
+          currentDetection={currentDetection}
+          isPlaying={isPlaying}
+          stopAndClose={stopAndClose}
+          audioRef={audioRef}
+          handleAudioPlay={handleAudioPlay}
+          handleAudioPause={handleAudioPause}
+          handleAudioEnded={handleAudioEnded}
+        />
       </div>
     </Modal>
   );
