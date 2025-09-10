@@ -6,6 +6,8 @@ import { Button } from "components/Button";
 import { useRouter } from "next/router";
 import { useTranslation } from "hooks/useTranslation";
 import { setQueryParams } from "hooks/useQueryParams";
+import { useStationSearch, SearchStation } from "hooks/useStationSearch";
+import { Spinner } from "components/Spinner";
 
 type Props = {
   speciesData?: Species[];
@@ -22,9 +24,13 @@ export const Settings: React.FC<Props> = ({
 }) => {
   const router = useRouter();
   const [isEditMode, setIsEditMode] = useState(false);
-  const [inputValue, setInputValue] = useState(stationId || "");
+  const [inputValue, setInputValue] = useState("");
+  const [showResults, setShowResults] = useState(false);
 
   const { t } = useTranslation();
+
+  // Search for stations when user types
+  const { data: searchResults, isLoading } = useStationSearch(inputValue);
 
   const totalDetections = speciesData?.reduce(
     (total, species) => total + species.detections.total,
@@ -34,6 +40,19 @@ export const Settings: React.FC<Props> = ({
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
     setInputValue(value);
+    setShowResults(value.length > 0);
+  };
+
+  const handleSelectStation = async (station: SearchStation) => {
+    await setQueryParams({
+      router,
+      params: { station: station.id },
+      options: { shallow: false },
+    });
+    setIsEditMode(false);
+
+    // Hack: refresh page to load new data
+    window.location.reload();
   };
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -86,7 +105,7 @@ export const Settings: React.FC<Props> = ({
       {isEditMode && (
         <>
           <p>
-            {t("stationIdFrom")}{" "}
+            {t("searchStation")} |{" "}
             <a
               href={`https://app.birdweather.com/${
                 speciesError || !stationId ? "" : `/stations/${stationId}`
@@ -103,12 +122,31 @@ export const Settings: React.FC<Props> = ({
             <Input
               value={inputValue}
               handleChange={handleInputChange}
-              width="small"
-              type="number"
+              type="text"
+              placeholder={t("searchStation")}
             />
-
-            <Button type="submit">{t("save")}</Button>
+            <Button onClick={() => setIsEditMode(false)}>{t("close")}</Button>
           </form>
+
+          {showResults && searchResults.length > 0 && (
+            <div className={styles.searchResults}>
+              {searchResults.map((station) => (
+                <button
+                  key={station.id}
+                  type="button"
+                  className={styles.stationResult}
+                  onClick={() => handleSelectStation(station)}
+                >
+                  {station.name}{" "}
+                  <small className="color-muted">#{station.id}</small>
+                </button>
+              ))}
+            </div>
+          )}
+
+          {showResults && searchResults.length === 0 && isLoading && (
+            <Spinner />
+          )}
         </>
       )}
     </div>

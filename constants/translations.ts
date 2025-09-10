@@ -115,6 +115,18 @@ export const translations = {
     no: "Lagre",
     sv: "Spara",
   },
+  close: {
+    en: "Close",
+    de: "Schliessen",
+    no: "Lukk",
+    sv: "Stäng",
+  },
+  searchStation: {
+    en: "Search station name or ID",
+    de: "Stationsname oder ID suchen",
+    no: "Søk stasjonsnavn eller ID",
+    sv: "Sök stationsnamn eller ID",
+  },
   newSpecie: {
     en: "new species",
     de: "Neue Art",
