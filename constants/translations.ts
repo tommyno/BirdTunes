@@ -122,10 +122,10 @@ export const translations = {
     sv: "Stäng",
   },
   searchStation: {
-    en: "Search station name or ID",
-    de: "Stationsname oder ID suchen",
-    no: "Søk stasjonsnavn eller ID",
-    sv: "Sök stationsnamn eller ID",
+    en: "Search for station name or ID",
+    de: "Nach Stationsname oder ID suchen",
+    no: "Søk etter stasjonsnavn eller ID",
+    sv: "Sök efter stationsnamn eller ID",
   },
   newSpecie: {
     en: "new species",
@@ -198,5 +198,11 @@ export const translations = {
     de: "Sekunden",
     no: "sekunder",
     sv: "sekunder",
+  },
+  noResults: {
+    en: "No results",
+    de: "Keine Ergebnisse",
+    no: "Ingen resultater",
+    sv: "Inga resultat",
   },
 } as const;

@@ -105,7 +105,6 @@ export const Settings: React.FC<Props> = ({
       {isEditMode && (
         <>
           <p>
-            {t("searchStation")} |{" "}
             <a
               href={`https://app.birdweather.com/${
                 speciesError || !stationId ? "" : `/stations/${stationId}`
@@ -125,6 +124,7 @@ export const Settings: React.FC<Props> = ({
               type="text"
               placeholder={t("searchStation")}
             />
+
             <Button onClick={() => setIsEditMode(false)}>{t("close")}</Button>
           </form>
 
@@ -146,6 +146,10 @@ export const Settings: React.FC<Props> = ({
 
           {showResults && searchResults.length === 0 && isLoading && (
             <Spinner />
+          )}
+
+          {showResults && searchResults.length === 0 && !isLoading && (
+            <p>{t("noResults")}</p>
           )}
         </>
       )}
