@@ -45,9 +45,7 @@
 }
 
 .closeButton {
-  all: unset;
   line-height: 1;
-  cursor: pointer;
   padding: var(--spacing-2);
   position: absolute;
   top: var(--spacing-5);
@@ -56,8 +54,7 @@
   border-radius: 50%;
   background-color: var(--color-winter);
 
-  &:hover,
-  &:focus {
+  &:hover {
     background-color: var(--color-gray);
   }
 }

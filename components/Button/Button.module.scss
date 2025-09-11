@@ -1,8 +1,6 @@
 .button {
-  all: unset;
   display: inline-block;
   transition: all 0.05s ease;
-  cursor: pointer;
   text-align: center;
   border-bottom: 4px solid var(--color-winter);
   margin: 0 var(--spacing-2);
