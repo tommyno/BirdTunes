@@ -44,29 +44,15 @@ export const Settings: React.FC<Props> = ({
   };
 
   const handleSelectStation = async (station: SearchStation) => {
-    await setQueryParams({
-      router,
-      params: { station: station.id },
-      options: { shallow: false },
-    });
-    setIsEditMode(false);
-
-    // Hack: refresh page to load new data
-    window.location.reload();
-  };
-
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-
     // If station id is the same as the current station id, don't do anything
-    if (inputValue === stationId) {
+    if (station.id === stationId) {
       setIsEditMode(false);
       return;
     }
 
     await setQueryParams({
       router,
-      params: { station: inputValue },
+      params: { station: station.id },
       options: { shallow: false },
     });
     setIsEditMode(false);
@@ -117,7 +103,7 @@ export const Settings: React.FC<Props> = ({
             </a>
           </p>
 
-          <form onSubmit={handleSubmit} className={styles.form}>
+          <div className={styles.form}>
             <Input
               value={inputValue}
               handleChange={handleInputChange}
@@ -126,7 +112,7 @@ export const Settings: React.FC<Props> = ({
             />
 
             <Button onClick={() => setIsEditMode(false)}>{t("close")}</Button>
-          </form>
+          </div>
 
           {showResults && searchResults.length > 0 && (
             <div className={styles.searchResults}>
