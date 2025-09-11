@@ -106,7 +106,7 @@ export const Settings: React.FC<Props> = ({
         <>
           <p>
             <a
-              href={`https://app.birdweather.com/${
+              href={`https://app.birdweather.com${
                 speciesError || !stationId ? "" : `/stations/${stationId}`
               }`}
               className="link"
