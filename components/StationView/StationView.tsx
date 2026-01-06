@@ -1,6 +1,6 @@
 import React from "react";
+import { useRouter } from "next/router";
 
-import styles from "./StationView.module.scss";
 import { Spinner } from "components/Spinner";
 import { LastUpdated } from "components/LastUpdated";
 import { BirdCardGrid } from "components/BirdCardGrid";
@@ -9,36 +9,48 @@ import { Button } from "components/Button";
 import { Settings } from "components/Settings";
 import { Block } from "components/Block";
 import { NewSpecies } from "components/NewSpecies";
-import { Species } from "hooks/useFetchSpecies";
-import { useTranslation } from "hooks/useTranslation";
-import { getSortedSpeciesList } from "utils/species";
-import { setQueryParams } from "hooks/useQueryParams";
-import { useRouter } from "next/router";
 import { Search } from "components/Search";
+import { useFetchSpecies } from "hooks/useFetchSpecies";
+import { useTranslation } from "hooks/useTranslation";
+import { useQueryParams, setQueryParams } from "hooks/useQueryParams";
+import { getSortedSpeciesList } from "utils/species";
+import styles from "./StationView.module.scss";
 
 type Props = {
-  speciesData: Species[];
-  speciesError: Error | null;
-  stationId: string;
   stationName?: string;
-  sort: string;
-  search: string;
-  lang: string;
-  isLoadingSpecies: boolean;
 };
 
-export const StationView: React.FC<Props> = ({
-  speciesData,
-  speciesError,
-  stationId,
-  stationName,
-  sort,
-  search,
-  lang,
-  isLoadingSpecies,
-}) => {
+const DEFAULT_STATION_ID = "8588";
+
+export const StationView: React.FC<Props> = ({ stationName }) => {
   const router = useRouter();
+  const isReady = router.isReady;
   const { t } = useTranslation();
+
+  // Get query parameters with defaults
+  const [params] = useQueryParams({
+    defaults: {
+      station: DEFAULT_STATION_ID,
+      lang: "en",
+      period: "all",
+      sort: "active",
+      search: "",
+    },
+    ready: isReady,
+  });
+
+  const { station: stationId, lang, period, sort, search } = params;
+
+  const {
+    data: speciesData = [],
+    isLoading: isLoadingSpecies,
+    error: speciesError,
+  } = useFetchSpecies({
+    stationId,
+    lang,
+    period,
+    enabled: isReady,
+  });
 
   const speciesList = getSortedSpeciesList({
     species: speciesData,
@@ -62,7 +74,7 @@ export const StationView: React.FC<Props> = ({
       <Settings
         speciesData={speciesData}
         speciesError={speciesError}
-        stationId={stationId}
+        stationId={stationId || DEFAULT_STATION_ID}
         stationName={stationName}
       />
 

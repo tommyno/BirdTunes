@@ -1,46 +1,28 @@
-import { useFetchSpecies } from "hooks/useFetchSpecies";
-import { useFetchStation } from "hooks/useFetchStation";
-import { useTranslation } from "hooks/useTranslation";
-import { useQueryParams } from "hooks/useQueryParams";
 import Head from "next/head";
 import { useRouter } from "next/router";
 import { GetServerSideProps } from "next";
+
+import { useFetchStation } from "hooks/useFetchStation";
+import { useTranslation } from "hooks/useTranslation";
+import { getQueryParam } from "hooks/useQueryParams";
 import { getPageTitle } from "utils/species";
 import { Footer } from "components/Footer";
 import { Header } from "components/Header";
 import { StationView } from "components/StationView/StationView";
 
+const DEFAULT_STATION_ID = "8588";
+
 export default function Home() {
   const router = useRouter();
-  const isReady = router.isReady;
   const { t } = useTranslation();
 
-  // Get query parameters with defaults
-  const [params] = useQueryParams({
-    defaults: {
-      station: "8588",
-      lang: "en",
-      period: "all",
-      sort: "active",
-      search: "",
-    },
-    ready: isReady,
+  const stationId = getQueryParam({
+    value: router.query.station,
   });
 
-  const { station: stationId, lang, period, sort, search } = params;
-
-  const {
-    data: speciesData = [],
-    isLoading: isLoadingSpecies,
-    error: speciesError,
-  } = useFetchSpecies({
-    stationId,
-    lang,
-    period,
-    enabled: isReady,
-  });
-
-  const { data: stationData } = useFetchStation(stationId);
+  const { data: stationData } = useFetchStation(
+    stationId || DEFAULT_STATION_ID
+  );
 
   const title = getPageTitle(stationData?.name);
 
@@ -56,16 +38,7 @@ export default function Home() {
 
       <Header />
 
-      <StationView
-        speciesData={speciesData}
-        speciesError={speciesError}
-        stationId={stationId}
-        stationName={stationData?.name}
-        sort={sort}
-        search={search}
-        lang={lang}
-        isLoadingSpecies={isLoadingSpecies}
-      />
+      <StationView stationName={stationData?.name} />
 
       <Footer />
     </>
