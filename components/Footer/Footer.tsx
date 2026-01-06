@@ -2,11 +2,7 @@ import React from "react";
 
 import styles from "./Footer.module.scss";
 
-type Props = {
-  example?: string;
-};
-
-export const Footer: React.FC<Props> = () => {
+export const Footer: React.FC = () => {
   return (
     <div className={styles.footer}>
       <p>BirdTunes</p>

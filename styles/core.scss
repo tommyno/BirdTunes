@@ -30,14 +30,6 @@ body {
   flex-direction: column;
 }
 
-.header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  color: var(--color-white);
-  padding: var(--spacing-1) var(--gap) var(--spacing-6);
-}
-
 .wrap {
   margin: 0 auto;
   max-width: 1700px;

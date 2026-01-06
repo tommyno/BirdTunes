@@ -12,12 +12,12 @@ import { useTranslation } from "hooks/useTranslation";
 import { useQueryParams } from "hooks/useQueryParams";
 import Head from "next/head";
 import { useRouter } from "next/router";
-import { LanguageSwitcher } from "components/LanguageSwitcher";
 import { GetServerSideProps } from "next";
 import { NewSpecies } from "components/NewSpecies/NewSpecies";
 import { getPageTitle, getSortedSpeciesList } from "utils/species";
 import { Block } from "components/Block";
 import { Footer } from "components/Footer";
+import { Header } from "components/Header";
 
 export default function Home() {
   const router = useRouter();
@@ -80,10 +80,7 @@ export default function Home() {
         <meta property="og:image" content="/open-graph-share.png" />
       </Head>
 
-      <div className="header">
-        <h1 className="h3">BirdTunes</h1>
-        <LanguageSwitcher />
-      </div>
+      <Header />
 
       <div className="wrap">
         {!isLoadingSpecies && (
