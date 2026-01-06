@@ -1,11 +1,3 @@
-import { BirdCard } from "components/BirdCard";
-import { BirdCardGrid } from "components/BirdCardGrid";
-import { Button } from "components/Button";
-import { LastUpdated } from "components/LastUpdated";
-import { Search } from "components/Search";
-import { Settings } from "components/Settings";
-import { Spinner } from "components/Spinner";
-import { STATION_ID } from "constants/birdweather";
 import { useFetchSpecies } from "hooks/useFetchSpecies";
 import { useFetchStation } from "hooks/useFetchStation";
 import { useTranslation } from "hooks/useTranslation";
@@ -13,11 +5,10 @@ import { useQueryParams } from "hooks/useQueryParams";
 import Head from "next/head";
 import { useRouter } from "next/router";
 import { GetServerSideProps } from "next";
-import { NewSpecies } from "components/NewSpecies/NewSpecies";
-import { getPageTitle, getSortedSpeciesList } from "utils/species";
-import { Block } from "components/Block";
+import { getPageTitle } from "utils/species";
 import { Footer } from "components/Footer";
 import { Header } from "components/Header";
+import { StationView } from "components/StationView/StationView";
 
 export default function Home() {
   const router = useRouter();
@@ -25,9 +16,9 @@ export default function Home() {
   const { t } = useTranslation();
 
   // Get query parameters with defaults
-  const [params, { setParams }] = useQueryParams({
+  const [params] = useQueryParams({
     defaults: {
-      station: STATION_ID,
+      station: "8588",
       lang: "en",
       period: "all",
       sort: "active",
@@ -51,23 +42,6 @@ export default function Home() {
 
   const { data: stationData } = useFetchStation(stationId);
 
-  const speciesList = getSortedSpeciesList({
-    species: speciesData,
-    sort,
-    search,
-  });
-
-  const handleSortBy = async (sortBy: string) => {
-    const newParams: Record<string, string | null> = { sort: sortBy };
-
-    // Remove search param when no longer in search view
-    if (sortBy !== "search") {
-      newParams.search = null;
-    }
-
-    await setParams(newParams);
-  };
-
   const title = getPageTitle(stationData?.name);
 
   return (
@@ -82,64 +56,16 @@ export default function Home() {
 
       <Header />
 
-      <div className="wrap">
-        {!isLoadingSpecies && (
-          <Settings
-            speciesData={speciesData}
-            speciesError={speciesError}
-            stationId={stationId}
-            stationName={stationData?.name}
-          />
-        )}
-
-        {!isLoadingSpecies && (
-          <NewSpecies speciesData={speciesData} stationId={stationId} />
-        )}
-
-        <Block top="4" bottom="5">
-          <Button
-            onClick={() => handleSortBy("active")}
-            isActive={sort === "active" || sort === null}
-          >
-            {t("lastHeard")}
-          </Button>
-          <Button
-            onClick={() => handleSortBy("observations")}
-            isActive={sort === "observations"}
-          >
-            {t("mostVisits")}
-          </Button>
-          <Button
-            onClick={() => handleSortBy("search")}
-            isActive={sort === "search"}
-          >
-            {t("search")}
-          </Button>
-        </Block>
-
-        {sort === "search" && <Search />}
-
-        {!isLoadingSpecies && (
-          <div style={{ position: "relative" }}>
-            <BirdCardGrid>
-              {speciesList.map((species) => (
-                <BirdCard
-                  key={species.id}
-                  data={{ ...species, stationId, lang }}
-                />
-              ))}
-            </BirdCardGrid>
-
-            {speciesError && (
-              <p className="color-red">{speciesError.toString()}</p>
-            )}
-
-            <LastUpdated lang={lang} />
-          </div>
-        )}
-
-        {isLoadingSpecies && <Spinner />}
-      </div>
+      <StationView
+        speciesData={speciesData}
+        speciesError={speciesError}
+        stationId={stationId}
+        stationName={stationData?.name}
+        sort={sort}
+        search={search}
+        lang={lang}
+        isLoadingSpecies={isLoadingSpecies}
+      />
 
       <Footer />
     </>
