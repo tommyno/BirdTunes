@@ -13,8 +13,6 @@ import { Footer } from "components/Footer";
 import { Header } from "components/Header";
 import { StationView } from "components/StationView/StationView";
 
-const DEFAULT_STATION_ID = "8588";
-
 export default function Home() {
   const router = useRouter();
   const { t } = useTranslation();
@@ -24,7 +22,7 @@ export default function Home() {
   });
 
   const { data: stationData } = useSWR<Station>(
-    `${API_BASE_URL}/stations/${stationId || DEFAULT_STATION_ID}`,
+    stationId ? `${API_BASE_URL}/stations/${stationId}` : null,
     fetcher
   );
 
@@ -42,7 +40,7 @@ export default function Home() {
 
       <Header />
 
-      <StationView stationName={stationData?.name} />
+      {stationId && <StationView stationName={stationData?.name} />}
 
       <Footer />
     </>

@@ -23,8 +23,6 @@ type Props = {
   stationName?: string;
 };
 
-const DEFAULT_STATION_ID = "8588";
-
 export const StationView: React.FC<Props> = ({ stationName }) => {
   const router = useRouter();
   const isReady = router.isReady;
@@ -33,7 +31,6 @@ export const StationView: React.FC<Props> = ({ stationName }) => {
   // Get query parameters with defaults
   const [params] = useQueryParams({
     defaults: {
-      station: DEFAULT_STATION_ID,
       lang: "en",
       period: "all",
       sort: "active",
@@ -77,7 +74,7 @@ export const StationView: React.FC<Props> = ({ stationName }) => {
       <Settings
         speciesData={speciesData}
         speciesError={speciesError}
-        stationId={stationId || DEFAULT_STATION_ID}
+        stationId={stationId}
         stationName={stationName}
       />
 
