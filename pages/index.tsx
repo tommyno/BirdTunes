@@ -12,10 +12,10 @@ import { useTranslation } from "hooks/useTranslation";
 import { useQueryParams } from "hooks/useQueryParams";
 import Head from "next/head";
 import { useRouter } from "next/router";
-import { useMemo } from "react";
 import { LanguageSwitcher } from "components/LanguageSwitcher";
 import { GetServerSideProps } from "next";
 import { NewSpecies } from "components/NewSpecies/NewSpecies";
+import { getPageTitle, getSortedSpeciesList } from "utils/species";
 
 export default function Home() {
   const router = useRouter();
@@ -35,7 +35,6 @@ export default function Home() {
   });
 
   const { station: stationId, lang, period, sort, search } = params;
-  const searchFilter = search.toLowerCase();
 
   const {
     data: speciesData = [],
@@ -50,43 +49,24 @@ export default function Home() {
 
   const { data: stationData } = useFetchStation(stationId);
 
-  const speciesActive = [...speciesData].sort(
-    (a, b) =>
-      new Date(b.latestDetectionAt).getTime() -
-      new Date(a.latestDetectionAt).getTime()
-  );
-  const speciesObservations = [...speciesData].sort(
-    (a, b) => b.detections.total - a.detections.total
-  );
+  const speciesList = getSortedSpeciesList({
+    species: speciesData,
+    sort,
+    search,
+  });
 
-  // Toggle different views/sortings
   const handleSortBy = async (sortBy: string) => {
-    const params: Record<string, string | null> = { sort: sortBy };
+    const newParams: Record<string, string | null> = { sort: sortBy };
 
     // Remove search param when no longer in search view
     if (sortBy !== "search") {
-      params.search = null;
+      newParams.search = null;
     }
 
-    await setParams(params);
+    await setParams(newParams);
   };
 
-  const filteredSpecies = useMemo(() => {
-    const speciesList =
-      sort === "observations" ? speciesObservations : speciesActive;
-    if (!searchFilter) return speciesList;
-
-    return speciesList?.filter(
-      (species) =>
-        species.commonName.toLowerCase().includes(searchFilter) ||
-        species.scientificName.toLowerCase().includes(searchFilter)
-    );
-  }, [sort, speciesObservations, speciesActive, searchFilter]);
-
-  const cleanStationName = stationData?.name?.replace("BirdNET-Pi - ", "");
-  const title = cleanStationName
-    ? `${cleanStationName} | BirdTunes`
-    : "BirdTunes";
+  const title = getPageTitle(stationData?.name);
 
   return (
     <>
@@ -143,7 +123,7 @@ export default function Home() {
         {!isLoadingSpecies && (
           <div style={{ position: "relative" }}>
             <BirdCardGrid>
-              {filteredSpecies?.map((species) => (
+              {speciesList.map((species) => (
                 <BirdCard
                   key={species.id}
                   data={{ ...species, stationId, lang }}
