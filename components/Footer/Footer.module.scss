@@ -1,0 +1,9 @@
+.footer {
+  padding: var(--spacing-4) var(--gap);
+  display: flex;
+  justify-content: space-between;
+  background-color: var(--color-forrest);
+  color: var(--color-white);
+  position: sticky;
+  top: 100vh;
+}

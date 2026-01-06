@@ -17,6 +17,7 @@ import { GetServerSideProps } from "next";
 import { NewSpecies } from "components/NewSpecies/NewSpecies";
 import { getPageTitle, getSortedSpeciesList } from "utils/species";
 import { Block } from "components/Block";
+import { Footer } from "components/Footer";
 
 export default function Home() {
   const router = useRouter();
@@ -143,18 +144,7 @@ export default function Home() {
         {isLoadingSpecies && <Spinner />}
       </div>
 
-      {!isLoadingSpecies && (
-        <div className="footer">
-          <p>BirdTunes</p>
-          <a
-            href="https://github.com/tommyno/birdtunes"
-            className="link"
-            target="_blank"
-          >
-            Github ↗
-          </a>
-        </div>
-      )}
+      <Footer />
     </>
   );
 }
