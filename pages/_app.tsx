@@ -3,7 +3,7 @@ import Head from "next/head";
 import { ModalProvider } from "contexts/ModalContext";
 import Script from "next/script";
 
-import "/styles/index.scss";
+import "styles/index.scss";
 import { useIsLocalhost } from "hooks/useIsLocalhost";
 
 export default function App({ Component, pageProps }: AppProps) {
