@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect } from "react";
 import { createAudioProcessor } from "utils/audio";
-import { Detection } from "hooks/useFetchDetections";
+import { Detection } from "types/api";
 
 type UseModalAudioPlayerProps = {
   detections: Detection[] | null;

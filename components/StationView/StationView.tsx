@@ -1,6 +1,8 @@
 import React from "react";
 import { useRouter } from "next/router";
+import useSWR from "swr";
 
+import { API_BASE_URL } from "constants/birdweather";
 import { Spinner } from "components/Spinner";
 import { LastUpdated } from "components/LastUpdated";
 import { BirdCardGrid } from "components/BirdCardGrid";
@@ -10,10 +12,11 @@ import { Settings } from "components/Settings";
 import { Block } from "components/Block";
 import { NewSpecies } from "components/NewSpecies";
 import { Search } from "components/Search";
-import { useFetchSpecies } from "hooks/useFetchSpecies";
 import { useTranslation } from "hooks/useTranslation";
 import { useQueryParams, setQueryParams } from "hooks/useQueryParams";
 import { getSortedSpeciesList } from "utils/species";
+import { Species } from "types/api";
+import { fetchAllSpeciesPages } from "utils/fetcher";
 import styles from "./StationView.module.scss";
 
 type Props = {
@@ -41,16 +44,16 @@ export const StationView: React.FC<Props> = ({ stationName }) => {
 
   const { station: stationId, lang, period, sort, search } = params;
 
+  const shouldFetch = isReady && stationId && lang && period;
+  const speciesUrl = shouldFetch
+    ? `${API_BASE_URL}/stations/${stationId}/species?locale=${lang}&period=${period}`
+    : null;
+
   const {
     data: speciesData = [],
     isLoading: isLoadingSpecies,
     error: speciesError,
-  } = useFetchSpecies({
-    stationId,
-    lang,
-    period,
-    enabled: isReady,
-  });
+  } = useSWR<Species[]>(speciesUrl, fetchAllSpeciesPages);
 
   const speciesList = getSortedSpeciesList({
     species: speciesData,

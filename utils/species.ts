@@ -1,4 +1,4 @@
-import { Species } from "hooks/useFetchSpecies";
+import { Species } from "types/api";
 
 // Sort species by most recent detection
 export const sortByLatestDetection = (species: Species[]): Species[] => {

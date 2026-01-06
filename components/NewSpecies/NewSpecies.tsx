@@ -1,6 +1,6 @@
 import React from "react";
 import styles from "./NewSpecies.module.scss";
-import { Species } from "hooks/useFetchSpecies";
+import { Species } from "types/api";
 import { useTranslation } from "hooks/useTranslation";
 import { getItem, setItem } from "hooks/useLocalStorage";
 type BirdnetStation = {

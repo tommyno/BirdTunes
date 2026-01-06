@@ -1,12 +1,13 @@
 import React, { useState } from "react";
 import styles from "./Settings.module.scss";
-import { Species } from "hooks/useFetchSpecies";
+import { Species } from "types/api";
 import { Input } from "components/Input/Input";
 import { Button } from "components/Button";
 import { useRouter } from "next/router";
 import { useTranslation } from "hooks/useTranslation";
 import { setQueryParams } from "hooks/useQueryParams";
-import { useStationSearch, SearchStation } from "hooks/useStationSearch";
+import { useStationSearch } from "hooks/useStationSearch";
+import { SearchStation } from "types/api";
 import { Spinner } from "components/Spinner";
 
 type Props = {

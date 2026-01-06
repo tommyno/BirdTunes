@@ -1,11 +1,14 @@
 import Head from "next/head";
 import { useRouter } from "next/router";
 import { GetServerSideProps } from "next";
+import useSWR from "swr";
 
-import { useFetchStation } from "hooks/useFetchStation";
+import { API_BASE_URL } from "constants/birdweather";
 import { useTranslation } from "hooks/useTranslation";
 import { getQueryParam } from "hooks/useQueryParams";
 import { getPageTitle } from "utils/species";
+import { fetcher } from "utils/fetcher";
+import { Station } from "types/api";
 import { Footer } from "components/Footer";
 import { Header } from "components/Header";
 import { StationView } from "components/StationView/StationView";
@@ -20,8 +23,9 @@ export default function Home() {
     value: router.query.station,
   });
 
-  const { data: stationData } = useFetchStation(
-    stationId || DEFAULT_STATION_ID
+  const { data: stationData } = useSWR<Station>(
+    `${API_BASE_URL}/stations/${stationId || DEFAULT_STATION_ID}`,
+    fetcher
   );
 
   const title = getPageTitle(stationData?.name);
