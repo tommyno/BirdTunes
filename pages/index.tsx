@@ -16,6 +16,7 @@ import { LanguageSwitcher } from "components/LanguageSwitcher";
 import { GetServerSideProps } from "next";
 import { NewSpecies } from "components/NewSpecies/NewSpecies";
 import { getPageTitle, getSortedSpeciesList } from "utils/species";
+import { Block } from "components/Block";
 
 export default function Home() {
   const router = useRouter();
@@ -97,7 +98,7 @@ export default function Home() {
           <NewSpecies speciesData={speciesData} stationId={stationId} />
         )}
 
-        <div style={{ margin: "16px 0 24px" }}>
+        <Block top="4" bottom="5">
           <Button
             onClick={() => handleSortBy("active")}
             isActive={sort === "active" || sort === null}
@@ -116,7 +117,7 @@ export default function Home() {
           >
             {t("search")}
           </Button>
-        </div>
+        </Block>
 
         {sort === "search" && <Search />}
 
