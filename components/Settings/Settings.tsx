@@ -15,6 +15,7 @@ type Props = {
   speciesError?: Error | null;
   stationId?: string | null;
   stationName?: string | null;
+  isLoadingSpecies?: boolean;
 };
 
 export const Settings: React.FC<Props> = ({
@@ -22,6 +23,7 @@ export const Settings: React.FC<Props> = ({
   speciesError,
   stationId,
   stationName,
+  isLoadingSpecies,
 }) => {
   const router = useRouter();
   const [isEditMode, setIsEditMode] = useState(false);
@@ -63,7 +65,8 @@ export const Settings: React.FC<Props> = ({
   };
 
   // Remove "BirdNET-Pi - " from stationName
-  const cleanStationName = stationName?.replace("BirdNET-Pi - ", "");
+  const cleanStationName =
+    stationName?.replace("BirdNET-Pi - ", "") || t("loading");
 
   return (
     <div className={styles.wrap}>
@@ -80,10 +83,12 @@ export const Settings: React.FC<Props> = ({
             </button>
           </h2>
 
-          <p>
-            {speciesData?.length || 0} {t("species")} · {totalDetections}{" "}
-            {t("detections")}
-          </p>
+          {!isLoadingSpecies && (
+            <p>
+              {speciesData?.length || 0} {t("species")} · {totalDetections}{" "}
+              {t("detections")}
+            </p>
+          )}
 
           {speciesError && (
             <p className="color-red">{speciesError.toString()}</p>

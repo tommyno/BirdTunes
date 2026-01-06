@@ -76,6 +76,7 @@ export const StationView: React.FC<Props> = ({ stationName }) => {
         speciesError={speciesError}
         stationId={stationId}
         stationName={stationName}
+        isLoadingSpecies={isLoadingSpecies}
       />
 
       <NewSpecies speciesData={speciesData} stationId={stationId} />

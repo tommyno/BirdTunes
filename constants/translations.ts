@@ -205,4 +205,10 @@ export const translations = {
     no: "Ingen resultater",
     sv: "Inga resultat",
   },
+  loading: {
+    en: "Loading...",
+    de: "Lädt...",
+    no: "Laster...",
+    sv: "Laddar...",
+  },
 } as const;
