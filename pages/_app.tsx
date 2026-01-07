@@ -1,10 +1,11 @@
 import type { AppProps } from "next/app";
 import Head from "next/head";
-import { ModalProvider } from "contexts/ModalContext";
 import Script from "next/script";
+import { SWRConfig } from "swr";
+import { ModalProvider } from "contexts/ModalContext";
+import { useIsLocalhost } from "hooks/useIsLocalhost";
 
 import "styles/index.scss";
-import { useIsLocalhost } from "hooks/useIsLocalhost";
 
 export default function App({ Component, pageProps }: AppProps) {
   const isLocalhost = useIsLocalhost();
@@ -32,9 +33,16 @@ export default function App({ Component, pageProps }: AppProps) {
         <link rel="manifest" href="/site.webmanifest" />
       </Head>
 
-      <ModalProvider>
-        <Component {...pageProps} />
-      </ModalProvider>
+      <SWRConfig
+        value={{
+          errorRetryCount: 2,
+          dedupingInterval: 5000,
+        }}
+      >
+        <ModalProvider>
+          <Component {...pageProps} />
+        </ModalProvider>
+      </SWRConfig>
 
       {/* Skip tracking for localhost/dev */}
       {!isLocalhost && (
