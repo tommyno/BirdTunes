@@ -2,6 +2,7 @@ import React from "react";
 import styles from "./StationTitle.module.scss";
 import { Species } from "types/api";
 import { useTranslation } from "hooks/useTranslation";
+import { FavouriteButton } from "components/FavouriteButton/FavouriteButton";
 
 type Props = {
   speciesData?: Species[];
@@ -67,18 +68,24 @@ export const StationTitle: React.FC<Props> = ({
             >
               <img
                 src="/icons/pin.svg"
-                className={styles.shareIcon}
+                className={styles.icon}
                 alt="Open in map"
               />
             </a>
+
             <button onClick={handleShare}>
               <img
                 src="/icons/share.svg"
                 alt="Share"
                 title="Share url"
-                className={styles.shareIcon}
+                className={styles.icon}
               />
             </button>
+
+            <FavouriteButton
+              stationId={stationId || ""}
+              stationName={cleanStationName}
+            />
           </div>
         )}
       </div>

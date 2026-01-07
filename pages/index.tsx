@@ -17,6 +17,7 @@ import { PopularStations } from "components/PopularStations/PopularStations";
 import { About } from "components/About/About";
 import { Flow } from "components/Flow/Flow";
 import { StationSearch } from "components/StationSearch";
+import { Favourites } from "components/Favourites/Favourites";
 
 export default function Home() {
   const router = useRouter();
@@ -59,6 +60,7 @@ export default function Home() {
           <div className="smallWrap">
             <Flow space="xlarge" fixed>
               <StationSearch />
+              <Favourites />
               <PopularStations />
               <About />
             </Flow>
