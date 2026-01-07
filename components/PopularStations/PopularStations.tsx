@@ -47,7 +47,7 @@ export const PopularStations: React.FC = () => {
             rel="noopener noreferrer"
             className="link"
           >
-            {t("findOtherStations")}
+            {t("findOtherStations")} ↗
           </a>
         </p>
       </Block>

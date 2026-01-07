@@ -8,13 +8,13 @@ export const About: React.FC = () => {
       <h2>About</h2>
       <p>
         BirdTunes lets you explore birds detected at locations around the world.
-        You can see which species have been spotted, listen to their recordings,
-        and discover the diversity of birdlife around the world.
+        See which species have been spotted, listen to their recordings, and
+        discover the diversity of birdlife.
       </p>
 
       <p>
-        The detections are made with outdoor microphones that continuously
-        listen to the enviroment and use an AI-model from{" "}
+        Detections are made with outdoor microphones that continuously listen to
+        the environment and use an AI model from{" "}
         <a
           href="https://birdnet.cornell.edu/"
           target="_blank"
@@ -27,7 +27,7 @@ export const About: React.FC = () => {
       </p>
 
       <p>
-        If you want to get started yourself, you can either get an all-in-one
+        If you want to get started yourself, you can either get a pre-built
         device like the{" "}
         <a
           href="https://www.birdweather.com"
@@ -37,7 +37,7 @@ export const About: React.FC = () => {
         >
           PUC
         </a>{" "}
-        or get a Raspberry Pi 5 with a microphone, and install{" "}
+        or get a Raspberry Pi with a microphone, and install{" "}
         <a
           href="https://github.com/tphakala/birdnet-go"
           target="_blank"
