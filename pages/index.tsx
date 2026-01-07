@@ -47,7 +47,7 @@ export default function Home() {
         {/* Show when no station is selected */}
         {!stationId && (
           <Flow>
-            <StationSearch stationId={stationId} />
+            <StationSearch />
             <PopularStations />
             <About />
           </Flow>
