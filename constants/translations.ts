@@ -229,4 +229,10 @@ export const translations = {
     no: "Finn andre stasjoner på BirdWeather",
     sv: "Hitta andra stationer på BirdWeather",
   },
+  favourites: {
+    en: "Your favourites",
+    de: "Deine Favoriten",
+    no: "Dine favoritter",
+    sv: "Dina favoriter",
+  },
 } as const;

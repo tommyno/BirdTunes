@@ -1,0 +1,23 @@
+.wrap {
+  display: block;
+}
+
+.favourites {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+  gap: var(--spacing-3);
+  margin-top: var(--spacing-3);
+}
+
+.link {
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  text-decoration-thickness: 0.5px;
+  color: inherit;
+  display: inline-block;
+}
+
+.stationId {
+  font-size: 0.8rem;
+  color: var(--color-gray);
+}
