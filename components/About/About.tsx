@@ -9,7 +9,7 @@ export const About: React.FC = () => {
       <p>
         BirdTunes lets you explore birds detected at locations around the world.
         See which species have been spotted, listen to their recordings, and
-        discover the diversity of birdlife.
+        discover the diversity of birdlife around you.
       </p>
 
       <p>
@@ -37,7 +37,7 @@ export const About: React.FC = () => {
         >
           PUC
         </a>{" "}
-        or get a Raspberry Pi with a microphone, and install{" "}
+        or set up a Raspberry Pi with a microphone, and install{" "}
         <a
           href="https://github.com/tphakala/birdnet-go"
           target="_blank"

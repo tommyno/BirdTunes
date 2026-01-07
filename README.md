@@ -25,7 +25,7 @@ Made with Next. Install dependencies with `npm install` and run `npm run dev`.
 - ✅ Full screen bird-view, with additional data
 - ✅ Show and play recorded bird samples
 - ✅ Filter: Search
-- Filter: Today / Last 24 hours
+- Filter: Today / Last 24 hours / Custom period
 - Filter: Sort by newest detected species (firstDetectedAt)
 - Replace current [V1 REST API](https://app.birdweather.com/api/v1]:) with new [GraphQL API](https://app.birdweather.com/api/index.html)?
 
