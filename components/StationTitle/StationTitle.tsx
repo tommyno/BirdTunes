@@ -49,6 +49,10 @@ export const StationTitle: React.FC<Props> = ({
     await navigator.clipboard.writeText(url);
   };
 
+  const handleFavourite = () => {
+    console.log("Add to favourites");
+  };
+
   return (
     <div className={styles.wrap}>
       <div className={styles.titleWrap}>
@@ -71,11 +75,21 @@ export const StationTitle: React.FC<Props> = ({
                 alt="Open in map"
               />
             </a>
+
             <button onClick={handleShare}>
               <img
                 src="/icons/share.svg"
                 alt="Share"
                 title="Share url"
+                className={styles.shareIcon}
+              />
+            </button>
+
+            <button onClick={handleFavourite}>
+              <img
+                src="/icons/star.svg"
+                alt="Favorite"
+                title="Add to favourites"
                 className={styles.shareIcon}
               />
             </button>
