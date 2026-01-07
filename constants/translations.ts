@@ -211,4 +211,10 @@ export const translations = {
     no: "Laster...",
     sv: "Laddar...",
   },
+  popularStations: {
+    en: "Popular",
+    de: "Beliebte",
+    no: "Populære",
+    sv: "Populära",
+  },
 } as const;

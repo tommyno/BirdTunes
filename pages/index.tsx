@@ -2,7 +2,6 @@ import Head from "next/head";
 import { useRouter } from "next/router";
 import { GetServerSideProps } from "next";
 import useSWR from "swr";
-
 import { API_BASE_URL } from "constants/birdweather";
 import { useTranslation } from "hooks/useTranslation";
 import { getQueryParam } from "hooks/useQueryParams";
@@ -12,6 +11,7 @@ import { Station } from "types/api";
 import { Footer } from "components/Footer";
 import { Header } from "components/Header";
 import { StationView } from "components/StationView/StationView";
+import { PopularStations } from "components/PopularStations/PopularStations";
 
 export default function Home() {
   const router = useRouter();
@@ -40,7 +40,13 @@ export default function Home() {
 
       <Header />
 
-      {stationId && <StationView stationName={stationData?.name} />}
+      <div className="wrap">
+        {!stationId && <PopularStations />}
+
+        {stationId && <StationView stationName={stationData?.name} />}
+
+        {stationId && <PopularStations />}
+      </div>
 
       <Footer />
     </>

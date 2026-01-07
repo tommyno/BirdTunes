@@ -70,7 +70,7 @@ export const StationView: React.FC<Props> = ({ stationName }) => {
   };
 
   return (
-    <div className="wrap">
+    <>
       <Settings
         speciesData={speciesData}
         speciesError={speciesError}
@@ -81,7 +81,7 @@ export const StationView: React.FC<Props> = ({ stationName }) => {
 
       <NewSpecies speciesData={speciesData} stationId={stationId} />
 
-      <Block top="4" bottom="5">
+      <Block top="4" bottom="5" center>
         <Button
           onClick={() => handleSortBy("active")}
           isActive={sort === "active" || sort === null}
@@ -117,6 +117,6 @@ export const StationView: React.FC<Props> = ({ stationName }) => {
 
         <LastUpdated lang={lang} />
       </div>
-    </div>
+    </>
   );
 };
