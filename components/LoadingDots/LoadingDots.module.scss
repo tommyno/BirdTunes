@@ -1,0 +1,33 @@
+.loading {
+  display: inline-flex;
+}
+
+.dot {
+  animation: loadingAnimation 1.8s step-end infinite;
+  opacity: 0;
+}
+
+.dot:nth-child(1) {
+  animation-delay: 0s;
+}
+
+.dot:nth-child(2) {
+  animation-delay: 0.2s;
+}
+
+.dot:nth-child(3) {
+  animation-delay: 0.4s;
+}
+
+@keyframes loadingAnimation {
+  0%,
+  75%,
+  100% {
+    opacity: 0;
+  }
+
+  25%,
+  50% {
+    opacity: 1;
+  }
+}

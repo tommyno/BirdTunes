@@ -20,6 +20,7 @@ import { getSortedSpeciesList } from "utils/species";
 import { Species } from "types/api";
 import { fetchAllSpeciesPages } from "utils/fetcher";
 import styles from "./StationView.module.scss";
+import { LoadingDots } from "components/LoadingDots";
 
 type Props = {
   stationName?: string;
@@ -115,6 +116,19 @@ export const StationView: React.FC<Props> = ({ stationName }) => {
 
       {sort === "search" && <Search />}
 
+      {isLoadingSpecies && (
+        <Block center bottom="4">
+          {cachedData.length > 0 ? (
+            <p className="color-gray">
+              {t("updating")}
+              <LoadingDots />
+            </p>
+          ) : (
+            <Spinner />
+          )}
+        </Block>
+      )}
+
       <div style={{ position: "relative" }}>
         <BirdCardGrid>
           {speciesList.map((species) => (
@@ -123,10 +137,6 @@ export const StationView: React.FC<Props> = ({ stationName }) => {
         </BirdCardGrid>
 
         {speciesError && <p className="color-red">{speciesError.toString()}</p>}
-
-        <Block center bottom="5">
-          {isLoadingSpecies && <Spinner />}
-        </Block>
 
         <LastUpdated lang={lang} />
       </div>

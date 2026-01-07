@@ -211,6 +211,12 @@ export const translations = {
     no: "Laster...",
     sv: "Laddar...",
   },
+  updating: {
+    en: "Updating",
+    de: "Aktualisieren",
+    no: "Oppdaterer",
+    sv: "Uppdaterar",
+  },
   popularStations: {
     en: "Popular",
     de: "Beliebte",
