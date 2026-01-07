@@ -7,6 +7,8 @@ import { useTranslation } from "hooks/useTranslation";
 import { getQueryParam } from "hooks/useQueryParams";
 import { getPageTitle } from "utils/species";
 import { fetcher } from "utils/fetcher";
+import { setItem } from "hooks/useLocalStorage";
+import { useLocalStorageCache } from "hooks/useLocalStorageCache";
 import { Station } from "types/api";
 import { Footer } from "components/Footer";
 import { Header } from "components/Header";
@@ -24,12 +26,20 @@ export default function Home() {
     value: router.query.station,
   });
 
+  // Cache station data in localStorage
+  const cacheKey = `birdtunes-station-${stationId}`;
+  const cachedStation = useLocalStorageCache<Station>(cacheKey);
+
   const { data: stationData } = useSWR<Station>(
     stationId ? `${API_BASE_URL}/stations/${stationId}` : null,
-    fetcher
+    fetcher,
+    { onSuccess: (data) => setItem(cacheKey, JSON.stringify([data])) }
   );
 
-  const title = getPageTitle(stationData?.name);
+  // Use fresh data if available, otherwise show cached
+  const displayStation = stationData ?? cachedStation[0];
+
+  const title = getPageTitle(displayStation?.name);
 
   return (
     <>
@@ -56,7 +66,7 @@ export default function Home() {
         )}
 
         {/* Show when a station is selected */}
-        {stationId && <StationView stationName={stationData?.name} />}
+        {stationId && <StationView stationName={displayStation?.name} />}
       </div>
 
       <Footer />
