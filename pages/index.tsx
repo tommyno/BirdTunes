@@ -17,6 +17,9 @@ export default function Home() {
   const router = useRouter();
   const { t } = useTranslation();
 
+  console.log("router.isReady:", router.isReady);
+  console.log("router.query:", router.query);
+
   const stationId = getQueryParam({
     value: router.query.station,
   });
@@ -41,11 +44,11 @@ export default function Home() {
       <Header />
 
       <div className="wrap">
+        {/* Show when no station is selected */}
         {!stationId && <PopularStations />}
 
+        {/* Show when a station is selected */}
         {stationId && <StationView stationName={stationData?.name} />}
-
-        {stationId && <PopularStations />}
       </div>
 
       <Footer />
