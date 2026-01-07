@@ -13,6 +13,7 @@ import { Header } from "components/Header";
 import { StationView } from "components/StationView/StationView";
 import { PopularStations } from "components/PopularStations/PopularStations";
 import { About } from "components/About/About";
+import { Flow } from "components/Flow/Flow";
 
 export default function Home() {
   const router = useRouter();
@@ -44,10 +45,10 @@ export default function Home() {
       <div className="wrap">
         {/* Show when no station is selected */}
         {!stationId && (
-          <>
+          <Flow>
             <PopularStations />
             <About />
-          </>
+          </Flow>
         )}
 
         {/* Show when a station is selected */}

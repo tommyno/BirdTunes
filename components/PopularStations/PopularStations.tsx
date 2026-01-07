@@ -7,7 +7,7 @@ import styles from "./PopularStations.module.scss";
 import { Block } from "components/Block";
 
 const popularStations = [
-  { id: 8858, name: "Nesodden (Norway)" },
+  { id: 8588, name: "Nesodden (Norway)" },
   { id: 18836, name: "Lilleby (Sweden)" },
   { id: 12540, name: "Abbey Road Allotments (England)" },
   { id: 4445, name: "Würenlingen (Switzerland)" },
