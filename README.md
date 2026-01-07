@@ -10,15 +10,13 @@ https://birdtunes.net
 
 ## Current setup
 
-A Raspberry Pi 5 and an outdoors microphone to listen to the enviroment, and AI-powered bird sound recognition from [BirdNet Sound ID](https://birdnet.cornell.edu/). The data is handled by [BirdNET-PI](https://github.com/Nachtzuster/BirdNET-Pi) and uploaded to [Birdweather](https://app.birdweather.com/) for additional verification.
+A Raspberry Pi 5 and an outdoors microphone to listen to the enviroment, and AI-powered bird sound recognition from [BirdNet Sound ID](https://birdnet.cornell.edu/). The data is handled by [BirdNET-Go](https://github.com/tphakala/birdnet-go) and uploaded to [Birdweather](https://app.birdweather.com/) for additional verification.
 
 This repo / website pulls together all the data and presents it in a nice and orderly fashion.
 
 ## Development
 
 Made with Next. Install dependencies with `npm install` and run `npm run dev`.
-
-Update `constants/birdweather.ts` if you want to change the default station.
 
 ## Planned updates
 

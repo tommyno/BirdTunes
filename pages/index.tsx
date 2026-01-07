@@ -12,13 +12,11 @@ import { Footer } from "components/Footer";
 import { Header } from "components/Header";
 import { StationView } from "components/StationView/StationView";
 import { PopularStations } from "components/PopularStations/PopularStations";
+import { About } from "components/About/About";
 
 export default function Home() {
   const router = useRouter();
   const { t } = useTranslation();
-
-  console.log("router.isReady:", router.isReady);
-  console.log("router.query:", router.query);
 
   const stationId = getQueryParam({
     value: router.query.station,
@@ -45,7 +43,12 @@ export default function Home() {
 
       <div className="wrap">
         {/* Show when no station is selected */}
-        {!stationId && <PopularStations />}
+        {!stationId && (
+          <>
+            <PopularStations />
+            <About />
+          </>
+        )}
 
         {/* Show when a station is selected */}
         {stationId && <StationView stationName={stationData?.name} />}
