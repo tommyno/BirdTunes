@@ -47,7 +47,7 @@ export default function Home() {
         {/* Show when no station is selected */}
         {!stationId && (
           <div className="smallWrap">
-            <Flow>
+            <Flow space="xlarge" fixed>
               <StationSearch />
               <PopularStations />
               <About />
