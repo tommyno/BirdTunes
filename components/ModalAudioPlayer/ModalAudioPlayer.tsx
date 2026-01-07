@@ -2,7 +2,7 @@ import React from "react";
 import { classNames } from "utils/classNames";
 import styles from "./ModalAudioPlayer.module.scss";
 import { useTranslation } from "hooks/useTranslation";
-import { Detection } from "hooks/useFetchDetections";
+import { Detection } from "types/api";
 
 type ModalAudioPlayerProps = {
   currentDetection: Detection | null;

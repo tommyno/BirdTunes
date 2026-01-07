@@ -205,4 +205,22 @@ export const translations = {
     no: "Ingen resultater",
     sv: "Inga resultat",
   },
+  loading: {
+    en: "Loading...",
+    de: "Lädt...",
+    no: "Laster...",
+    sv: "Laddar...",
+  },
+  popularStations: {
+    en: "Popular",
+    de: "Beliebte",
+    no: "Populære",
+    sv: "Populära",
+  },
+  findOtherStations: {
+    en: "Find other stations on BirdWeather",
+    de: "Andere Stationen auf BirdWeather finden",
+    no: "Finn andre stasjoner på BirdWeather",
+    sv: "Hitta andra stationer på BirdWeather",
+  },
 } as const;

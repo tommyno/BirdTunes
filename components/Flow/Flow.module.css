@@ -1,0 +1,47 @@
+.flow {
+  display: block;
+
+  &:empty {
+    display: none;
+  }
+}
+
+.-xsmall > * + * {
+  margin-block-start: 0.5em;
+}
+
+.-small > * + * {
+  margin-block-start: 1em;
+}
+
+.-normal > * + * {
+  margin-block-start: 1.5em;
+}
+
+.-large > * + * {
+  margin-block-start: 2em;
+}
+
+.-xlarge > * + * {
+  margin-block-start: 3em;
+}
+
+.-xsmall.-fixed > * + * {
+  margin-block-start: var(--spacing-1);
+}
+
+.-small.-fixed > * + * {
+  margin-block-start: var(--spacing-2);
+}
+
+.-normal.-fixed > * + * {
+  margin-block-start: var(--spacing-3);
+}
+
+.-large.-fixed > * + * {
+  margin-block-start: var(--spacing-4);
+}
+
+.-xlarge.-fixed > * + * {
+  margin-block-start: var(--spacing-8);
+}

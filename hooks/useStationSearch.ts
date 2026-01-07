@@ -1,11 +1,7 @@
-import { API_BASE_URL_GRAPHQL } from "constants/birdweather";
 import { useEffect, useState } from "react";
 
-export type SearchStation = {
-  id: string;
-  name: string;
-  location?: string;
-};
+import { API_BASE_URL_GRAPHQL } from "constants/birdweather";
+import { SearchStation } from "types/api";
 
 export const useStationSearch = (query: string) => {
   const [data, setData] = useState<SearchStation[]>([]);

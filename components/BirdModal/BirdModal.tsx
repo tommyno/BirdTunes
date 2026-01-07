@@ -1,15 +1,21 @@
-import { Species } from "hooks/useFetchSpecies";
+import useSWR from "swr";
 
+import { API_BASE_URL } from "constants/birdweather";
 import { Modal } from "components/Modal/Modal";
-import styles from "./BirdModal.module.scss";
-import { dateDetailed } from "utils/date";
-import { useFetchDetections } from "hooks/useFetchDetections";
 import { Spinner } from "components/Spinner";
 import { Block } from "components/Block";
+import { ModalAudioPlayer } from "components/ModalAudioPlayer";
 import { useTranslation } from "hooks/useTranslation";
 import { useModalAudioPlayer } from "hooks/useModalAudioPlayer";
-import { ModalAudioPlayer } from "components/ModalAudioPlayer";
+import { dateDetailed } from "utils/date";
 import { classNames } from "utils/classNames";
+import { Species, Detection } from "types/api";
+import { fetcher } from "utils/fetcher";
+import styles from "./BirdModal.module.scss";
+
+type DetectionsResponse = {
+  detections: Detection[];
+};
 
 type BirdModalProps = {
   data: Species & { stationId: string | null; lang: string | null };
@@ -20,11 +26,18 @@ type BirdModalProps = {
 export function BirdModal({ data: bird, isOpen, onClose }: BirdModalProps) {
   const { t } = useTranslation();
 
-  const { data, isLoading, error } = useFetchDetections({
-    speciesId: bird.id,
-    stationId: bird.stationId,
-    lang: bird.lang,
-  });
+  const shouldFetch = bird.id && bird.stationId && bird.lang;
+  const detectionsUrl = shouldFetch
+    ? `${API_BASE_URL}/stations/${bird.stationId}/detections?limit=5&speciesId=${bird.id}&locale=${bird.lang}&order=desc`
+    : null;
+
+  const {
+    data: detectionsData,
+    isLoading,
+    error,
+  } = useSWR<DetectionsResponse>(detectionsUrl, fetcher);
+
+  const detections = detectionsData?.detections ?? null;
 
   const {
     currentDetection,
@@ -35,7 +48,7 @@ export function BirdModal({ data: bird, isOpen, onClose }: BirdModalProps) {
     handleAudioPlay,
     handleAudioPause,
     handleAudioEnded,
-  } = useModalAudioPlayer({ detections: data });
+  } = useModalAudioPlayer({ detections });
 
   return (
     <Modal isOpen={isOpen} onClose={onClose}>
@@ -73,7 +86,7 @@ export function BirdModal({ data: bird, isOpen, onClose }: BirdModalProps) {
         <div className={styles.detections}>
           <Block bottom="3">
             <h2 className="h4">
-              {t("last")} {data?.length} {t("detections")}
+              {t("last")} {detections?.length} {t("detections")}
             </h2>
           </Block>
 
@@ -85,7 +98,7 @@ export function BirdModal({ data: bird, isOpen, onClose }: BirdModalProps) {
             </p>
           )}
 
-          {data?.map((detection) => {
+          {detections?.map((detection) => {
             const isCurrentlyPlaying =
               currentDetection?.id === detection.id && isPlaying;
 

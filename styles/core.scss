@@ -30,25 +30,21 @@ body {
   flex-direction: column;
 }
 
-.header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  color: var(--color-white);
-  padding: var(--spacing-1) var(--gap) var(--spacing-6);
-}
-
 .wrap {
   margin: 0 auto;
   max-width: 1700px;
   padding: var(--spacing-2) var(--gap) var(--spacing-5);
-  text-align: center;
   background-color: var(--color-white);
   border-radius: var(--border-radius);
   position: relative;
   margin-top: -22px;
   flex: 1 0 auto;
   width: 100%;
+}
+
+.smallWrap {
+  max-width: 760px;
+  margin: var(--spacing-3) auto;
 }
 
 // Fade in image when loaded
@@ -66,16 +62,6 @@ body {
   text-underline-offset: 2px;
   text-decoration-thickness: 0.5px;
   color: inherit;
-}
-
-.footer {
-  padding: var(--spacing-4) var(--gap);
-  display: flex;
-  justify-content: space-between;
-  background-color: var(--color-forrest);
-  color: var(--color-white);
-  position: sticky;
-  top: 100vh;
 }
 
 .color-muted {

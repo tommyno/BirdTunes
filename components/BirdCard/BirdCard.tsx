@@ -1,6 +1,6 @@
 import React from "react";
 import styles from "./BirdCard.module.scss";
-import { Species } from "hooks/useFetchSpecies";
+import { Species } from "types/api";
 import { timeAgo } from "utils/date";
 import { useModal } from "contexts/ModalContext";
 import { useTranslation } from "hooks/useTranslation";
