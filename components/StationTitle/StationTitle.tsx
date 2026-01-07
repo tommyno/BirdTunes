@@ -2,6 +2,7 @@ import React from "react";
 import styles from "./StationTitle.module.scss";
 import { Species } from "types/api";
 import { useTranslation } from "hooks/useTranslation";
+import { FavouriteButton } from "components/FavouriteButton/FavouriteButton";
 
 type Props = {
   speciesData?: Species[];
@@ -49,10 +50,6 @@ export const StationTitle: React.FC<Props> = ({
     await navigator.clipboard.writeText(url);
   };
 
-  const handleFavourite = () => {
-    console.log("Add to favourites");
-  };
-
   return (
     <div className={styles.wrap}>
       <div className={styles.titleWrap}>
@@ -71,7 +68,7 @@ export const StationTitle: React.FC<Props> = ({
             >
               <img
                 src="/icons/pin.svg"
-                className={styles.shareIcon}
+                className={styles.icon}
                 alt="Open in map"
               />
             </a>
@@ -81,18 +78,14 @@ export const StationTitle: React.FC<Props> = ({
                 src="/icons/share.svg"
                 alt="Share"
                 title="Share url"
-                className={styles.shareIcon}
+                className={styles.icon}
               />
             </button>
 
-            <button onClick={handleFavourite}>
-              <img
-                src="/icons/star.svg"
-                alt="Favorite"
-                title="Add to favourites"
-                className={styles.shareIcon}
-              />
-            </button>
+            <FavouriteButton
+              stationId={stationId || ""}
+              stationName={cleanStationName}
+            />
           </div>
         )}
       </div>
