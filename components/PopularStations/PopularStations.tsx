@@ -41,14 +41,13 @@ export const PopularStations: React.FC = () => {
 
       <Block top="6">
         <p>
-          Find other stations on{" "}
           <a
             href="https://app.birdweather.com"
             target="_blank"
             rel="noopener noreferrer"
             className="link"
           >
-            BirdWeather
+            {t("findOtherStations")}
           </a>
         </p>
       </Block>

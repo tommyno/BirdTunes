@@ -217,4 +217,10 @@ export const translations = {
     no: "Populære",
     sv: "Populära",
   },
+  findOtherStations: {
+    en: "Find other stations on BirdWeather",
+    de: "Andere Stationen auf BirdWeather finden",
+    no: "Finn andre stasjoner på BirdWeather",
+    sv: "Hitta andra stationer på BirdWeather",
+  },
 } as const;
