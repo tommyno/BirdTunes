@@ -1,0 +1,35 @@
+.wrap {
+  margin: var(--spacing-5) 0;
+  position: relative;
+  text-align: center;
+}
+
+.titleWrap {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: var(--spacing-2);
+  margin-bottom: var(--spacing-2);
+}
+
+.title {
+  font-size: 1.5rem;
+  text-wrap: balance;
+  line-height: 1.1;
+  font-weight: bold;
+}
+
+.iconWrap {
+  display: flex;
+  gap: var(--spacing-1);
+}
+
+.shareIcon {
+  transition: opacity 0.2s ease;
+  opacity: 0.3;
+  width: 20px;
+
+  &:hover {
+    opacity: 1;
+  }
+}

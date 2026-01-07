@@ -8,7 +8,7 @@ import { LastUpdated } from "components/LastUpdated";
 import { BirdCardGrid } from "components/BirdCardGrid";
 import { BirdCard } from "components/BirdCard";
 import { Button } from "components/Button";
-import { Settings } from "components/Settings";
+import { StationTitle } from "components/StationTitle";
 import { Block } from "components/Block";
 import { NewSpecies } from "components/NewSpecies";
 import { Search } from "components/Search";
@@ -71,7 +71,7 @@ export const StationView: React.FC<Props> = ({ stationName }) => {
 
   return (
     <>
-      <Settings
+      <StationTitle
         speciesData={speciesData}
         speciesError={speciesError}
         stationId={stationId}
