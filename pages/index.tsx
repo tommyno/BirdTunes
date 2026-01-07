@@ -14,6 +14,7 @@ import { StationView } from "components/StationView/StationView";
 import { PopularStations } from "components/PopularStations/PopularStations";
 import { About } from "components/About/About";
 import { Flow } from "components/Flow/Flow";
+import { StationSearch } from "components/StationSearch";
 
 export default function Home() {
   const router = useRouter();
@@ -46,6 +47,7 @@ export default function Home() {
         {/* Show when no station is selected */}
         {!stationId && (
           <Flow>
+            <StationSearch stationId={stationId} />
             <PopularStations />
             <About />
           </Flow>
