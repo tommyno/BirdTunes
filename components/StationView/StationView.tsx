@@ -14,6 +14,8 @@ import { NewSpecies } from "components/NewSpecies";
 import { Search } from "components/Search";
 import { useTranslation } from "hooks/useTranslation";
 import { useQueryParams, setQueryParams } from "hooks/useQueryParams";
+import { setItem } from "hooks/useLocalStorage";
+import { useLocalStorageCache } from "hooks/useLocalStorageCache";
 import { getSortedSpeciesList } from "utils/species";
 import { Species } from "types/api";
 import { fetchAllSpeciesPages } from "utils/fetcher";
@@ -46,14 +48,23 @@ export const StationView: React.FC<Props> = ({ stationName }) => {
     ? `${API_BASE_URL}/stations/${stationId}/species?locale=${lang}&period=${period}`
     : null;
 
+  // Cache key for localStorage (per station + period)
+  const cacheKey = `birdtunes-species-${stationId}-${period}`;
+  const cachedData = useLocalStorageCache<Species>(cacheKey);
+
   const {
-    data: speciesData = [],
+    data: speciesData,
     isLoading: isLoadingSpecies,
     error: speciesError,
-  } = useSWR<Species[]>(speciesUrl, fetchAllSpeciesPages);
+  } = useSWR<Species[]>(speciesUrl, fetchAllSpeciesPages, {
+    onSuccess: (data) => setItem(cacheKey, JSON.stringify(data)),
+  });
+
+  // Use fresh data if available, otherwise show cached
+  const displayData = speciesData ?? cachedData;
 
   const speciesList = getSortedSpeciesList({
-    species: speciesData,
+    species: displayData,
     sort,
     search,
   });
@@ -72,14 +83,14 @@ export const StationView: React.FC<Props> = ({ stationName }) => {
   return (
     <>
       <StationTitle
-        speciesData={speciesData}
+        speciesData={displayData}
         speciesError={speciesError}
         stationId={stationId}
         stationName={stationName}
         isLoadingSpecies={isLoadingSpecies}
       />
 
-      <NewSpecies speciesData={speciesData} stationId={stationId} />
+      <NewSpecies speciesData={displayData} stationId={stationId} />
 
       <Block top="4" bottom="5" center>
         <Button
