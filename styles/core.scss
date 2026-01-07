@@ -42,6 +42,11 @@ body {
   width: 100%;
 }
 
+.smallWrap {
+  max-width: 760px;
+  margin: var(--spacing-3) auto;
+}
+
 // Fade in image when loaded
 .fade-in-image {
   transition: opacity 0.2s ease;

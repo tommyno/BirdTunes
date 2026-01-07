@@ -46,11 +46,13 @@ export default function Home() {
       <div className="wrap">
         {/* Show when no station is selected */}
         {!stationId && (
-          <Flow>
-            <StationSearch />
-            <PopularStations />
-            <About />
-          </Flow>
+          <div className="smallWrap">
+            <Flow>
+              <StationSearch />
+              <PopularStations />
+              <About />
+            </Flow>
+          </div>
         )}
 
         {/* Show when a station is selected */}

@@ -16,6 +16,7 @@ const popularStations = [
   { id: 17860, name: "Brisbane (Australia)" },
   { id: 19519, name: "Eastside Landing (Canada)" },
   { id: 19555, name: "Austin (USA)" },
+  { id: 10737, name: "National park (Belize)" },
 ];
 
 export const PopularStations: React.FC = () => {
