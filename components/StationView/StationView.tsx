@@ -14,10 +14,13 @@ import { NewSpecies } from "components/NewSpecies";
 import { Search } from "components/Search";
 import { useTranslation } from "hooks/useTranslation";
 import { useQueryParams, setQueryParams } from "hooks/useQueryParams";
+import { setItem } from "hooks/useLocalStorage";
+import { useLocalStorageCache } from "hooks/useLocalStorageCache";
 import { getSortedSpeciesList } from "utils/species";
 import { Species } from "types/api";
 import { fetchAllSpeciesPages } from "utils/fetcher";
 import styles from "./StationView.module.scss";
+import { LoadingDots } from "components/LoadingDots";
 
 type Props = {
   stationName?: string;
@@ -46,14 +49,23 @@ export const StationView: React.FC<Props> = ({ stationName }) => {
     ? `${API_BASE_URL}/stations/${stationId}/species?locale=${lang}&period=${period}`
     : null;
 
+  // Cache key for localStorage (per station + period)
+  const cacheKey = `birdtunes-species-${stationId}-${period}`;
+  const cachedData = useLocalStorageCache<Species>(cacheKey);
+
   const {
-    data: speciesData = [],
+    data: speciesData,
     isLoading: isLoadingSpecies,
     error: speciesError,
-  } = useSWR<Species[]>(speciesUrl, fetchAllSpeciesPages);
+  } = useSWR<Species[]>(speciesUrl, fetchAllSpeciesPages, {
+    onSuccess: (data) => setItem(cacheKey, JSON.stringify(data)),
+  });
+
+  // Use fresh data if available, otherwise show cached
+  const displayData = speciesData ?? cachedData;
 
   const speciesList = getSortedSpeciesList({
-    species: speciesData,
+    species: displayData,
     sort,
     search,
   });
@@ -72,14 +84,14 @@ export const StationView: React.FC<Props> = ({ stationName }) => {
   return (
     <>
       <StationTitle
-        speciesData={speciesData}
+        speciesData={displayData}
         speciesError={speciesError}
         stationId={stationId}
         stationName={stationName}
         isLoadingSpecies={isLoadingSpecies}
       />
 
-      <NewSpecies speciesData={speciesData} stationId={stationId} />
+      <NewSpecies speciesData={displayData} stationId={stationId} />
 
       <Block top="4" bottom="5" center>
         <Button
@@ -104,6 +116,19 @@ export const StationView: React.FC<Props> = ({ stationName }) => {
 
       {sort === "search" && <Search />}
 
+      {isLoadingSpecies && (
+        <Block center bottom="4">
+          {cachedData.length > 0 ? (
+            <p className="color-gray">
+              {t("updating")}
+              <LoadingDots />
+            </p>
+          ) : (
+            <Spinner />
+          )}
+        </Block>
+      )}
+
       <div style={{ position: "relative" }}>
         <BirdCardGrid>
           {speciesList.map((species) => (
@@ -112,10 +137,6 @@ export const StationView: React.FC<Props> = ({ stationName }) => {
         </BirdCardGrid>
 
         {speciesError && <p className="color-red">{speciesError.toString()}</p>}
-
-        <Block center bottom="5">
-          {isLoadingSpecies && <Spinner />}
-        </Block>
 
         <LastUpdated lang={lang} />
       </div>
