@@ -37,6 +37,7 @@ export default function App({ Component, pageProps }: AppProps) {
         value={{
           errorRetryCount: 2,
           dedupingInterval: 5000,
+          revalidateOnFocus: false,
         }}
       >
         <ModalProvider>
