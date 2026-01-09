@@ -5,3 +5,16 @@
   color: var(--color-white);
   padding: var(--spacing-1) var(--gap) var(--spacing-6);
 }
+
+.logoWrap {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-1);
+}
+
+.arrow {
+  rotate: 270deg;
+
+  // Filter: Make the arrow white
+  filter: invert(1);
+}

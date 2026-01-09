@@ -52,7 +52,7 @@ export default function Home() {
         <meta property="og:image" content="/open-graph-share.png" />
       </Head>
 
-      <Header />
+      <Header showArrow={stationId} />
 
       <div className="wrap">
         {/* Show when no station is selected */}
