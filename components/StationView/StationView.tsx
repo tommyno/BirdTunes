@@ -91,7 +91,11 @@ export const StationView: React.FC<Props> = ({ stationName }) => {
         isLoadingSpecies={isLoadingSpecies}
       />
 
-      <NewSpecies speciesData={displayData} stationId={stationId} />
+      <NewSpecies
+        cachedSpecies={cachedData}
+        freshSpecies={speciesData}
+        stationId={stationId}
+      />
 
       <Block top="4" bottom="5" center>
         <Button

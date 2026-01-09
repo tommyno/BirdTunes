@@ -2,73 +2,37 @@ import React from "react";
 import styles from "./NewSpecies.module.scss";
 import { Species } from "types/api";
 import { useTranslation } from "hooks/useTranslation";
-import { getItem, setItem } from "hooks/useLocalStorage";
-type BirdnetStation = {
-  id: string;
-  species: string[];
-  lastUpdated: number;
-};
 
 type Props = {
-  speciesData: Species[];
+  cachedSpecies: Species[];
+  freshSpecies: Species[] | undefined;
   stationId: string | null;
 };
 
-export const NewSpecies: React.FC<Props> = ({ speciesData, stationId }) => {
+export const NewSpecies: React.FC<Props> = ({
+  cachedSpecies,
+  freshSpecies,
+  stationId,
+}) => {
   const { t } = useTranslation();
 
-  if (!stationId || !speciesData) return null;
+  // Only show when we have both cached (previous) and fresh (current) data
+  if (!stationId || !freshSpecies || cachedSpecies.length === 0) return null;
 
-  // Get species ids from local storage
-  const localstoreData = getItem("newSpecies") as BirdnetStation[];
-  const speciesIdsFromLocalStorage = localstoreData.find(
-    (station) => station.id === stationId
-  )?.species;
-
-  // Check if there is any new species (do this before updating local storage)
-  const newSpecies = speciesData.filter(
-    ({ id }) => !speciesIdsFromLocalStorage?.map(Number).includes(id)
+  // Find species in fresh data that weren't in cached data
+  const cachedIds = new Set(cachedSpecies.map((species) => species.id));
+  const newSpecies = freshSpecies.filter(
+    (species) => !cachedIds.has(species.id)
   );
 
-  // Update local storage if the station has not been updated in the last minute
-  const isRecentlyUpdated =
-    (localstoreData?.find((station) => station.id === stationId)?.lastUpdated ??
-      0) >
-    Date.now() - 60 * 1000;
-
-  // Update local storage
-  if (!isRecentlyUpdated) {
-    const stationIndex = localstoreData.findIndex(
-      (station) => station.id === stationId
-    );
-    const newStationData = {
-      id: stationId,
-      species: speciesData.map((species) => species.id),
-      lastUpdated: Date.now(),
-    };
-
-    let updatedData;
-    if (stationIndex >= 0) {
-      // Update existing station
-      updatedData = localstoreData.map((station, index) =>
-        index === stationIndex ? newStationData : station
-      );
-    } else {
-      // Add new station
-      updatedData = [...localstoreData, newStationData];
-    }
-
-    setItem("newSpecies", JSON.stringify(updatedData));
-  }
-
-  // Decide if new species should be shown
+  // Don't show if no new species
   if (newSpecies.length === 0) return null;
 
-  // If all species are new, don't show anything
-  if (newSpecies.length === speciesData.length) return null;
+  // If all species are new, don't show anything (first visit)
+  if (newSpecies.length === freshSpecies.length) return null;
 
   // If there is a ton of new species, don't show anything
-  if (newSpecies.length > 20) return null;
+  if (newSpecies.length > 12) return null;
 
   return (
     <div className={styles.wrap}>
