@@ -32,3 +32,8 @@
     width: 100%;
   }
 }
+
+.lastUpdatedText {
+  white-space: nowrap;
+  flex-shrink: 0;
+}

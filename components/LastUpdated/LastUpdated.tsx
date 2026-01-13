@@ -25,7 +25,7 @@ export const LastUpdated: React.FC<{ lang?: string | null }> = ({ lang }) => {
           <img src="/icons/arrow-up.svg" alt={t("toTop")} />
         </button>
 
-        <p className="no-wrap">
+        <p className={styles.lastUpdatedText}>
           {t("lastUpdated")} {time}
         </p>
 
