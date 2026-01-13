@@ -1,7 +1,8 @@
 import React, { useState } from "react";
 
-import styles from "./FavouriteButton.module.scss";
+import { useTranslation } from "hooks/useTranslation";
 import { getItem, setItem } from "hooks/useLocalStorage";
+import styles from "./FavouriteButton.module.scss";
 
 type Props = {
   stationId: string;
@@ -14,6 +15,8 @@ export const FavouriteButton: React.FC<Props> = ({
   stationId,
   stationName,
 }) => {
+  const { t } = useTranslation();
+
   // Handle favourites
   const favourites: Favourite[] = getItem("birdtunes-favourites");
   const [isFavourite, setIsFavourite] = useState(
@@ -30,13 +33,16 @@ export const FavouriteButton: React.FC<Props> = ({
   };
 
   return (
-    <button onClick={() => handleFavourite(stationId)}>
+    <button
+      onClick={() => handleFavourite(stationId)}
+      className={styles.iconButton}
+    >
       <img
         src={`/icons/star${isFavourite ? "-filled" : ""}.svg`}
-        alt="Favorite"
-        title={`${isFavourite ? "Remove from" : "Add to"} favourites`}
+        alt=""
         className={styles.icon}
       />
+      {isFavourite ? t("removeFromFavourites") : t("addToFavourites")}
     </button>
   );
 };

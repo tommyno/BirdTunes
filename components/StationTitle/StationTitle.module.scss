@@ -4,32 +4,33 @@
   text-align: center;
 }
 
-.titleWrap {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: var(--spacing-2);
-  margin-bottom: var(--spacing-2);
-}
-
 .title {
   font-size: 1.5rem;
   text-wrap: balance;
   line-height: 1.1;
   font-weight: bold;
+  margin-bottom: var(--spacing-2);
+}
+
+.titleButton {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--spacing-2);
 }
 
 .iconWrap {
   display: flex;
+  gap: var(--spacing-4);
+  justify-content: center;
+  margin: var(--spacing-4) 0;
+}
+
+.iconButton {
+  display: flex;
+  align-items: center;
   gap: var(--spacing-1);
 }
 
 .icon {
-  transition: opacity 0.2s ease;
-  opacity: 0.4;
   width: 24px;
-
-  &:hover {
-    opacity: 1;
-  }
 }

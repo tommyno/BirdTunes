@@ -235,4 +235,34 @@ export const translations = {
     no: "Dine favoritter",
     sv: "Dina favoriter",
   },
+  showMore: {
+    en: "Show more",
+    de: "Mehr anzeigen",
+    no: "Vis mer",
+    sv: "Visa mer",
+  },
+  map: {
+    en: "Map",
+    de: "Karte",
+    no: "Kart",
+    sv: "Karta",
+  },
+  share: {
+    en: "Share",
+    de: "Teilen",
+    no: "Del",
+    sv: "Dela",
+  },
+  addToFavourites: {
+    en: "Add to favourites",
+    de: "Zu Favoriten hinzufügen",
+    no: "Legg til i favoritter",
+    sv: "Lägg till i favoriter",
+  },
+  removeFromFavourites: {
+    en: "Remove from favourites",
+    de: "Aus Favoriten entfernen",
+    no: "Fjern fra favoritter",
+    sv: "Ta bort från favoriter",
+  },
 } as const;

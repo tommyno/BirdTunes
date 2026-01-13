@@ -1,9 +1,9 @@
-.icon {
-  transition: opacity 0.2s ease;
-  opacity: 0.4;
-  width: 24px;
+.iconButton {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-1);
+}
 
-  &:hover {
-    opacity: 1;
-  }
+.icon {
+  width: 24px;
 }

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import styles from "./StationTitle.module.scss";
 import { Species } from "types/api";
 import { useTranslation } from "hooks/useTranslation";
@@ -20,6 +20,8 @@ export const StationTitle: React.FC<Props> = ({
   isLoadingSpecies,
 }) => {
   const { t } = useTranslation();
+
+  const [isExpanded, setIsExpanded] = useState(false);
 
   const totalDetections = speciesData?.reduce(
     (total, species) => total + species.detections.total,
@@ -52,43 +54,50 @@ export const StationTitle: React.FC<Props> = ({
 
   return (
     <div className={styles.wrap}>
-      <div className={styles.titleWrap}>
-        <h2 className={styles.title}>{cleanStationName}</h2>
+      <h2 className={styles.title}>
+        <button
+          onClick={() => setIsExpanded(!isExpanded)}
+          aria-expanded={isExpanded}
+          className={styles.titleButton}
+          title={t("showMore")}
+        >
+          {cleanStationName}
+          <img
+            src="/icons/chevron-down.svg"
+            alt=""
+            className={styles.expandIcon}
+            style={{
+              transform: isExpanded ? "rotate(180deg)" : "rotate(0deg)",
+            }}
+          />
+        </button>
+      </h2>
 
-        {stationName && (
-          <div className={styles.iconWrap}>
-            <a
-              href={`https://app.birdweather.com${
-                speciesError || !stationId ? "" : `/stations/${stationId}`
-              }`}
-              className={styles.stationLink}
-              target="_blank"
-              rel="noopener noreferrer"
-              title="Open in map"
-            >
-              <img
-                src="/icons/pin.svg"
-                className={styles.icon}
-                alt="Open in map"
-              />
-            </a>
+      {stationName && isExpanded && (
+        <div className={styles.iconWrap}>
+          <a
+            href={`https://app.birdweather.com${
+              speciesError || !stationId ? "" : `/stations/${stationId}`
+            }`}
+            className={styles.iconButton}
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <img src="/icons/pin.svg" className={styles.icon} alt="" />
+            {t("map")}
+          </a>
 
-            <button onClick={handleShare}>
-              <img
-                src="/icons/share.svg"
-                alt="Share"
-                title="Share url"
-                className={styles.icon}
-              />
-            </button>
+          <button onClick={handleShare} className={styles.iconButton}>
+            <img src="/icons/share.svg" alt="" className={styles.icon} />
+            {t("share")}
+          </button>
 
-            <FavouriteButton
-              stationId={stationId || ""}
-              stationName={cleanStationName}
-            />
-          </div>
-        )}
-      </div>
+          <FavouriteButton
+            stationId={stationId || ""}
+            stationName={cleanStationName}
+          />
+        </div>
+      )}
 
       {!isLoadingSpecies && (
         <p>
