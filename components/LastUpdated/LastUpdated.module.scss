@@ -1,7 +1,6 @@
 .wrap {
   position: sticky;
   bottom: var(--spacing-4);
-  text-align: center;
 
   // Avoid content being hidden behind the home indicator when in standalone mode (iOS)
   @media all and (display-mode: standalone) {
@@ -10,10 +9,12 @@
 }
 
 .content {
-  display: inline-flex;
+  display: flex;
   align-items: center;
   justify-content: center;
   gap: var(--spacing-1);
+  width: max-content;
+  margin: 0 auto;
   padding: 0 var(--spacing-1);
   background-color: white;
   border-radius: var(--border-radius);
