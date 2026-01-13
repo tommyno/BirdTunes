@@ -20,6 +20,7 @@
 }
 
 .button {
+  flex-shrink: 0;
   width: 44px;
   height: 44px;
   display: flex;
