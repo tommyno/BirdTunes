@@ -254,15 +254,15 @@ export const translations = {
     sv: "Dela",
   },
   addToFavourites: {
-    en: "Add to favourites",
-    de: "Zu Favoriten hinzufügen",
-    no: "Legg til i favoritter",
-    sv: "Lägg till i favoriter",
+    en: "Add favourite",
+    de: "Favorit hinzufügen",
+    no: "Legg til favoritt",
+    sv: "Lägg till favorit",
   },
   removeFromFavourites: {
-    en: "Remove from favourites",
-    de: "Aus Favoriten entfernen",
-    no: "Fjern fra favoritter",
-    sv: "Ta bort från favoriter",
+    en: "Remove favourite",
+    de: "Favorit entfernen",
+    no: "Fjern favoritt",
+    sv: "Ta bort favorit",
   },
 } as const;

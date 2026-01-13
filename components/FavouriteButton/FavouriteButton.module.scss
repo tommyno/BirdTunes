@@ -2,6 +2,14 @@
   display: flex;
   align-items: center;
   gap: var(--spacing-1);
+  padding: var(--spacing-1) var(--spacing-2);
+  border-radius: var(--border-radius);
+  background-color: var(--color-winter);
+  white-space: nowrap;
+
+  &:hover {
+    filter: brightness(0.9);
+  }
 }
 
 .icon {

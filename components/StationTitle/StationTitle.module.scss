@@ -20,7 +20,8 @@
 
 .iconWrap {
   display: flex;
-  gap: var(--spacing-4);
+  flex-wrap: wrap;
+  gap: var(--spacing-3);
   justify-content: center;
   margin: var(--spacing-4) 0;
 }
@@ -29,6 +30,13 @@
   display: flex;
   align-items: center;
   gap: var(--spacing-1);
+  padding: var(--spacing-1) var(--spacing-2);
+  border-radius: var(--border-radius);
+  background-color: var(--color-winter);
+
+  &:hover {
+    filter: brightness(0.9);
+  }
 }
 
 .icon {
