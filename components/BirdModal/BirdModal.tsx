@@ -72,6 +72,7 @@ export function BirdModal({ data: bird, isOpen, onClose }: BirdModalProps) {
                 target="_blank"
                 rel="noreferrer"
                 title={t("wikiTitle")}
+                className="link"
               >
                 {bird.scientificName}
               </a>
