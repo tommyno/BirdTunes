@@ -1,8 +1,7 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import styles from "./LastUpdated.module.scss";
 import { timeDetailedNow } from "utils/date";
-import { useIsomorphicLayoutEffect } from "hooks/useIsomorphicLayoutEffect";
 import { useTranslation } from "hooks/useTranslation";
 
 export const LastUpdated: React.FC<{ lang?: string | null }> = ({ lang }) => {
@@ -10,7 +9,8 @@ export const LastUpdated: React.FC<{ lang?: string | null }> = ({ lang }) => {
   const [time, setTime] = useState<string>("");
   const { t } = useTranslation();
 
-  useIsomorphicLayoutEffect(() => {
+  // Avoid hydration error
+  useEffect(() => {
     setTime(timeDetailedNow(lang));
   }, []);
 

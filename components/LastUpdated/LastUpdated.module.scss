@@ -1,6 +1,9 @@
 .wrap {
   position: sticky;
   bottom: var(--spacing-4);
+  // Forces a new compositing layer so iOS Safari repaints text updates
+  // inside sticky elements without requiring a scroll event.
+  transform: translateZ(0);
 
   // Avoid content being hidden behind the home indicator when in standalone mode (iOS)
   @media all and (display-mode: standalone) {
