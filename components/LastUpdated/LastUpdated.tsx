@@ -4,18 +4,24 @@ import styles from "./LastUpdated.module.scss";
 import { timeDetailedNow } from "utils/date";
 import { useTranslation } from "hooks/useTranslation";
 
-export const LastUpdated: React.FC<{ lang?: string | null }> = ({ lang }) => {
+export const LastUpdated: React.FC<{
+  lang?: string | null;
+  isUpdating?: boolean;
+}> = ({ lang, isUpdating }) => {
   const router = useRouter();
   const [time, setTime] = useState<string>("");
   const { t } = useTranslation();
 
   // Avoid hydration error
   useEffect(() => {
-    setTime(timeDetailedNow(lang));
-  }, []);
+    // Update time when a fetch completes
+    if (!isUpdating) {
+      setTime(timeDetailedNow(lang));
+    }
+  }, [isUpdating]);
 
   return (
-    <div className={styles.wrap}>
+    <div className={styles.wrap} key={time}>
       <div className={styles.content}>
         <button
           className={styles.button}
@@ -26,7 +32,7 @@ export const LastUpdated: React.FC<{ lang?: string | null }> = ({ lang }) => {
         </button>
 
         <p className={styles.lastUpdatedText}>
-          {t("lastUpdated")} {time}
+          {isUpdating ? t("updating") : `${t("lastUpdated")} ${time}`}
         </p>
 
         <button
@@ -34,7 +40,11 @@ export const LastUpdated: React.FC<{ lang?: string | null }> = ({ lang }) => {
           title="Refresh"
           onClick={() => router.reload()}
         >
-          <img src="/icons/refresh.svg" alt="Refresh" />
+          <img
+            src="/icons/refresh.svg"
+            alt="Refresh"
+            className={isUpdating ? styles.spinning : undefined}
+          />
         </button>
       </div>
     </div>

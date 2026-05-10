@@ -142,7 +142,7 @@ export const StationView: React.FC<Props> = ({ stationName }) => {
 
         {speciesError && <p className="color-red">{speciesError.toString()}</p>}
 
-        <LastUpdated lang={lang} />
+        <LastUpdated lang={lang} isUpdating={isLoadingSpecies} />
       </div>
     </>
   );
