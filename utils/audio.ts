@@ -1,7 +1,10 @@
 type AudioProcessor = {
   readonly context: AudioContext;
   readonly gain: GainNode;
+  readonly analyser: AnalyserNode;
   setGain: (value: number) => void;
+  startDynamicGain: () => void;
+  stopDynamicGain: () => void;
 };
 
 type CreateAudioProcessorProps = {
@@ -23,16 +26,58 @@ export const createAudioProcessor = ({
 
   const context = new AudioContext();
   const source = context.createMediaElementSource(audioElement);
+  const analyser = context.createAnalyser();
   const gain = context.createGain();
 
-  source.connect(gain);
+  analyser.fftSize = 2048;
+  analyser.smoothingTimeConstant = 0.7;
+
+  source.connect(analyser);
+  analyser.connect(gain);
   gain.connect(context.destination);
+
+  let dynamicGainRAF: number | null = null;
+
+  const updateDynamicGain = () => {
+    const dataArray = new Float32Array(analyser.frequencyBinCount);
+    analyser.getFloatTimeDomainData(dataArray);
+
+    let sum = 0;
+    for (let i = 0; i < dataArray.length; i++) {
+      sum += dataArray[i] * dataArray[i];
+    }
+    const rms = Math.sqrt(sum / dataArray.length);
+    const db = 20 * Math.log10(Math.max(rms, 1e-6));
+    const dbDiff = -10 - db;
+    const targetGain = Math.min(75, Math.max(1, Math.pow(10, dbDiff / 20)));
+
+    // Asymmetric attack/release: slow to increase (2%), fast to decrease (25%).
+    // This prevents gain from shooting up during leading silence and causing a pop
+    // when the bird call suddenly arrives.
+    const isIncreasing = targetGain > gain.gain.value;
+    const alpha = isIncreasing ? 0.02 : 0.25;
+    gain.gain.value = gain.gain.value * (1 - alpha) + targetGain * alpha;
+
+    dynamicGainRAF = requestAnimationFrame(updateDynamicGain);
+  };
 
   const processor: AudioProcessor = {
     context,
     gain,
+    analyser,
     setGain: (value) => {
       gain.gain.value = value;
+    },
+    startDynamicGain: () => {
+      if (!dynamicGainRAF) {
+        updateDynamicGain();
+      }
+    },
+    stopDynamicGain: () => {
+      if (dynamicGainRAF) {
+        cancelAnimationFrame(dynamicGainRAF);
+        dynamicGainRAF = null;
+      }
     },
   };
 

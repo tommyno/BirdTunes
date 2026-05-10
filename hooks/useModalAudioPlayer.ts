@@ -34,13 +34,19 @@ export const useModalAudioPlayer = ({
     null
   );
   const blobUrlRef = useRef<string | null>(null);
-
+  // Tracks whether we fell back to dynamic gain (e.g. iOS PWA where decodeAudioData fails for FLAC)
+  const isDynamicGainRef = useRef(false);
 
   const revokeBlobUrl = () => {
     if (blobUrlRef.current) {
       URL.revokeObjectURL(blobUrlRef.current);
       blobUrlRef.current = null;
     }
+  };
+
+  const stopDynamicGain = () => {
+    processorRef.current?.stopDynamicGain();
+    isDynamicGainRef.current = false;
   };
 
   // Initialize audio processor once the audio element is available
@@ -78,6 +84,7 @@ export const useModalAudioPlayer = ({
         audioRef.current.src = "";
         audioRef.current.controls = false;
       }
+      stopDynamicGain();
       revokeBlobUrl();
     }
   }, [detections]);
@@ -96,7 +103,8 @@ export const useModalAudioPlayer = ({
       return;
     }
 
-    // Stop current playback and clean up previous blob URL
+    // Stop any active dynamic gain and clean up previous playback
+    stopDynamicGain();
     audio.pause();
     audio.src = "";
     revokeBlobUrl();
@@ -104,15 +112,15 @@ export const useModalAudioPlayer = ({
     setCurrentDetection(detection);
     setIsLoaded(false);
 
+    // Ensure processor and its AudioContext are available
+    if (!processorRef.current) {
+      processorRef.current = createAudioProcessor({ audioElement: audio });
+    }
+    const processor = processorRef.current;
+
     try {
       const response = await fetch(detection.soundscape.url);
       const arrayBuffer = await response.arrayBuffer();
-
-      // Ensure processor and its AudioContext are available
-      if (!processorRef.current) {
-        processorRef.current = createAudioProcessor({ audioElement: audio });
-      }
-      const processor = processorRef.current;
 
       // Decode the full file to calculate whole-file RMS normalization.
       // slice(0) passes a copy so the original arrayBuffer stays intact for the Blob below.
@@ -129,12 +137,22 @@ export const useModalAudioPlayer = ({
       blobUrlRef.current = blobUrl;
 
       audio.src = blobUrl;
+    } catch {
+      // decodeAudioData fails in some environments (e.g. iOS PWA + FLAC files).
+      // Fall back to dynamic gain: stream the original URL and adjust gain in real time.
+      processor.setGain(1);
+      processor.startDynamicGain();
+      isDynamicGainRef.current = true;
+      audio.src = detection.soundscape.url;
+    }
+
+    try {
       audio.controls = true;
       setIsLoaded(true);
-
       await audio.play();
     } catch (err) {
-      console.error("Error loading or playing audio:", err);
+      console.error("[audio] play() failed:", err);
+      stopDynamicGain();
       setIsLoaded(false);
     }
   };
@@ -152,6 +170,10 @@ export const useModalAudioPlayer = ({
     } else {
       audioRef.current.controls = true;
       audioRef.current.play();
+      // Restart the dynamic gain RAF if we're in fallback mode
+      if (isDynamicGainRef.current) {
+        processorRef.current?.startDynamicGain();
+      }
     }
   };
 
@@ -161,10 +183,13 @@ export const useModalAudioPlayer = ({
 
   const handleAudioPause = () => {
     setIsPlaying(false);
+    // Stop the RAF while paused to avoid wasting CPU
+    processorRef.current?.stopDynamicGain();
   };
 
   const handleAudioEnded = () => {
     setIsPlaying(false);
+    stopDynamicGain();
   };
 
   const stopAndClose = () => {
@@ -173,6 +198,7 @@ export const useModalAudioPlayer = ({
       audioRef.current.src = "";
       audioRef.current.controls = false;
     }
+    stopDynamicGain();
     revokeBlobUrl();
     setCurrentDetection(null);
     setIsPlaying(false);
