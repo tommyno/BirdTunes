@@ -3,6 +3,7 @@ import { useRouter } from "next/router";
 import styles from "./LastUpdated.module.scss";
 import { timeDetailedNow } from "utils/date";
 import { useTranslation } from "hooks/useTranslation";
+import { LoadingDots } from "components/LoadingDots/LoadingDots";
 
 export const LastUpdated: React.FC<{
   lang?: string | null;
@@ -32,7 +33,13 @@ export const LastUpdated: React.FC<{
         </button>
 
         <p className={styles.lastUpdatedText}>
-          {isUpdating ? t("updating") : `${t("lastUpdated")} ${time}`}
+          {isUpdating ? (
+            <>
+              {t("updating")} <LoadingDots />
+            </>
+          ) : (
+            `${t("lastUpdated")} ${time}`
+          )}
         </p>
 
         <button
