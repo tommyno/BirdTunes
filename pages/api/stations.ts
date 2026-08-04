@@ -72,6 +72,13 @@ export default async function handler(
     return;
   }
 
+  // Reject query params: every unique query string is a separate CDN cache
+  // key, so allowing them would let anyone bypass the cache at will
+  if (req.url?.includes("?")) {
+    res.status(400).json({ message: "Query parameters are not allowed" });
+    return;
+  }
+
   try {
     const nodes = await fetchAllStations();
     const activeThreshold =
