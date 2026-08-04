@@ -2,6 +2,7 @@ import { useRouter } from "next/router";
 import styles from "./LanguageSwitcher.module.scss";
 import { Fragment } from "react";
 import { setQueryParams } from "hooks/useQueryParams";
+import { storeLanguage } from "hooks/useRestoreLanguage";
 
 // This list is identical to Birdweather's language list
 const languages = [
@@ -43,6 +44,7 @@ export const LanguageSwitcher = () => {
   ) => {
     const newLang = e.target.value;
 
+    storeLanguage(newLang);
     await setQueryParams({ router, params: { lang: newLang } });
     window.location.reload();
   };

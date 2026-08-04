@@ -4,11 +4,13 @@ import Script from "next/script";
 import { SWRConfig } from "swr";
 import { ModalProvider } from "contexts/ModalContext";
 import { useIsLocalhost } from "hooks/useIsLocalhost";
+import { useRestoreLanguage } from "hooks/useRestoreLanguage";
 
 import "styles/index.scss";
 
 export default function App({ Component, pageProps }: AppProps) {
   const isLocalhost = useIsLocalhost();
+  useRestoreLanguage();
 
   return (
     <>

@@ -6,6 +6,7 @@ import { setQueryParams } from "hooks/useQueryParams";
 import { useStationSearch } from "hooks/useStationSearch";
 import { SearchStation } from "types/api";
 import { Spinner } from "components/Spinner";
+import { MapLink } from "components/MapLink";
 
 export const StationSearch: React.FC = () => {
   const router = useRouter();
@@ -50,55 +51,59 @@ export const StationSearch: React.FC = () => {
     showResults && (hasResults || isLoading || inputValue.length > 0);
 
   return (
-    <div className={styles.wrap} ref={wrapRef}>
-      <div className={styles.inputWrap}>
-        <img
-          src="/icons/search.svg"
-          alt=""
-          className={styles.searchIcon}
-          aria-hidden="true"
-        />
-        <input
-          type="text"
-          value={inputValue}
-          onChange={handleInputChange}
-          placeholder={t("searchStation")}
-          className={styles.input}
-          aria-label={t("searchStation")}
-          onFocus={() => inputValue.length > 0 && setShowResults(true)}
-        />
+    <div className={styles.row}>
+      <div className={styles.wrap} ref={wrapRef}>
+        <div className={styles.inputWrap}>
+          <img
+            src="/icons/search.svg"
+            alt=""
+            className={styles.searchIcon}
+            aria-hidden="true"
+          />
+          <input
+            type="text"
+            value={inputValue}
+            onChange={handleInputChange}
+            placeholder={t("searchStation")}
+            className={styles.input}
+            aria-label={t("searchStation")}
+            onFocus={() => inputValue.length > 0 && setShowResults(true)}
+          />
+        </div>
+
+        {showDropdown && (
+          <div className={styles.dropdown}>
+            {hasResults && (
+              <ul className={styles.results}>
+                {searchResults.map((station) => (
+                  <li key={station.id}>
+                    <button
+                      type="button"
+                      className={styles.resultItem}
+                      onClick={() => handleSelectStation(station)}
+                    >
+                      <span className={styles.stationName}>{station.name}</span>
+                      <span className={styles.stationId}>#{station.id}</span>
+                    </button>
+                  </li>
+                ))}
+              </ul>
+            )}
+
+            {!hasResults && isLoading && (
+              <div className={styles.dropdownMessage}>
+                <Spinner />
+              </div>
+            )}
+
+            {!hasResults && !isLoading && inputValue.length > 0 && (
+              <div className={styles.dropdownMessage}>{t("noResults")}</div>
+            )}
+          </div>
+        )}
       </div>
 
-      {showDropdown && (
-        <div className={styles.dropdown}>
-          {hasResults && (
-            <ul className={styles.results}>
-              {searchResults.map((station) => (
-                <li key={station.id}>
-                  <button
-                    type="button"
-                    className={styles.resultItem}
-                    onClick={() => handleSelectStation(station)}
-                  >
-                    <span className={styles.stationName}>{station.name}</span>
-                    <span className={styles.stationId}>#{station.id}</span>
-                  </button>
-                </li>
-              ))}
-            </ul>
-          )}
-
-          {!hasResults && isLoading && (
-            <div className={styles.dropdownMessage}>
-              <Spinner />
-            </div>
-          )}
-
-          {!hasResults && !isLoading && inputValue.length > 0 && (
-            <div className={styles.dropdownMessage}>{t("noResults")}</div>
-          )}
-        </div>
-      )}
+      <MapLink />
     </div>
   );
 };

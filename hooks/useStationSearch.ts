@@ -1,7 +1,14 @@
 import { useEffect, useState } from "react";
 
-import { API_BASE_URL_GRAPHQL } from "constants/birdweather";
 import { SearchStation } from "types/api";
+import { fetchGraphQL } from "utils/fetcher";
+
+type SearchResponse = {
+  data?: {
+    station?: SearchStation;
+    stations?: { nodes: SearchStation[] };
+  };
+};
 
 export const useStationSearch = (query: string) => {
   const [data, setData] = useState<SearchStation[]>([]);
@@ -25,19 +32,7 @@ export const useStationSearch = (query: string) => {
           ? `query { station(id: "${query}") { id name location } }`
           : `query { stations(query: "${query}", first: 10) { nodes { id name location } } }`;
 
-        const response = await fetch(API_BASE_URL_GRAPHQL, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ query: graphqlQuery }),
-        });
-
-        if (!response.ok) {
-          throw new Error(`Error: ${response.status}`);
-        }
-
-        const result = await response.json();
+        const result: SearchResponse = await fetchGraphQL(graphqlQuery);
 
         if (isNumeric && result.data?.station) {
           setData([result.data.station]);

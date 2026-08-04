@@ -223,12 +223,6 @@ export const translations = {
     no: "Populære",
     sv: "Populära",
   },
-  findOtherStations: {
-    en: "Find other stations on BirdWeather",
-    de: "Andere Stationen auf BirdWeather finden",
-    no: "Finn andre stasjoner på BirdWeather",
-    sv: "Hitta andra stationer på BirdWeather",
-  },
   favourites: {
     en: "Your favourites",
     de: "Deine Favoriten",
@@ -264,5 +258,29 @@ export const translations = {
     de: "Favorit entfernen",
     no: "Fjern favoritt",
     sv: "Ta bort favorit",
+  },
+  mapTitle: {
+    en: "Station map",
+    de: "Stationskarte",
+    no: "Stasjonskart",
+    sv: "Stationskarta",
+  },
+  showMap: {
+    en: "Show map",
+    de: "Karte anzeigen",
+    no: "Vis kart",
+    sv: "Visa karta",
+  },
+  loadingStations: {
+    en: "Loading stations",
+    de: "Lade Stationen",
+    no: "Laster stasjoner",
+    sv: "Laddar stationer",
+  },
+  stationsError: {
+    en: "Could not load stations",
+    de: "Stationen konnten nicht geladen werden",
+    no: "Kunne ikke laste stasjonene",
+    sv: "Stationerna kunde inte laddas",
   },
 } as const;

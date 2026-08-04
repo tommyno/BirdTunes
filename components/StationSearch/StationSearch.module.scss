@@ -1,5 +1,11 @@
+.row {
+  display: flex;
+  gap: var(--spacing-2);
+}
+
 .wrap {
   position: relative;
+  flex: 1;
 }
 
 .inputWrap {
