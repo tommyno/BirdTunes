@@ -124,6 +124,7 @@ Pass these along when building links so context isn't lost.
 
 ## Working style
 
+- **NEVER run `git commit` or `git push` — the user always commits and pushes themselves.** Leave all changes uncommitted, even when asked to "commit" or "deploy"; instead say the changes are ready.
 - Prioritize readability over performance optimization.
 - Follow existing patterns in the codebase rather than introducing new ones.
 - Leave no TODOs or placeholders — finish what you start.
