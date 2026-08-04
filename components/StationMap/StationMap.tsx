@@ -54,7 +54,12 @@ export const StationMap: React.FC = () => {
       },
       center: [10, 30],
       zoom: 1.6,
+      dragRotate: false,
+      touchPitch: false,
     });
+
+    // Keep two-finger pinch zoom, but don't let it rotate the map
+    map.touchZoomRotate.disableRotation();
 
     map.addControl(new NavigationControl({ showCompass: false }));
 
@@ -139,8 +144,8 @@ export const StationMap: React.FC = () => {
           COLOR_FORREST,
           COLOR_GRAY,
         ],
-        "circle-radius": 6,
-        "circle-stroke-width": 1.5,
+        "circle-radius": 8,
+        "circle-stroke-width": 2,
         "circle-stroke-color": COLOR_WHITE,
       },
     });
