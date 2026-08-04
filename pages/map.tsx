@@ -22,6 +22,12 @@ export default function Map() {
         <meta name="og:title" content={title} />
         <meta name="og:description" content={t("pageDescription")} />
         <meta property="og:image" content="/open-graph-share.png" />
+        {/* Open the tile server connection while the map chunk downloads */}
+        <link
+          rel="preconnect"
+          href="https://tiles.openfreemap.org"
+          crossOrigin="anonymous"
+        />
       </Head>
 
       <Header />

@@ -33,6 +33,9 @@
   // Style the popup box that maplibre generates around our content
   :global(.maplibregl-popup-content) {
     font-family: var(--font-default);
+    // Override the 12px font maplibre sets on the map container
+    font-size: 1rem;
+    line-height: 1.4;
     padding: var(--spacing-3) var(--spacing-4);
     border-radius: var(--border-radius);
   }
