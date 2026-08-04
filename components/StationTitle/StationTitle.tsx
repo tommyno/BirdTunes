@@ -1,7 +1,9 @@
 import React, { useState } from "react";
+import Link from "next/link";
 import styles from "./StationTitle.module.scss";
 import { Species } from "types/api";
 import { useTranslation } from "hooks/useTranslation";
+import { useQueryParam } from "hooks/useQueryParams";
 import { FavouriteButton } from "components/FavouriteButton/FavouriteButton";
 
 type Props = {
@@ -20,6 +22,7 @@ export const StationTitle: React.FC<Props> = ({
   isLoadingSpecies,
 }) => {
   const { t } = useTranslation();
+  const [lang] = useQueryParam({ key: "lang" });
 
   const [isExpanded, setIsExpanded] = useState(false);
 
@@ -75,17 +78,13 @@ export const StationTitle: React.FC<Props> = ({
 
       {stationName && isExpanded && (
         <div className={styles.iconWrap}>
-          <a
-            href={`https://app.birdweather.com${
-              speciesError || !stationId ? "" : `/stations/${stationId}`
-            }`}
+          <Link
+            href={`/map${lang ? `?lang=${lang}` : ""}`}
             className={styles.iconButton}
-            target="_blank"
-            rel="noopener noreferrer"
           >
             <img src="/icons/pin.svg" className={styles.icon} alt="" />
             {t("map")}
-          </a>
+          </Link>
 
           <button onClick={handleShare} className={styles.iconButton}>
             <img src="/icons/share.svg" alt="" className={styles.icon} />

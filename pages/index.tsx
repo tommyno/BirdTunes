@@ -1,6 +1,5 @@
 import Head from "next/head";
 import { useRouter } from "next/router";
-import { GetServerSideProps } from "next";
 import useSWR from "swr";
 import { API_BASE_URL } from "constants/birdweather";
 import { useTranslation } from "hooks/useTranslation";
@@ -76,16 +75,4 @@ export default function Home() {
   );
 }
 
-// Pass language to _document.tsx (to dynamically set html lang attribute)
-export const getServerSideProps: GetServerSideProps<{ lang: string }> = async (
-  context
-) => {
-  // Default to english
-  const { lang = "en" } = context.query;
-  return {
-    props: {
-      // Handle array case if multiple params are sent
-      lang: Array.isArray(lang) ? lang[0] : lang,
-    },
-  };
-};
+export { getLangServerSideProps as getServerSideProps } from "utils/lang";

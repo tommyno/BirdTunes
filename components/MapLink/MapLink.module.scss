@@ -1,0 +1,25 @@
+// Pill shaped to match the search input it sits next to
+.link {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-1);
+  padding: 0 var(--spacing-4);
+  border-radius: 50px;
+  background-color: var(--color-winter);
+  white-space: nowrap;
+
+  &:hover {
+    filter: brightness(0.9);
+  }
+}
+
+.icon {
+  width: 24px;
+}
+
+// Icon-only button on small screens
+.label {
+  @media (max-width: 500px) {
+    display: none;
+  }
+}

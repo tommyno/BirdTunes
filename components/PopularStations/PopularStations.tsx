@@ -4,7 +4,6 @@ import Link from "next/link";
 import { useTranslation } from "hooks/useTranslation";
 import { useQueryParam } from "hooks/useQueryParams";
 import styles from "./PopularStations.module.scss";
-import { Block } from "components/Block";
 
 const popularStations = [
   { id: 8588, name: "Nesodden (Norway)" },
@@ -40,19 +39,6 @@ export const PopularStations: React.FC = () => {
           </Link>
         ))}
       </div>
-
-      <Block top="6">
-        <p>
-          <a
-            href="https://app.birdweather.com"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="link"
-          >
-            {t("findOtherStations")} ↗
-          </a>
-        </p>
-      </Block>
     </div>
   );
 };

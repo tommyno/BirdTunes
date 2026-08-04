@@ -36,3 +36,12 @@ export type SearchStation = {
   location?: string;
 };
 
+// Compact station tuple served by /api/stations for the map:
+// [id, name, latitude, longitude, active within last 30 days]
+export type MapStation = [string, string, number, number, 0 | 1];
+
+export type StationsMapData = {
+  updatedAt: string;
+  stations: MapStation[];
+};
+

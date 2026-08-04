@@ -1,0 +1,55 @@
+.wrap {
+  position: relative;
+  flex: 1 1 auto;
+  min-height: 0;
+  background-color: var(--color-white);
+  border-radius: var(--border-radius) var(--border-radius) 0 0;
+  overflow: hidden;
+
+  // Overlap the green header, like the global .wrap in core.scss
+  margin-top: -22px;
+}
+
+// Sized with width/height instead of absolute positioning, because the
+// maplibre stylesheet sets position: relative on the same element
+.map {
+  width: 100%;
+  height: 100%;
+}
+
+.status {
+  position: absolute;
+  top: var(--spacing-4);
+  left: 50%;
+  translate: -50% 0;
+  z-index: 1;
+  padding: var(--spacing-2) var(--spacing-4);
+  background-color: var(--color-white);
+  border: 1px solid var(--color-winter);
+  border-radius: var(--border-radius);
+}
+
+.popup {
+  // Style the popup box that maplibre generates around our content
+  :global(.maplibregl-popup-content) {
+    font-family: var(--font-default);
+    padding: var(--spacing-3) var(--spacing-4);
+    border-radius: var(--border-radius);
+  }
+}
+
+.popupLink {
+  display: block;
+  max-width: 240px;
+  overflow-wrap: anywhere;
+  color: var(--color-black);
+  font-weight: 600;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  text-decoration-thickness: 1px;
+}
+
+.popupId {
+  color: var(--color-gray);
+  font-weight: 400;
+}

@@ -1,3 +1,4 @@
+import { API_BASE_URL_GRAPHQL } from "constants/birdweather";
 import { Species } from "types/api";
 
 // Generic fetcher for SWR
@@ -8,6 +9,21 @@ export const fetcher = async <T>(url: string): Promise<T> => {
     const errorData = await response.json().catch(() => ({}));
     const message = errorData?.message || response.statusText;
     throw new Error(`Error: ${response.status} ${message}`);
+  }
+
+  return response.json();
+};
+
+// POST a query to the Birdweather GraphQL API and return the parsed response
+export const fetchGraphQL = async <T>(query: string): Promise<T> => {
+  const response = await fetch(API_BASE_URL_GRAPHQL, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ query }),
+  });
+
+  if (!response.ok) {
+    throw new Error(`Error: ${response.status}`);
   }
 
   return response.json();
