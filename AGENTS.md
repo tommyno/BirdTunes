@@ -1,0 +1,132 @@
+# Birdtunes.net
+
+Website that shows bird detections from [Birdweather](https://app.birdweather.com/) listening stations.
+There is no backend of our own — all data is fetched client-side from the Birdweather API.
+
+## Stack and commands
+
+- **Next.js Pages Router** (`pages/`). Do not add an `app/` directory or App Router APIs.
+- React + TypeScript (`strict: true`), SCSS modules, SWR for data fetching.
+- Exact versions live in `package.json` — check there instead of assuming.
+- `npm run dev` · `npm run build` · `npm run lint`
+- There is no test setup in this project. Don't add tests or a test runner unless asked.
+- Mobile-first, installable as a PWA. iOS/Safari is the main problem platform — verify audio, sticky elements and refresh behaviour there when touching those areas.
+
+## File organization
+
+| Directory     | Contents                                          |
+| ------------- | ------------------------------------------------- |
+| `components/` | One directory per component                       |
+| `pages/`      | Routes (`index.tsx`, `_app.tsx`, `_document.tsx`)  |
+| `hooks/`      | Reusable hooks                                     |
+| `utils/`      | Pure helpers (`classNames`, `date`, `fetcher`, ...) |
+| `contexts/`   | React contexts (`ModalContext`)                    |
+| `constants/`  | API URLs and translations                          |
+| `types/`      | Shared types (`api.ts` = Birdweather responses)    |
+| `styles/`     | Global styles and CSS variables                    |
+
+Imports are absolute from the repo root (`baseUrl: "."`) — `import { Button } from "components/Button"`.
+Never use relative paths like `../../utils/date`.
+
+## Components
+
+Each component gets its own directory:
+
+```
+components/Button/
+  Button.tsx            // component
+  Button.module.scss    // styles
+  index.ts              // export { Button } from "./Button";
+```
+
+Import components by directory (`components/Button`), not by file.
+
+```tsx
+import React from "react";
+
+import { classNames } from "utils/classNames";
+import styles from "./Button.module.scss";
+
+type Props = {
+  isActive?: boolean;
+  children: React.ReactNode;
+};
+
+export const Button: React.FC<Props> = ({ isActive, children }) => {
+  // early return for edge cases
+  if (!children) return null;
+
+  const handleClick = () => {
+    // ...
+  };
+
+  const buttonClass = classNames(styles.button, isActive && styles.isActive);
+
+  return (
+    <button className={buttonClass} onClick={handleClick}>
+      {children}
+    </button>
+  );
+};
+```
+
+Import order: React/Next → third-party → internal (constants, types, hooks, utils, contexts, components) → styles last.
+
+## TypeScript
+
+- Always `type`, never `interface`.
+- The props type is always called `Props`, declared right above the component.
+- No `any`. Extend native props with `& React.ButtonHTMLAttributes<HTMLButtonElement>` when a component wraps an element.
+- Birdweather API response types belong in `types/api.ts`.
+
+## Naming and code structure
+
+- `const` arrow functions, not `function` declarations (except Next.js page and `getServerSideProps` exports).
+- Event handlers prefixed with `handle`: `handleClick`, `handleSubmit`, `handleKeyDown`.
+- Early returns over nested conditionals.
+- Descriptive variable names; the code should read without needing comments.
+- Comments use `// ...`, never `/** ... */`.
+
+## Styling
+
+- SCSS modules for all component styles. **Never Tailwind.**
+- Spacing: only `var(--spacing-1)` … `var(--spacing-11)` from `styles/variables.scss` — no arbitrary px values.
+- Colors: only `var(--color-*)` from `styles/variables.scss`.
+- Class names are generic since CSS modules scope them: `wrap`, `box`, `header`, `title`.
+- camelCase for multi-word class names (`imageWrap`), never dashes or underscores.
+- Modifiers use a `-` prefix and are applied via `classNames`: `styles["-playing"]`, `` styles[`-width-${width}`] ``.
+- Global helpers (`wrap`, `smallWrap`, `link`, `fade-in-image`) live in `styles/core.scss`.
+
+## Data fetching
+
+- Use SWR with the fetchers in `utils/fetcher.ts` (`fetcher`, or `fetchAllSpeciesPages` for the paginated species endpoint).
+- Global SWR defaults are set in `pages/_app.tsx` — don't duplicate them per hook.
+- API base URLs come from `constants/birdweather.ts`. Never hardcode a Birdweather URL.
+  - REST v1 (`API_BASE_URL`) is the default.
+  - Use GraphQL (`API_BASE_URL_GRAPHQL`) only when REST can't do it — see `hooks/useStationSearch.ts`.
+- Some views cache responses in localStorage via `hooks/useLocalStorageCache.ts` so content shows instantly on revisit.
+
+## Translations
+
+All user-facing text must go through translations — no hardcoded strings in components.
+
+- Add the key to `constants/translations.ts` with **all four locales**: `en`, `de`, `no`, `sv`.
+- Read it with `const { t } = useTranslation()` and `t("myKey")`.
+
+## URL state
+
+App state lives in query params, read via `getQueryParam` from `hooks/useQueryParams.ts`:
+
+- `?station=xxxx` — selected station
+- `?lang=en|de|no|sv` — language (defaults to `en`)
+
+Pass these along when building links so context isn't lost.
+
+## Working style
+
+- Prioritize readability over performance optimization.
+- Follow existing patterns in the codebase rather than introducing new ones.
+- Leave no TODOs or placeholders — finish what you start.
+- If you don't know something, say so instead of guessing.
+- If a request is unclear, ask before writing code.
+- Commit messages: short, imperative, sentence case, no prefixes — e.g. `Fix audio playback "pop" noise at start`.
