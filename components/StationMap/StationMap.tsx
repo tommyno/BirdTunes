@@ -14,6 +14,7 @@ import useSWRImmutable from "swr/immutable";
 import { STATIONS_URL } from "constants/stations";
 import { StationsMapData } from "types/api";
 import { useTranslation } from "hooks/useTranslation";
+import { useQueryParam } from "hooks/useQueryParams";
 import { fetcher } from "utils/fetcher";
 import { LoadingDots } from "components/LoadingDots";
 import styles from "./StationMap.module.scss";
@@ -55,6 +56,44 @@ const POPUP_OFFSET: Offset = {
   center: [0, 0],
 };
 
+const CLUSTER_MAX_ZOOM = 11;
+
+// A deep-linked station has to land past the clustering zoom to show as
+// its own pin
+const FOCUS_ZOOM = CLUSTER_MAX_ZOOM + 1;
+
+// Build popup content as DOM nodes so station names can't inject HTML
+const openStationPopup = (
+  map: MapLibreMap,
+  coordinates: [number, number],
+  id: string,
+  name: string,
+) => {
+  // Read lang from the url directly; callers can live outside React
+  const currentLang = new URLSearchParams(window.location.search).get("lang");
+
+  const stationLink = document.createElement("a");
+  stationLink.href = `/?station=${id}${
+    currentLang ? `&lang=${currentLang}` : ""
+  }`;
+  stationLink.className = styles.popupLink;
+
+  const stationId = document.createElement("span");
+  stationId.className = styles.popupId;
+  stationId.textContent = `#${id}`;
+
+  stationLink.append(stationId, ` ${name}`);
+
+  new Popup({
+    offset: POPUP_OFFSET,
+    closeButton: false,
+    className: styles.popup,
+  })
+    .setLngLat(coordinates)
+    .setDOMContent(stationLink)
+    .addTo(map);
+};
+
 // Rasterizing the pin needs neither the map nor the station data, so
 // it starts once and the decoded image is reused across remounts
 let pinImagePromise: Promise<HTMLImageElement> | null = null;
@@ -73,6 +112,8 @@ export const StationMap: React.FC = () => {
 
   const mapContainerRef = useRef<HTMLDivElement>(null);
   const [map, setMap] = useState<MapLibreMap | null>(null);
+
+  const [focusedStationId] = useQueryParam({ key: "station" });
 
   // Static file behind a versioned url, so skip SWR revalidation
   const { data, error, isLoading } = useSWRImmutable<StationsMapData>(
@@ -155,7 +196,7 @@ export const StationMap: React.FC = () => {
       type: "geojson",
       data: geojson,
       cluster: true,
-      clusterMaxZoom: 11,
+      clusterMaxZoom: CLUSTER_MAX_ZOOM,
       clusterRadius: 40,
     });
 
@@ -219,32 +260,7 @@ export const StationMap: React.FC = () => {
       const { id, name } = feature.properties as { id: string; name: string };
       const geometry = feature.geometry as GeoJSON.Point;
 
-      // Read lang from the url directly; this handler lives outside React
-      const currentLang = new URLSearchParams(window.location.search).get(
-        "lang",
-      );
-
-      // Build popup content as DOM nodes so station names can't inject HTML
-      const stationLink = document.createElement("a");
-      stationLink.href = `/?station=${id}${
-        currentLang ? `&lang=${currentLang}` : ""
-      }`;
-      stationLink.className = styles.popupLink;
-
-      const stationId = document.createElement("span");
-      stationId.className = styles.popupId;
-      stationId.textContent = `#${id}`;
-
-      stationLink.append(stationId, ` ${name}`);
-
-      new Popup({
-        offset: POPUP_OFFSET,
-        closeButton: false,
-        className: styles.popup,
-      })
-        .setLngLat(geometry.coordinates as [number, number])
-        .setDOMContent(stationLink)
-        .addTo(map);
+      openStationPopup(map, geometry.coordinates as [number, number], id, name);
     };
 
     const handleMouseEnter = () => {
@@ -293,6 +309,29 @@ export const StationMap: React.FC = () => {
       cancelled = true;
     };
   }, [map, data]);
+
+  // A station in the url (linked from a station page) centers the map on
+  // that station and opens its popup
+  useEffect(() => {
+    if (!map || !data || !focusedStationId) return;
+
+    const station = data.stations.find(([id]) => id === focusedStationId);
+    if (!station) return;
+
+    const [id, name, lat, lon] = station;
+    const coordinates: [number, number] = [lon, lat];
+
+    map.flyTo({ center: coordinates, zoom: FOCUS_ZOOM });
+
+    // Wait for the flight to land before opening the popup, otherwise it
+    // drifts across the screen with its coordinate on the way in
+    const showPopup = () => openStationPopup(map, coordinates, id, name);
+    map.once("moveend", showPopup);
+
+    return () => {
+      map.off("moveend", showPopup);
+    };
+  }, [map, data, focusedStationId]);
 
   return (
     <div className={styles.wrap}>

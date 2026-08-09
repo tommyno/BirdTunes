@@ -28,7 +28,7 @@ export const StationTitle: React.FC<Props> = ({
 
   const totalDetections = speciesData?.reduce(
     (total, species) => total + species.detections.total,
-    0
+    0,
   );
 
   // Remove "BirdNET-Pi - " from station names
@@ -79,7 +79,7 @@ export const StationTitle: React.FC<Props> = ({
       {stationName && isExpanded && (
         <div className={styles.iconWrap}>
           <Link
-            href={`/map${lang ? `?lang=${lang}` : ""}`}
+            href={`/map?station=${stationId}${lang ? `&lang=${lang}` : ""}`}
             className={styles.iconButton}
           >
             <img src="/icons/pin.svg" className={styles.icon} alt="" />
