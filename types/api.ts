@@ -36,9 +36,9 @@ export type SearchStation = {
   location?: string;
 };
 
-// Compact station tuple served by /api/stations for the map:
-// [id, name, latitude, longitude, active within last 30 days]
-export type MapStation = [string, string, number, number, 0 | 1];
+// Compact station tuple written to public/data/stations.json for the map:
+// [id, name, latitude, longitude]
+export type MapStation = [string, string, number, number];
 
 export type StationsMapData = {
   updatedAt: string;

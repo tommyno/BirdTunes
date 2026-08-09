@@ -11,6 +11,7 @@ import type {
 } from "maplibre-gl";
 import useSWRImmutable from "swr/immutable";
 
+import { STATIONS_URL } from "constants/stations";
 import { StationsMapData } from "types/api";
 import { useTranslation } from "hooks/useTranslation";
 import { fetcher } from "utils/fetcher";
@@ -22,7 +23,6 @@ import "maplibre-gl/dist/maplibre-gl.css";
 // styles/variables.scss is repeated here
 const COLOR_FORREST = "#314023";
 const COLOR_PIN_GREEN = "#5f7e44";
-const COLOR_PIN_GREEN_MUTED = "#8c9485";
 const COLOR_WHITE = "#ffffff";
 
 // Station pin size in CSS pixels; the SVG rasterizes at 2x for retina
@@ -31,21 +31,11 @@ const PIN_HEIGHT = 38;
 
 // Teardrop map pin with a white outline and center hole, tip at the
 // bottom so it points at the station coordinate
-const pinSvg = (fill: string) =>
+const pinSvg = () =>
   `<svg xmlns="http://www.w3.org/2000/svg" width="${PIN_WIDTH * 2}" height="${PIN_HEIGHT * 2}" viewBox="0 0 ${PIN_WIDTH} ${PIN_HEIGHT}">` +
-  `<path d="M15 37 C12 31 2 23 2 14 A13 13 0 1 1 28 14 C28 23 18 31 15 37 Z" fill="${fill}" stroke="${COLOR_WHITE}" stroke-width="2"/>` +
+  `<path d="M15 37 C12 31 2 23 2 14 A13 13 0 1 1 28 14 C28 23 18 31 15 37 Z" fill="${COLOR_PIN_GREEN}" stroke="${COLOR_WHITE}" stroke-width="2"/>` +
   `<circle cx="15" cy="14" r="5" fill="${COLOR_WHITE}"/>` +
   `</svg>`;
-
-const loadPinImage = (fill: string) =>
-  new Promise<HTMLImageElement>((resolve, reject) => {
-    const image = new Image();
-    image.onload = () => resolve(image);
-    image.onerror = reject;
-    image.src = `data:image/svg+xml;charset=utf-8,${encodeURIComponent(
-      pinSvg(fill),
-    )}`;
-  });
 
 // The pin extends upward from its coordinate, so push the popup clear
 // of it in every direction it can anchor
@@ -65,14 +55,18 @@ const POPUP_OFFSET: Offset = {
   center: [0, 0],
 };
 
-// Rasterizing the pins needs neither the map nor the station data, so
-// it starts once and the decoded images are reused across remounts
-let pinImagesPromise: Promise<HTMLImageElement[]> | null = null;
-const loadPinImages = () =>
-  (pinImagesPromise ??= Promise.all([
-    loadPinImage(COLOR_PIN_GREEN),
-    loadPinImage(COLOR_PIN_GREEN_MUTED),
-  ]));
+// Rasterizing the pin needs neither the map nor the station data, so
+// it starts once and the decoded image is reused across remounts
+let pinImagePromise: Promise<HTMLImageElement> | null = null;
+const loadPinImage = () =>
+  (pinImagePromise ??= new Promise<HTMLImageElement>((resolve, reject) => {
+    const image = new Image();
+    image.onload = () => resolve(image);
+    image.onerror = reject;
+    image.src = `data:image/svg+xml;charset=utf-8,${encodeURIComponent(
+      pinSvg(),
+    )}`;
+  }));
 
 export const StationMap: React.FC = () => {
   const { t, locale } = useTranslation();
@@ -80,9 +74,9 @@ export const StationMap: React.FC = () => {
   const mapContainerRef = useRef<HTMLDivElement>(null);
   const [map, setMap] = useState<MapLibreMap | null>(null);
 
-  // The station data only changes once a day, so skip SWR revalidation
+  // Static file behind a versioned url, so skip SWR revalidation
   const { data, error, isLoading } = useSWRImmutable<StationsMapData>(
-    "/api/stations",
+    STATIONS_URL,
     fetcher,
   );
 
@@ -90,8 +84,8 @@ export const StationMap: React.FC = () => {
   useEffect(() => {
     if (!mapContainerRef.current) return;
 
-    // Start rasterizing the pin icons in parallel with the style load
-    loadPinImages();
+    // Start rasterizing the pin icon in parallel with the style load
+    loadPinImage();
 
     const map = new MapLibreMap({
       container: mapContainerRef.current,
@@ -149,10 +143,10 @@ export const StationMap: React.FC = () => {
 
     const geojson: GeoJSON.FeatureCollection = {
       type: "FeatureCollection",
-      features: data.stations.map(([id, name, lat, lon, active]) => ({
+      features: data.stations.map(([id, name, lat, lon]) => ({
         type: "Feature",
         geometry: { type: "Point", coordinates: [lon, lat] },
-        properties: { id, name, active },
+        properties: { id, name },
       })),
     };
 
@@ -265,15 +259,14 @@ export const StationMap: React.FC = () => {
     map.on("mouseenter", "clusters", handleMouseEnter);
     map.on("mouseleave", "clusters", handleMouseLeave);
 
-    // The pin icons rasterize from SVG asynchronously, so the station
-    // layer and its handlers are added once both images are ready
+    // The pin icon rasterizes from SVG asynchronously, so the station
+    // layer and its handlers are added once the image is ready
     let cancelled = false;
-    loadPinImages()
-      .then(([activePin, inactivePin]) => {
+    loadPinImage()
+      .then((pin) => {
         if (cancelled) return;
 
-        map.addImage("stationPinActive", activePin, { pixelRatio: 2 });
-        map.addImage("stationPinInactive", inactivePin, { pixelRatio: 2 });
+        map.addImage("stationPin", pin, { pixelRatio: 2 });
 
         map.addLayer({
           id: "stationPoints",
@@ -281,13 +274,7 @@ export const StationMap: React.FC = () => {
           source: "stations",
           filter: ["!", ["has", "point_count"]],
           layout: {
-            "icon-image": [
-              "match",
-              ["get", "active"],
-              1,
-              "stationPinActive",
-              "stationPinInactive",
-            ],
+            "icon-image": "stationPin",
             "icon-anchor": "bottom",
             // Symbols hide on collision by default; keep every pin visible
             "icon-allow-overlap": true,
