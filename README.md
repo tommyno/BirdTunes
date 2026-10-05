@@ -18,6 +18,8 @@ This repo / website pulls together all the data and presents it in a nice and or
 
 Made with Next. Install dependencies with `npm install` and run `npm run dev`.
 
+The map's station list is generated at build time and not committed. Run `npm run update-stations` once to get it locally.
+
 ## Comments
 
 Feel free to add suggestions, pull requests or fork this repo and customize it to your own needs.

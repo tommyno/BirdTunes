@@ -12,7 +12,6 @@ import type {
 } from "maplibre-gl";
 import useSWRImmutable from "swr/immutable";
 
-import { STATIONS_URL } from "constants/stations";
 import { MapStation, StationsMapData } from "types/api";
 import { useTranslation } from "hooks/useTranslation";
 import { useQueryParam } from "hooks/useQueryParams";
@@ -21,6 +20,9 @@ import { LoadingDots } from "components/LoadingDots";
 import { StationFilter } from "components/StationFilter";
 import styles from "./StationMap.module.scss";
 import "maplibre-gl/dist/maplibre-gl.css";
+
+// Generated at build time by "npm run update-stations"
+const STATIONS_URL = "/data/stations.json";
 
 // Map paint values can't read CSS variables, so the palette from
 // styles/variables.scss is repeated here
@@ -169,7 +171,7 @@ export const StationMap: React.FC = () => {
 
   const [focusedStationId] = useQueryParam({ key: "station" });
 
-  // Static file behind a versioned url, so skip SWR revalidation
+  // Static file that only changes on deploy, so skip SWR revalidation
   const { data, error, isLoading } = useSWRImmutable<StationsMapData>(
     STATIONS_URL,
     fetcher,

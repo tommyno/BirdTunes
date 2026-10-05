@@ -1,0 +1,22 @@
+# Redeploys the site every week so the map's station list, which is generated
+# during the build by "npm run update-stations", is never more than a week old.
+# VERCEL_DEPLOY_HOOK_URL is a repository secret holding a Vercel Deploy Hook url.
+name: Weekly deploy
+
+on:
+  schedule:
+    # Mondays at 03:17 UTC — off the hour, when GitHub's scheduler is less busy
+    - cron: "17 3 * * 1"
+  # Adds a "Run workflow" button in the Actions tab
+  workflow_dispatch:
+
+permissions: {}
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Trigger Vercel deploy hook
+        env:
+          DEPLOY_HOOK_URL: ${{ secrets.VERCEL_DEPLOY_HOOK_URL }}
+        run: curl --fail --silent --show-error --request POST "$DEPLOY_HOOK_URL"

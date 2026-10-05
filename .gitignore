@@ -20,6 +20,9 @@
 # production
 /build
 
+# generated at build time by "npm run update-stations"
+/public/data/stations.json
+
 # misc
 .DS_Store
 *.pem
