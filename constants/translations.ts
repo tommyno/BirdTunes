@@ -283,4 +283,16 @@ export const translations = {
     no: "Kunne ikke laste stasjonene",
     sv: "Stationerna kunde inte laddas",
   },
+  allStations: {
+    en: "All stations",
+    de: "Alle Stationen",
+    no: "Alle stasjoner",
+    sv: "Alla stationer",
+  },
+  activeStations: {
+    en: "Active",
+    de: "Aktiv",
+    no: "Aktive",
+    sv: "Aktiva",
+  },
 } as const;

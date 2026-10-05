@@ -1,0 +1,22 @@
+.wrap {
+  display: flex;
+  padding: var(--spacing-1);
+  background-color: var(--color-white);
+  border: 1px solid var(--color-winter);
+  border-radius: var(--border-radius);
+}
+
+.button {
+  padding: var(--spacing-1) var(--spacing-3);
+  border-radius: var(--spacing-2);
+  font-family: var(--font-default);
+  font-size: 0.9rem;
+  white-space: nowrap;
+  color: var(--color-black);
+  cursor: pointer;
+
+  &.-selected {
+    background-color: var(--color-forrest);
+    color: var(--color-white);
+  }
+}

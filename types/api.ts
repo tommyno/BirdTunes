@@ -37,8 +37,9 @@ export type SearchStation = {
 };
 
 // Compact station tuple written to public/data/stations.json for the map:
-// [id, name, latitude, longitude]
-export type MapStation = [string, string, number, number];
+// [id, name, latitude, longitude, isActive]. isActive is 1 when the station
+// had a detection in the 30 days before the file was generated
+export type MapStation = [string, string, number, number, 0 | 1];
 
 export type StationsMapData = {
   updatedAt: string;

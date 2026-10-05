@@ -23,6 +23,7 @@ type GraphQLStationsResponse = {
 const PAGE_SIZE = 5000;
 const MAX_PAGES = 10;
 const DETECTION_PERIOD_YEARS = 20;
+const ACTIVE_PERIOD_DAYS = 30;
 
 const DATA_DIRECTORY = "public/data";
 const DATA_FILE = `${DATA_DIRECTORY}/stations.json`;
@@ -30,6 +31,11 @@ const CONSTANT_FILE = "constants/stations.ts";
 
 // Round coordinates to 4 decimals (~11 m accuracy), enough for a map pin
 const roundCoordinate = (value: number) => Math.round(value * 10000) / 10000;
+
+// Stored as a flag rather than a date, so a regenerated file only differs for
+// stations that started or stopped detecting
+const isRecentlyActive = (latestDetectionAt: string, activeSince: number) =>
+  new Date(latestDetectionAt).getTime() >= activeSince ? 1 : 0;
 
 // Fetch every public station from the Birdweather GraphQL API (~5 pages)
 const fetchAllStations = async (): Promise<GraphQLStationNode[]> => {
@@ -71,6 +77,8 @@ const fetchAllStations = async (): Promise<GraphQLStationNode[]> => {
 // have never detected anything don't deserve a pin — neither has a query
 // argument, so both are filtered here
 const toMapStations = (nodes: GraphQLStationNode[]): MapStation[] => {
+  const activeSince = Date.now() - ACTIVE_PERIOD_DAYS * 24 * 60 * 60 * 1000;
+
   const stations = nodes.flatMap<MapStation>((node) => {
     if (!node.coords || !node.latestDetectionAt) return [];
 
@@ -79,6 +87,7 @@ const toMapStations = (nodes: GraphQLStationNode[]): MapStation[] => {
       cleanStationName(node.name?.trim()) || `Station ${node.id}`,
       roundCoordinate(node.coords.lat),
       roundCoordinate(node.coords.lon),
+      isRecentlyActive(node.latestDetectionAt, activeSince),
     ];
     return [station];
   });

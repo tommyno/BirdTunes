@@ -3,6 +3,7 @@ import React, { useEffect, useRef, useState } from "react";
 // that Next's bundler doesn't emit, which silently breaks GeoJSON sources
 import { Map as MapLibreMap, NavigationControl, Popup } from "maplibre-gl";
 import type {
+  AddLayerObject,
   ExpressionSpecification,
   GeoJSONSource,
   MapLayerMouseEvent,
@@ -12,11 +13,12 @@ import type {
 import useSWRImmutable from "swr/immutable";
 
 import { STATIONS_URL } from "constants/stations";
-import { StationsMapData } from "types/api";
+import { MapStation, StationsMapData } from "types/api";
 import { useTranslation } from "hooks/useTranslation";
 import { useQueryParam } from "hooks/useQueryParams";
 import { fetcher } from "utils/fetcher";
 import { LoadingDots } from "components/LoadingDots";
+import { StationFilter } from "components/StationFilter";
 import styles from "./StationMap.module.scss";
 import "maplibre-gl/dist/maplibre-gl.css";
 
@@ -61,6 +63,57 @@ const CLUSTER_MAX_ZOOM = 11;
 // A deep-linked station has to land past the clustering zoom to show as
 // its own pin
 const FOCUS_ZOOM = CLUSTER_MAX_ZOOM + 1;
+
+const toGeoJson = (stations: MapStation[]): GeoJSON.FeatureCollection => ({
+  type: "FeatureCollection",
+  features: stations.map(([id, name, lat, lon]) => ({
+    type: "Feature",
+    geometry: { type: "Point", coordinates: [lon, lat] },
+    properties: { id, name },
+  })),
+});
+
+const CLUSTER_LAYER: AddLayerObject = {
+  id: "clusters",
+  type: "circle",
+  source: "stations",
+  filter: ["has", "point_count"],
+  paint: {
+    "circle-color": COLOR_FORREST,
+    "circle-opacity": 0.85,
+    "circle-radius": ["step", ["get", "point_count"], 16, 100, 22, 1000, 28],
+    "circle-stroke-width": 2,
+    "circle-stroke-color": COLOR_WHITE,
+  },
+};
+
+const CLUSTER_COUNT_LAYER: AddLayerObject = {
+  id: "clusterCounts",
+  type: "symbol",
+  source: "stations",
+  filter: ["has", "point_count"],
+  layout: {
+    "text-field": ["get", "point_count_abbreviated"],
+    "text-font": ["Noto Sans Regular"],
+    "text-size": 12,
+  },
+  paint: {
+    "text-color": COLOR_WHITE,
+  },
+};
+
+const STATION_PIN_LAYER: AddLayerObject = {
+  id: "stationPoints",
+  type: "symbol",
+  source: "stations",
+  filter: ["!", ["has", "point_count"]],
+  layout: {
+    "icon-image": "stationPin",
+    "icon-anchor": "bottom",
+    // Symbols hide on collision by default; keep every pin visible
+    "icon-allow-overlap": true,
+  },
+};
 
 // Build popup content as DOM nodes so station names can't inject HTML
 const openStationPopup = (
@@ -112,6 +165,7 @@ export const StationMap: React.FC = () => {
 
   const mapContainerRef = useRef<HTMLDivElement>(null);
   const [map, setMap] = useState<MapLibreMap | null>(null);
+  const [showOnlyActive, setShowOnlyActive] = useState(false);
 
   const [focusedStationId] = useQueryParam({ key: "station" });
 
@@ -177,71 +231,31 @@ export const StationMap: React.FC = () => {
     }
   }, [map, locale]);
 
-  // Add stations as a clustered source once both map and data are ready
+  // Add stations as a clustered source once both map and data are ready.
+  // It starts empty; the effect below fills it based on the active filter
   useEffect(() => {
     if (!map || !data) return;
     if (map.getSource("stations")) return;
 
-    const geojson: GeoJSON.FeatureCollection = {
-      type: "FeatureCollection",
-      features: data.stations.map(([id, name, lat, lon]) => ({
-        type: "Feature",
-        geometry: { type: "Point", coordinates: [lon, lat] },
-        properties: { id, name },
-      })),
-    };
-
     // Clustering runs in a web worker, so ~24k points stay smooth
     map.addSource("stations", {
       type: "geojson",
-      data: geojson,
+      data: toGeoJson([]),
       cluster: true,
       clusterMaxZoom: CLUSTER_MAX_ZOOM,
       clusterRadius: 40,
     });
 
-    map.addLayer({
-      id: "clusters",
-      type: "circle",
-      source: "stations",
-      filter: ["has", "point_count"],
-      paint: {
-        "circle-color": COLOR_FORREST,
-        "circle-opacity": 0.85,
-        "circle-radius": [
-          "step",
-          ["get", "point_count"],
-          16,
-          100,
-          22,
-          1000,
-          28,
-        ],
-        "circle-stroke-width": 2,
-        "circle-stroke-color": COLOR_WHITE,
-      },
-    });
-
-    map.addLayer({
-      id: "clusterCounts",
-      type: "symbol",
-      source: "stations",
-      filter: ["has", "point_count"],
-      layout: {
-        "text-field": ["get", "point_count_abbreviated"],
-        "text-font": ["Noto Sans Regular"],
-        "text-size": 12,
-      },
-      paint: {
-        "text-color": COLOR_WHITE,
-      },
-    });
+    map.addLayer(CLUSTER_LAYER);
+    map.addLayer(CLUSTER_COUNT_LAYER);
 
     const handleClusterClick = async (event: MapLayerMouseEvent) => {
       const feature = event.features?.[0];
       if (!feature) return;
 
-      const source = map.getSource("stations") as GeoJSONSource;
+      const source = map.getSource<GeoJSONSource>("stations");
+      if (!source) return;
+
       const zoom = await source.getClusterExpansionZoom(
         feature.properties.cluster_id,
       );
@@ -284,18 +298,7 @@ export const StationMap: React.FC = () => {
 
         map.addImage("stationPin", pin, { pixelRatio: 2 });
 
-        map.addLayer({
-          id: "stationPoints",
-          type: "symbol",
-          source: "stations",
-          filter: ["!", ["has", "point_count"]],
-          layout: {
-            "icon-image": "stationPin",
-            "icon-anchor": "bottom",
-            // Symbols hide on collision by default; keep every pin visible
-            "icon-allow-overlap": true,
-          },
-        });
+        map.addLayer(STATION_PIN_LAYER);
 
         map.on("click", "stationPoints", handleStationClick);
         map.on("mouseenter", "stationPoints", handleMouseEnter);
@@ -309,6 +312,21 @@ export const StationMap: React.FC = () => {
       cancelled = true;
     };
   }, [map, data]);
+
+  // Replacing the data (rather than filtering layers) keeps cluster counts
+  // in sync with the visible stations
+  useEffect(() => {
+    if (!map || !data) return;
+
+    const source = map.getSource<GeoJSONSource>("stations");
+    if (!source) return;
+
+    const visibleStations = showOnlyActive
+      ? data.stations.filter(([, , , , isActive]) => isActive)
+      : data.stations;
+
+    source.setData(toGeoJson(visibleStations));
+  }, [map, data, showOnlyActive]);
 
   // A station in the url (linked from a station page) centers the map on
   // that station and opens its popup
@@ -336,6 +354,15 @@ export const StationMap: React.FC = () => {
   return (
     <div className={styles.wrap}>
       <div ref={mapContainerRef} className={styles.map} />
+
+      {data && (
+        <div className={styles.filter}>
+          <StationFilter
+            showOnlyActive={showOnlyActive}
+            onChange={setShowOnlyActive}
+          />
+        </div>
+      )}
 
       {isLoading && (
         <p className={styles.status}>

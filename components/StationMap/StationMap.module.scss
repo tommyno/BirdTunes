@@ -30,6 +30,7 @@
 }
 
 .popup {
+
   // Style the popup box that maplibre generates around our content
   :global(.maplibregl-popup-content) {
     font-family: var(--font-default);
@@ -55,4 +56,11 @@
 .popupId {
   color: var(--color-gray);
   font-weight: 400;
+}
+
+.filter {
+  position: absolute;
+  top: var(--spacing-3);
+  left: var(--spacing-3);
+  z-index: 1;
 }
