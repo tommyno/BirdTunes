@@ -11,7 +11,8 @@ import styles from "./Favourites.module.scss";
 
 export const Favourites: React.FC = () => {
   const { t } = useTranslation();
-  const favourites = useLocalStorageCache<Favourite>(FAVOURITES_STORAGE_KEY);
+  const favourites =
+    useLocalStorageCache<Favourite[]>(FAVOURITES_STORAGE_KEY) ?? [];
   const [lang] = useQueryParam({ key: "lang" });
 
   if (favourites.length === 0) {

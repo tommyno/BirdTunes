@@ -6,7 +6,7 @@
     "dev": "next dev",
     "build": "npm run update-stations && next build",
     "start": "next start",
-    "lint": "next lint",
+    "lint": "eslint .",
     "update-stations": "tsx scripts/update-stations.ts",
     "update-deps": "npx npm-check-updates --upgrade"
   },

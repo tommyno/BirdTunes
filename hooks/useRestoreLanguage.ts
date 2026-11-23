@@ -20,7 +20,7 @@ export const useRestoreLanguage = () => {
     if (!router.isReady) return;
     if (router.query.lang) return;
 
-    const storedLang = getItem(STORAGE_KEY);
+    const storedLang = getItem<string>(STORAGE_KEY);
     if (typeof storedLang !== "string" || storedLang === "en") return;
 
     setQueryParams({ router, params: { lang: storedLang } });

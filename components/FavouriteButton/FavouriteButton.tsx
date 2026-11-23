@@ -17,7 +17,7 @@ export const FavouriteButton: React.FC<Props> = ({
 }) => {
   const { t } = useTranslation();
 
-  const favourites: Favourite[] = getItem(FAVOURITES_STORAGE_KEY);
+  const favourites = getItem<Favourite[]>(FAVOURITES_STORAGE_KEY) ?? [];
   const [isFavourite, setIsFavourite] = useState(
     favourites.some((fav) => fav.stationId === stationId)
   );

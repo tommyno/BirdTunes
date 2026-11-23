@@ -13,7 +13,6 @@ type UseQueryParamsProps = {
 type SetQueryParamsProps = {
   router: NextRouter;
   params: Record<string, string | null | undefined>;
-  options?: { shallow?: boolean };
 };
 
 type UseQueryParamProps = {
@@ -31,14 +30,9 @@ export const getQueryParam = ({ value, defaultValue }: GetQueryParamProps) => {
   return value || defaultValue || "";
 };
 
-// Set query parameters (single or multiple). Replaces the current history
-// entry instead of adding one.
-export const setQueryParams = async ({
-  router,
-  params,
-  options = {},
-}: SetQueryParamsProps) => {
-  const { shallow = true } = options;
+// Set query parameters (single or multiple). A shallow update that replaces
+// the current history entry instead of adding one.
+export const setQueryParams = async ({ router, params }: SetQueryParamsProps) => {
   const currentQuery = { ...router.query };
 
   // Apply updates
@@ -56,7 +50,7 @@ export const setQueryParams = async ({
       query: currentQuery,
     },
     undefined,
-    { shallow }
+    { shallow: true }
   );
 };
 

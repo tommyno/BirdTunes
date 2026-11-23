@@ -1,14 +1,14 @@
-// Read a JSON value from localStorage. Falls back to an empty list on the
-// server and when the stored value is missing or corrupted.
-export const getItem = (key: string) => {
-  if (typeof window === "undefined") return [];
+// Read a JSON value from localStorage. Returns null on the server and when
+// the stored value is missing or corrupted.
+export const getItem = <T>(key: string): T | null => {
+  if (typeof window === "undefined") return null;
 
   try {
     const stored = window.localStorage.getItem(key);
-    return stored ? JSON.parse(stored) : [];
+    return stored ? JSON.parse(stored) : null;
   } catch {
     window.localStorage.removeItem(key);
-    return [];
+    return null;
   }
 };
 

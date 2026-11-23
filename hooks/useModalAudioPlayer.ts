@@ -168,9 +168,23 @@ export const useModalAudioPlayer = (): UseModalAudioPlayerReturn => {
     const processor = processorRef.current;
     const isStillWanted = () => currentDetectionIdRef.current === detection.id;
 
+    // Plays the downloaded file, so the audio element doesn't download it again
+    const playFromBytes = (bytes: ArrayBuffer, type: string) => {
+      const blobUrl = URL.createObjectURL(new Blob([bytes], { type }));
+      blobUrlRef.current = blobUrl;
+      audio.src = blobUrl;
+    };
+
+    // Kept outside the try, so the fallback below can reuse the download
+    let arrayBuffer: ArrayBuffer | null = null;
+    let contentType = "";
+
     try {
       const response = await fetch(detection.soundscape.url);
-      const arrayBuffer = await response.arrayBuffer();
+      if (!response.ok) throw new Error(`Error: ${response.status}`);
+
+      arrayBuffer = await response.arrayBuffer();
+      contentType = response.headers.get("content-type") ?? "";
 
       // Decode the full file to calculate whole-file RMS normalization.
       // slice(0) passes a copy, because decodeAudioData detaches the buffer
@@ -193,21 +207,24 @@ export const useModalAudioPlayer = (): UseModalAudioPlayerReturn => {
       const gain = calculateNormalizationGain({ buffer: decoded });
       processor.setGain(gain);
 
-      const blob = new Blob([arrayBuffer], { type: "audio/mpeg" });
-      const blobUrl = URL.createObjectURL(blob);
-      blobUrlRef.current = blobUrl;
-
-      audio.src = blobUrl;
+      playFromBytes(arrayBuffer, contentType);
     } catch {
       if (!isStillWanted()) return;
 
       // decodeAudioData fails in some environments (e.g. iOS PWA + FLAC files).
-      // Fall back to dynamic gain: stream the original URL and adjust gain in real time.
+      // Fall back to dynamic gain: adjust the gain in real time while playing.
       // handleAudioPlay starts the gain loop; the duration is picked up in
       // handleAudioLoadedMetadata instead.
       processor.setGain(1);
       isDynamicGainRef.current = true;
-      audio.src = detection.soundscape.url;
+
+      // Play the file we already downloaded. Only stream the url when the
+      // download itself failed.
+      if (arrayBuffer) {
+        playFromBytes(arrayBuffer, contentType);
+      } else {
+        audio.src = detection.soundscape.url;
+      }
     }
 
     setIsLoading(false);

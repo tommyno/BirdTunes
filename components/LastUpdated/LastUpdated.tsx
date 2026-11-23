@@ -16,12 +16,13 @@ export const LastUpdated: React.FC<Props> = ({ lang, isUpdating }) => {
   const [time, setTime] = useState<string>("");
   const { t } = useTranslation();
 
-  // Avoid hydration error
+  // Update time when a fetch completes. Reading the clock has to wait until
+  // after hydration, otherwise server and client render different times.
   useEffect(() => {
-    // Update time when a fetch completes
-    if (!isUpdating) {
-      setTime(timeDetailedNow(lang));
-    }
+    if (isUpdating) return;
+
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    setTime(timeDetailedNow(lang));
   }, [isUpdating]);
 
   return (

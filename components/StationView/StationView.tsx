@@ -1,13 +1,11 @@
 import React from "react";
 import { useRouter } from "next/router";
-import useSWR from "swr";
 
 import { API_BASE_URL } from "constants/birdweather";
 import { Species } from "types/api";
 import { useTranslation, TranslationKey } from "hooks/useTranslation";
 import { useQueryParams, setQueryParams } from "hooks/useQueryParams";
-import { useLocalStorageCache } from "hooks/useLocalStorageCache";
-import { setItem } from "utils/localStorage";
+import { useCachedSWR } from "hooks/useCachedSWR";
 import { getSortedSpeciesList } from "utils/species";
 import { fetchAllSpeciesPages } from "utils/fetcher";
 import { Spinner } from "components/Spinner";
@@ -54,20 +52,21 @@ export const StationView: React.FC<Props> = ({ stationName }) => {
     ? `${API_BASE_URL}/stations/${stationId}/species?locale=${lang}&period=${period}`
     : null;
 
-  // Cache key for localStorage (per station + period)
-  const cacheKey = `birdtunes-species-${stationId}-${period}`;
-  const cachedData = useLocalStorageCache<Species>(cacheKey);
-
+  // Cached per station + period
   const {
-    data: speciesData,
+    data,
+    freshData: freshSpecies,
+    cachedData,
     isLoading: isLoadingSpecies,
     error: speciesError,
-  } = useSWR<Species[]>(speciesUrl, fetchAllSpeciesPages, {
-    onSuccess: (data) => setItem(cacheKey, JSON.stringify(data)),
+  } = useCachedSWR<Species[]>({
+    cacheKey: `birdtunes-species-${stationId}-${period}`,
+    url: speciesUrl,
+    fetcher: fetchAllSpeciesPages,
   });
 
-  // Use fresh data if available, otherwise show cached
-  const displayData = speciesData ?? cachedData;
+  const displayData = data ?? [];
+  const cachedSpecies = cachedData ?? [];
 
   const speciesList = getSortedSpeciesList({
     species: displayData,
@@ -97,8 +96,8 @@ export const StationView: React.FC<Props> = ({ stationName }) => {
       />
 
       <NewSpecies
-        cachedSpecies={cachedData}
-        freshSpecies={speciesData}
+        cachedSpecies={cachedSpecies}
+        freshSpecies={freshSpecies}
         stationId={stationId}
       />
 
@@ -118,7 +117,7 @@ export const StationView: React.FC<Props> = ({ stationName }) => {
 
       {isLoadingSpecies && (
         <Block center bottom="4">
-          {cachedData.length > 0 ? (
+          {cachedSpecies.length > 0 ? (
             <p className="color-muted">
               {t("updating")}
               <LoadingDots />

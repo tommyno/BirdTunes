@@ -48,9 +48,10 @@ export const LanguageSwitcher = () => {
   ) => {
     const newLang = e.target.value;
 
+    // Data fetches have the locale in their keys, so they reload by
+    // themselves when the query param changes
     storeLanguage(newLang);
     await setQueryParams({ router, params: { lang: newLang } });
-    window.location.reload();
   };
 
   return (

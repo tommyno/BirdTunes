@@ -3,13 +3,13 @@ import { useState, useEffect } from "react";
 import { getItem } from "utils/localStorage";
 
 // Read from localStorage after mount (avoids hydration mismatch)
-export const useLocalStorageCache = <T>(key: string): T[] => {
-  const [data, setData] = useState<T[]>([]);
+export const useLocalStorageCache = <T>(key: string): T | null => {
+  const [data, setData] = useState<T | null>(null);
 
-  // Also resets to empty when the new key has nothing stored, so data from
+  // Also resets to null when the new key has nothing stored, so data from
   // the previous key isn't shown
   useEffect(() => {
-    setData(getItem(key));
+    setData(getItem<T>(key));
   }, [key]);
 
   return data;
