@@ -1,29 +1,35 @@
+// Loudness that quiet recordings are boosted towards, and the most they are
+// boosted (protects against near-silent recordings)
+const TARGET_DB = -10;
+const MAX_GAIN = 75;
+
+// Converts a loudness (RMS) to the linear gain needed to reach targetDb.
+// Never below 1×, so already-loud recordings aren't attenuated.
+const rmsToGain = (rms: number, targetDb: number, maxGain: number) => {
+  // Convert RMS to decibels. The factor 20 is the standard scalar for
+  // amplitude ratios (as opposed to 10 used for power ratios), because
+  // dB = 10 * log10(power) and power ∝ amplitude², so 10 * 2 = 20.
+  // We floor at 1e-6 to avoid log10(0) = -Infinity on silent recordings.
+  const db = 20 * Math.log10(Math.max(rms, 1e-6));
+
+  // Convert the dB difference back to a linear multiplier: gain = 10^(dB / 20)
+  const gain = Math.pow(10, (targetDb - db) / 20);
+
+  return Math.min(maxGain, Math.max(1, gain));
+};
+
 type AudioProcessor = {
   readonly context: AudioContext;
-  readonly gain: GainNode;
-  readonly analyser: AnalyserNode;
   setGain: (value: number) => void;
   startDynamicGain: () => void;
   stopDynamicGain: () => void;
 };
 
-type CreateAudioProcessorProps = {
-  audioElement: HTMLAudioElement;
-  initialGain?: number;
-};
-
-const audioProcessors = new WeakMap<HTMLAudioElement, AudioProcessor>();
-
-export const createAudioProcessor = ({
-  audioElement,
-  initialGain = 1,
-}: CreateAudioProcessorProps): AudioProcessor => {
-  const existing = audioProcessors.get(audioElement);
-  if (existing) {
-    existing.setGain(initialGain);
-    return existing;
-  }
-
+// Routes the audio element through a gain node. Call once per element:
+// an element can only be connected to one audio context.
+export const createAudioProcessor = (
+  audioElement: HTMLAudioElement
+): AudioProcessor => {
   const context = new AudioContext();
   const source = context.createMediaElementSource(audioElement);
   const analyser = context.createAnalyser();
@@ -37,9 +43,9 @@ export const createAudioProcessor = ({
   gain.connect(context.destination);
 
   let dynamicGainRAF: number | null = null;
+  const dataArray = new Float32Array(analyser.frequencyBinCount);
 
   const updateDynamicGain = () => {
-    const dataArray = new Float32Array(analyser.frequencyBinCount);
     analyser.getFloatTimeDomainData(dataArray);
 
     let sum = 0;
@@ -47,9 +53,7 @@ export const createAudioProcessor = ({
       sum += dataArray[i] * dataArray[i];
     }
     const rms = Math.sqrt(sum / dataArray.length);
-    const db = 20 * Math.log10(Math.max(rms, 1e-6));
-    const dbDiff = -10 - db;
-    const targetGain = Math.min(75, Math.max(1, Math.pow(10, dbDiff / 20)));
+    const targetGain = rmsToGain(rms, TARGET_DB, MAX_GAIN);
 
     // Asymmetric attack/release: slow to increase (2%), fast to decrease (25%).
     // This prevents gain from shooting up during leading silence and causing a pop
@@ -61,10 +65,8 @@ export const createAudioProcessor = ({
     dynamicGainRAF = requestAnimationFrame(updateDynamicGain);
   };
 
-  const processor: AudioProcessor = {
+  return {
     context,
-    gain,
-    analyser,
     setGain: (value) => {
       gain.gain.value = value;
     },
@@ -80,11 +82,6 @@ export const createAudioProcessor = ({
       }
     },
   };
-
-  audioProcessors.set(audioElement, processor);
-  processor.setGain(initialGain);
-
-  return processor;
 };
 
 type CalculateNormalizationGainProps = {
@@ -98,8 +95,8 @@ type CalculateNormalizationGainProps = {
 // full buffer so the gain is stable for the entire recording.
 export const calculateNormalizationGain = ({
   buffer,
-  targetDb = -10,
-  maxGain = 75,
+  targetDb = TARGET_DB,
+  maxGain = MAX_GAIN,
 }: CalculateNormalizationGainProps): number => {
   let sumOfSquares = 0;
   let totalSamples = 0;
@@ -117,22 +114,7 @@ export const calculateNormalizationGain = ({
   // RMS (Root Mean Square) is the standard measure of perceived loudness.
   const rms = Math.sqrt(sumOfSquares / Math.max(totalSamples, 1));
 
-  // Convert RMS to decibels. The factor 20 is the standard scalar for
-  // amplitude ratios (as opposed to 10 used for power ratios), because
-  // dB = 10 * log10(power) and power ∝ amplitude², so 10 * 2 = 20.
-  // We floor at 1e-6 to avoid log10(0) = -Infinity on silent recordings.
-  const db = 20 * Math.log10(Math.max(rms, 1e-6));
-
-  // How many dB we need to add to reach the target level.
-  const dbDiff = targetDb - db;
-
-  // Convert that dB difference back to a linear multiplier.
-  // Inverse of the formula above: gain = 10^(dB / 20).
-  const gain = Math.pow(10, dbDiff / 20);
-
-  // Clamp: never reduce below 1× (don't attenuate already-loud recordings)
-  // and never exceed maxGain× (protects against near-silent recordings).
-  return Math.min(maxGain, Math.max(1, gain));
+  return rmsToGain(rms, targetDb, maxGain);
 };
 
 export const WAVEFORM_BAR_COUNT = 32;

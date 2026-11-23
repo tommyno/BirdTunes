@@ -1,48 +1,37 @@
 import React, { createContext, useContext, useState } from "react";
-import { BirdModal } from "components/BirdModal/BirdModal";
 
-type ModalType = "bird" | "settings" | "info";
-
-type ModalState = {
-  type: ModalType | null;
-  props: any;
-};
+import { BirdModalData } from "types/birdModal";
+import { BirdModal } from "components/BirdModal";
 
 type ModalContextType = {
-  openModal: (type: ModalType, props: any) => void;
+  openBirdModal: (bird: BirdModalData) => void;
   closeModal: () => void;
-  modalState: ModalState;
 };
 
 const ModalContext = createContext<ModalContextType | undefined>(undefined);
 
-export function ModalProvider({ children }: { children: React.ReactNode }) {
-  const [modalState, setModalState] = useState<ModalState>({
-    type: null,
-    props: null,
-  });
+type Props = {
+  children: React.ReactNode;
+};
 
-  const openModal = (type: ModalType, props: any) => {
-    setModalState({ type, props });
+export const ModalProvider: React.FC<Props> = ({ children }) => {
+  const [bird, setBird] = useState<BirdModalData | null>(null);
+
+  const openBirdModal = (birdData: BirdModalData) => {
+    setBird(birdData);
   };
 
   const closeModal = () => {
-    setModalState({ type: null, props: null });
+    setBird(null);
   };
 
   return (
-    <ModalContext.Provider value={{ openModal, closeModal, modalState }}>
+    <ModalContext.Provider value={{ openBirdModal, closeModal }}>
       {children}
-      {modalState.type === "bird" && (
-        <BirdModal
-          data={modalState.props}
-          isOpen={!!modalState.props}
-          onClose={closeModal}
-        />
-      )}
+      {bird && <BirdModal data={bird} isOpen onClose={closeModal} />}
     </ModalContext.Provider>
   );
-}
+};
 
 export const useModal = () => {
   const context = useContext(ModalContext);

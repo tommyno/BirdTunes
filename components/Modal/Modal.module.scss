@@ -11,7 +11,7 @@
   opacity: 0;
   visibility: hidden;
   transition: opacity 0.1s ease, visibility 0.1s ease;
-  background: #314023ee;
+  background: color-mix(in srgb, var(--color-forrest) 93%, transparent);
   backdrop-filter: blur(2px);
 
   &.modalVisible {
@@ -25,7 +25,6 @@
   padding: var(--spacing-3);
   background-color: var(--color-white);
   border-radius: var(--border-radius);
-  box-shadow: var(--shadow-2);
   outline: none;
   transform: scale(0.9);
   transition: transform 0.1s ease;

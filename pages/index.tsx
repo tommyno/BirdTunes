@@ -6,17 +6,17 @@ import { useTranslation } from "hooks/useTranslation";
 import { getQueryParam } from "hooks/useQueryParams";
 import { getPageTitle } from "utils/species";
 import { fetcher } from "utils/fetcher";
-import { setItem } from "hooks/useLocalStorage";
+import { setItem } from "utils/localStorage";
 import { useLocalStorageCache } from "hooks/useLocalStorageCache";
 import { Station } from "types/api";
 import { Footer } from "components/Footer";
 import { Header } from "components/Header";
-import { StationView } from "components/StationView/StationView";
-import { PopularStations } from "components/PopularStations/PopularStations";
-import { About } from "components/About/About";
-import { Flow } from "components/Flow/Flow";
+import { StationView } from "components/StationView";
+import { PopularStations } from "components/PopularStations";
+import { About } from "components/About";
+import { Flow } from "components/Flow";
 import { StationSearch } from "components/StationSearch";
-import { Favourites } from "components/Favourites/Favourites";
+import { Favourites } from "components/Favourites";
 
 export default function Home() {
   const router = useRouter();
@@ -51,7 +51,7 @@ export default function Home() {
         <meta property="og:image" content="/open-graph-share.png" />
       </Head>
 
-      <Header showArrow={stationId} />
+      <Header showArrow={!!stationId} />
 
       <div className="wrap">
         {/* Show when no station is selected */}

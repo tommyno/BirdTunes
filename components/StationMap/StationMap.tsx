@@ -12,17 +12,16 @@ import type {
 } from "maplibre-gl";
 import useSWRImmutable from "swr/immutable";
 
+import { STATIONS_URL } from "constants/stations";
 import { MapStation, StationsMapData } from "types/api";
 import { useTranslation } from "hooks/useTranslation";
 import { useQueryParam } from "hooks/useQueryParams";
 import { fetcher } from "utils/fetcher";
+import { buildHref } from "utils/url";
 import { LoadingDots } from "components/LoadingDots";
 import { StationFilter } from "components/StationFilter";
 import styles from "./StationMap.module.scss";
 import "maplibre-gl/dist/maplibre-gl.css";
-
-// Generated at build time by "npm run update-stations"
-const STATIONS_URL = "/data/stations.json";
 
 // Map paint values can't read CSS variables, so the palette from
 // styles/variables.scss is repeated here
@@ -124,13 +123,12 @@ const openStationPopup = (
   id: string,
   name: string,
 ) => {
-  // Read lang from the url directly; callers can live outside React
+  // Read lang from the url directly, so the map effects that open popups
+  // don't have to re-run when the language changes
   const currentLang = new URLSearchParams(window.location.search).get("lang");
 
   const stationLink = document.createElement("a");
-  stationLink.href = `/?station=${id}${
-    currentLang ? `&lang=${currentLang}` : ""
-  }`;
+  stationLink.href = buildHref("/", { station: id, lang: currentLang });
   stationLink.className = styles.popupLink;
 
   const stationId = document.createElement("span");

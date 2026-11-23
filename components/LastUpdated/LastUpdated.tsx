@@ -1,14 +1,17 @@
 import React, { useEffect, useState } from "react";
 import { useRouter } from "next/router";
-import styles from "./LastUpdated.module.scss";
-import { timeDetailedNow } from "utils/date";
-import { useTranslation } from "hooks/useTranslation";
-import { LoadingDots } from "components/LoadingDots/LoadingDots";
 
-export const LastUpdated: React.FC<{
+import { useTranslation } from "hooks/useTranslation";
+import { timeDetailedNow } from "utils/date";
+import { LoadingDots } from "components/LoadingDots";
+import styles from "./LastUpdated.module.scss";
+
+type Props = {
   lang?: string | null;
   isUpdating?: boolean;
-}> = ({ lang, isUpdating }) => {
+};
+
+export const LastUpdated: React.FC<Props> = ({ lang, isUpdating }) => {
   const router = useRouter();
   const [time, setTime] = useState<string>("");
   const { t } = useTranslation();
@@ -44,12 +47,12 @@ export const LastUpdated: React.FC<{
 
         <button
           className={styles.button}
-          title="Refresh"
+          title={t("refresh")}
           onClick={() => router.reload()}
         >
           <img
             src="/icons/refresh.svg"
-            alt="Refresh"
+            alt={t("refresh")}
             className={isUpdating ? styles.spinning : undefined}
           />
         </button>

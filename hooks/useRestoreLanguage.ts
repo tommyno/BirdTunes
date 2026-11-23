@@ -2,7 +2,7 @@ import { useEffect } from "react";
 import { useRouter } from "next/router";
 
 import { getQueryParam, setQueryParams } from "hooks/useQueryParams";
-import { getItem, setItem } from "hooks/useLocalStorage";
+import { getItem, setItem } from "utils/localStorage";
 
 const STORAGE_KEY = "birdtunes-lang";
 

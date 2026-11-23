@@ -1,5 +1,4 @@
-import { useRouter } from "next/router";
-import { NextRouter } from "next/router";
+import { useRouter, NextRouter } from "next/router";
 
 type GetQueryParamProps = {
   value: string | string[] | undefined;
@@ -14,7 +13,7 @@ type UseQueryParamsProps = {
 type SetQueryParamsProps = {
   router: NextRouter;
   params: Record<string, string | null | undefined>;
-  options?: { shallow?: boolean; replace?: boolean };
+  options?: { shallow?: boolean };
 };
 
 type UseQueryParamProps = {
@@ -32,13 +31,14 @@ export const getQueryParam = ({ value, defaultValue }: GetQueryParamProps) => {
   return value || defaultValue || "";
 };
 
-// Set query parameters (single or multiple)
+// Set query parameters (single or multiple). Replaces the current history
+// entry instead of adding one.
 export const setQueryParams = async ({
   router,
   params,
   options = {},
 }: SetQueryParamsProps) => {
-  const { shallow = true, replace = true } = options;
+  const { shallow = true } = options;
   const currentQuery = { ...router.query };
 
   // Apply updates
@@ -50,9 +50,7 @@ export const setQueryParams = async ({
     }
   });
 
-  const method = replace ? router.replace : router.push;
-
-  await method(
+  await router.replace(
     {
       pathname: router.pathname,
       query: currentQuery,
@@ -89,7 +87,6 @@ export const useQueryParams = (options: UseQueryParamsProps = {}) => {
 
   const queryParams = getParams();
 
-  // Actions for updating query parameters
   const setParam = async (
     paramKey: string,
     value: string | null | undefined
@@ -98,25 +95,7 @@ export const useQueryParams = (options: UseQueryParamsProps = {}) => {
     await setQueryParams({ router, params: { [paramKey]: value } });
   };
 
-  const setParams = async (
-    params: Record<string, string | null | undefined>
-  ) => {
-    if (!ready) return;
-    await setQueryParams({ router, params });
-  };
-
-  const removeParam = async (paramKey: string | string[]) => {
-    if (!ready) return;
-    const keysArray = Array.isArray(paramKey) ? paramKey : [paramKey];
-    const updates = keysArray.reduce((acc, k) => {
-      acc[k] = null;
-      return acc;
-    }, {} as Record<string, null>);
-
-    await setQueryParams({ router, params: updates });
-  };
-
-  return [queryParams, { setParam, setParams, removeParam }] as const;
+  return [queryParams, { setParam }] as const;
 };
 
 // Simplified hook for a single query parameter

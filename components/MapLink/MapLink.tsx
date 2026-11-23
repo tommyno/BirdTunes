@@ -3,6 +3,7 @@ import Link from "next/link";
 
 import { useTranslation } from "hooks/useTranslation";
 import { useQueryParam } from "hooks/useQueryParams";
+import { buildHref } from "utils/url";
 import styles from "./MapLink.module.scss";
 
 export const MapLink: React.FC = () => {
@@ -11,7 +12,7 @@ export const MapLink: React.FC = () => {
 
   return (
     <Link
-      href={`/map${lang ? `?lang=${lang}` : ""}`}
+      href={buildHref("/map", { lang })}
       className={styles.link}
       aria-label={t("showMap")}
     >

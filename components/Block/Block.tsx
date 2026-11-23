@@ -17,33 +17,21 @@ type AllowedValues =
 
 type Props = {
   top?: AllowedValues;
-  right?: AllowedValues;
   bottom?: AllowedValues;
-  left?: AllowedValues;
   children: React.ReactNode;
   center?: boolean;
 };
 
-export const Block = ({
-  top,
-  bottom,
-  left,
-  right,
-  center,
-  children,
-  ...rest
-}: Props) => {
+export const Block = ({ top, bottom, center, children }: Props) => {
   const blockClass = classNames(
     styles.block,
     top && styles[`-top-${top}`],
-    right && styles[`-right-${right}`],
     bottom && styles[`-bottom-${bottom}`],
-    left && styles[`-left-${left}`],
     center && styles["-center"]
   );
 
   return (
-    <div className={blockClass} {...rest}>
+    <div className={blockClass}>
       {children}
     </div>
   );

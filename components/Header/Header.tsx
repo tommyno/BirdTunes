@@ -1,28 +1,28 @@
 import React from "react";
-
-import styles from "./Header.module.scss";
-import { LanguageSwitcher } from "components/LanguageSwitcher";
 import Link from "next/link";
+
+import { useTranslation } from "hooks/useTranslation";
 import { useQueryParam } from "hooks/useQueryParams";
+import { buildHref } from "utils/url";
+import { LanguageSwitcher } from "components/LanguageSwitcher";
+import styles from "./Header.module.scss";
 
 type Props = {
-  showArrow?: string;
+  showArrow?: boolean;
 };
 
 export const Header: React.FC<Props> = ({ showArrow = true }) => {
+  const { t } = useTranslation();
   const [lang] = useQueryParam({ key: "lang" });
 
   return (
     <div className={styles.header}>
       <h1 className="h3">
-        <Link
-          href={`/${lang ? `?lang=${lang}` : ""}`}
-          className={styles.logoWrap}
-        >
+        <Link href={buildHref("/", { lang })} className={styles.logoWrap}>
           {showArrow && (
             <img
               src="/icons/arrow-up.svg"
-              alt="Go back to homepage"
+              alt={t("backToHomepage")}
               className={styles.arrow}
             />
           )}

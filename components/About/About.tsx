@@ -1,6 +1,6 @@
 import React from "react";
 
-import { Flow } from "components/Flow/Flow";
+import { Flow } from "components/Flow";
 
 export const About: React.FC = () => {
   return (

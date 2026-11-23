@@ -1,16 +1,17 @@
 import React, { useEffect, useRef, useState } from "react";
-import styles from "./Modal.module.scss";
-import { classNames } from "utils/classNames";
-import useBodyFreeze from "utils/useBodyFreeze";
-import { useTranslation } from "hooks/useTranslation";
 
-type ModalProps = {
+import { useTranslation } from "hooks/useTranslation";
+import { useBodyFreeze } from "hooks/useBodyFreeze";
+import { classNames } from "utils/classNames";
+import styles from "./Modal.module.scss";
+
+type Props = {
   isOpen: boolean;
   onClose: () => void;
   children: React.ReactNode;
 };
 
-export const Modal: React.FC<ModalProps> = ({ isOpen, onClose, children }) => {
+export const Modal: React.FC<Props> = ({ isOpen, onClose, children }) => {
   const [isVisible, setIsVisible] = useState(false);
   const modalRef = useRef<HTMLDivElement>(null);
   const { t } = useTranslation();

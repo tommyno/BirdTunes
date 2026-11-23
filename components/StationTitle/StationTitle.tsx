@@ -1,10 +1,13 @@
 import React, { useState } from "react";
 import Link from "next/link";
-import styles from "./StationTitle.module.scss";
+
 import { Species } from "types/api";
 import { useTranslation } from "hooks/useTranslation";
 import { useQueryParam } from "hooks/useQueryParams";
-import { FavouriteButton } from "components/FavouriteButton/FavouriteButton";
+import { cleanStationName, getPageTitle } from "utils/species";
+import { buildHref } from "utils/url";
+import { FavouriteButton } from "components/FavouriteButton";
+import styles from "./StationTitle.module.scss";
 
 type Props = {
   speciesData?: Species[];
@@ -31,14 +34,12 @@ export const StationTitle: React.FC<Props> = ({
     0,
   );
 
-  // Remove "BirdNET-Pi - " from station names
-  const cleanStationName =
-    stationName?.replace("BirdNET-Pi - ", "") || t("loading");
+  const displayName = cleanStationName(stationName ?? undefined) || t("loading");
 
   const handleShare = async () => {
     const url = window.location.href;
-    const title = `${cleanStationName} | BirdTunes`;
-    const text = cleanStationName;
+    const title = getPageTitle(displayName);
+    const text = displayName;
 
     // Use native share dialog if available (mobile + some desktop browsers)
     if (navigator.share) {
@@ -64,7 +65,7 @@ export const StationTitle: React.FC<Props> = ({
           className={styles.titleButton}
           title={t("showMore")}
         >
-          {cleanStationName}
+          {displayName}
           <img
             src="/icons/chevron-down.svg"
             alt=""
@@ -79,7 +80,7 @@ export const StationTitle: React.FC<Props> = ({
       {stationName && isExpanded && (
         <div className={styles.iconWrap}>
           <Link
-            href={`/map?station=${stationId}${lang ? `&lang=${lang}` : ""}`}
+            href={buildHref("/map", { station: stationId, lang })}
             className={styles.iconButton}
           >
             <img src="/icons/pin.svg" className={styles.icon} alt="" />
@@ -93,7 +94,7 @@ export const StationTitle: React.FC<Props> = ({
 
           <FavouriteButton
             stationId={stationId || ""}
-            stationName={cleanStationName}
+            stationName={displayName}
           />
         </div>
       )}

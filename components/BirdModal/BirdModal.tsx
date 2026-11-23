@@ -1,27 +1,28 @@
 import useSWR from "swr";
 
 import { API_BASE_URL } from "constants/birdweather";
-import { Modal } from "components/Modal/Modal";
+import { Detection } from "types/api";
+import { BirdModalData } from "types/birdModal";
+import { useTranslation } from "hooks/useTranslation";
+import { useModalAudioPlayer } from "hooks/useModalAudioPlayer";
+import { fetcher } from "utils/fetcher";
+import { Modal } from "components/Modal";
 import { Spinner } from "components/Spinner";
 import { Block } from "components/Block";
 import { DetectionRow } from "components/DetectionRow";
-import { useTranslation } from "hooks/useTranslation";
-import { useModalAudioPlayer } from "hooks/useModalAudioPlayer";
-import { Species, Detection } from "types/api";
-import { fetcher } from "utils/fetcher";
 import styles from "./BirdModal.module.scss";
 
 type DetectionsResponse = {
   detections: Detection[];
 };
 
-type BirdModalProps = {
-  data: Species & { stationId: string | null; lang: string | null };
+type Props = {
+  data: BirdModalData;
   isOpen: boolean;
   onClose: () => void;
 };
 
-export function BirdModal({ data: bird, isOpen, onClose }: BirdModalProps) {
+export const BirdModal: React.FC<Props> = ({ data: bird, isOpen, onClose }) => {
   const { t } = useTranslation();
 
   const shouldFetch = bird.id && bird.stationId && bird.lang;
@@ -52,7 +53,7 @@ export function BirdModal({ data: bird, isOpen, onClose }: BirdModalProps) {
     handleAudioLoadedMetadata,
     handleAudioSeeked,
     handleAudioError,
-  } = useModalAudioPlayer({ detections });
+  } = useModalAudioPlayer();
 
   return (
     <Modal isOpen={isOpen} onClose={onClose}>
@@ -97,11 +98,7 @@ export function BirdModal({ data: bird, isOpen, onClose }: BirdModalProps) {
 
           {isLoading && <Spinner />}
 
-          {error && (
-            <p className="color-red">
-              Det skjedde en feil ved henting av data.
-            </p>
-          )}
+          {error && <p className="color-red">{t("fetchError")}</p>}
 
           {detections?.map((detection) => {
             const isCurrent = currentDetection?.id === detection.id;
@@ -136,4 +133,4 @@ export function BirdModal({ data: bird, isOpen, onClose }: BirdModalProps) {
       </div>
     </Modal>
   );
-}
+};

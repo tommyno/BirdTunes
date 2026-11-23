@@ -3,6 +3,13 @@ import { useRouter } from "next/router";
 import useSWR from "swr";
 
 import { API_BASE_URL } from "constants/birdweather";
+import { Species } from "types/api";
+import { useTranslation, TranslationKey } from "hooks/useTranslation";
+import { useQueryParams, setQueryParams } from "hooks/useQueryParams";
+import { useLocalStorageCache } from "hooks/useLocalStorageCache";
+import { setItem } from "utils/localStorage";
+import { getSortedSpeciesList } from "utils/species";
+import { fetchAllSpeciesPages } from "utils/fetcher";
 import { Spinner } from "components/Spinner";
 import { LastUpdated } from "components/LastUpdated";
 import { BirdCardGrid } from "components/BirdCardGrid";
@@ -12,15 +19,13 @@ import { StationTitle } from "components/StationTitle";
 import { Block } from "components/Block";
 import { NewSpecies } from "components/NewSpecies";
 import { Search } from "components/Search";
-import { useTranslation } from "hooks/useTranslation";
-import { useQueryParams, setQueryParams } from "hooks/useQueryParams";
-import { setItem } from "hooks/useLocalStorage";
-import { useLocalStorageCache } from "hooks/useLocalStorageCache";
-import { getSortedSpeciesList } from "utils/species";
-import { Species } from "types/api";
-import { fetchAllSpeciesPages } from "utils/fetcher";
-import styles from "./StationView.module.scss";
 import { LoadingDots } from "components/LoadingDots";
+
+const sortOptions: { value: string; label: TranslationKey }[] = [
+  { value: "active", label: "lastHeard" },
+  { value: "observations", label: "mostVisits" },
+  { value: "search", label: "search" },
+];
 
 type Props = {
   stationName?: string;
@@ -98,24 +103,15 @@ export const StationView: React.FC<Props> = ({ stationName }) => {
       />
 
       <Block top="4" bottom="5" center>
-        <Button
-          onClick={() => handleSortBy("active")}
-          isActive={sort === "active" || sort === null}
-        >
-          {t("lastHeard")}
-        </Button>
-        <Button
-          onClick={() => handleSortBy("observations")}
-          isActive={sort === "observations"}
-        >
-          {t("mostVisits")}
-        </Button>
-        <Button
-          onClick={() => handleSortBy("search")}
-          isActive={sort === "search"}
-        >
-          {t("search")}
-        </Button>
+        {sortOptions.map((option) => (
+          <Button
+            key={option.value}
+            onClick={() => handleSortBy(option.value)}
+            isActive={sort === option.value}
+          >
+            {t(option.label)}
+          </Button>
+        ))}
       </Block>
 
       {sort === "search" && <Search />}
@@ -123,7 +119,7 @@ export const StationView: React.FC<Props> = ({ stationName }) => {
       {isLoadingSpecies && (
         <Block center bottom="4">
           {cachedData.length > 0 ? (
-            <p className="color-gray">
+            <p className="color-muted">
               {t("updating")}
               <LoadingDots />
             </p>
@@ -139,8 +135,6 @@ export const StationView: React.FC<Props> = ({ stationName }) => {
             <BirdCard key={species.id} data={{ ...species, stationId, lang }} />
           ))}
         </BirdCardGrid>
-
-        {speciesError && <p className="color-red">{speciesError.toString()}</p>}
 
         <LastUpdated lang={lang} isUpdating={isLoadingSpecies} />
       </div>
