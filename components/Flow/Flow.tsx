@@ -1,5 +1,5 @@
 import { classNames } from "utils/classNames";
-import styles from "./Flow.module.css";
+import styles from "./Flow.module.scss";
 
 type Props = {
   children: React.ReactNode;
@@ -7,7 +7,7 @@ type Props = {
   fixed?: boolean; // Use fixed px for spacing (default is em/relative)
 };
 
-export const Flow = ({ children, space = "normal", fixed, ...rest }: Props) => {
+export const Flow = ({ children, space = "normal", fixed }: Props) => {
   const flowClass = classNames(
     styles.flow,
     styles[`-${space}`],
@@ -15,7 +15,7 @@ export const Flow = ({ children, space = "normal", fixed, ...rest }: Props) => {
   );
 
   return (
-    <div className={flowClass} {...rest}>
+    <div className={flowClass}>
       {children}
     </div>
   );

@@ -3,6 +3,7 @@ import Link from "next/link";
 
 import { useTranslation } from "hooks/useTranslation";
 import { useQueryParam } from "hooks/useQueryParams";
+import { buildHref } from "utils/url";
 import styles from "./PopularStations.module.scss";
 
 const popularStations = [
@@ -31,7 +32,7 @@ export const PopularStations: React.FC = () => {
         {popularStations.map((station) => (
           <Link
             className={styles.stationLink}
-            href={`?station=${station.id}${lang ? `&lang=${lang}` : ""}`}
+            href={buildHref("/", { station: String(station.id), lang })}
             key={station.id}
           >
             {station.name}{" "}

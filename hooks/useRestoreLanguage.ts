@@ -2,7 +2,7 @@ import { useEffect } from "react";
 import { useRouter } from "next/router";
 
 import { getQueryParam, setQueryParams } from "hooks/useQueryParams";
-import { getItem, setItem } from "hooks/useLocalStorage";
+import { getItem, setItem } from "utils/localStorage";
 
 const STORAGE_KEY = "birdtunes-lang";
 
@@ -20,7 +20,7 @@ export const useRestoreLanguage = () => {
     if (!router.isReady) return;
     if (router.query.lang) return;
 
-    const storedLang = getItem(STORAGE_KEY);
+    const storedLang = getItem<string>(STORAGE_KEY);
     if (typeof storedLang !== "string" || storedLang === "en") return;
 
     setQueryParams({ router, params: { lang: storedLang } });

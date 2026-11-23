@@ -1,8 +1,9 @@
 import React from "react";
 import Link from "next/link";
 
-import styles from "./Footer.module.scss";
 import { useQueryParam } from "hooks/useQueryParams";
+import { buildHref } from "utils/url";
+import styles from "./Footer.module.scss";
 
 export const Footer: React.FC = () => {
   const [lang] = useQueryParam({ key: "lang" });
@@ -10,7 +11,7 @@ export const Footer: React.FC = () => {
   return (
     <div className={styles.footer}>
       <p>
-        <Link href={`/${lang ? `?lang=${lang}` : ""}`}>BirdTunes</Link>
+        <Link href={buildHref("/", { lang })}>BirdTunes</Link>
       </p>
       <a
         href="https://github.com/tommyno/birdtunes"

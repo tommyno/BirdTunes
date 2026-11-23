@@ -1,22 +1,36 @@
 import React from "react";
-import styles from "./BirdCard.module.scss";
-import { Species } from "types/api";
+
+import { BirdModalData } from "types/birdModal";
+import { useTranslation } from "hooks/useTranslation";
 import { timeAgo } from "utils/date";
 import { useModal } from "contexts/ModalContext";
-import { useTranslation } from "hooks/useTranslation";
+import styles from "./BirdCard.module.scss";
 
 type Props = {
-  data: Species & { stationId: string | null; lang: string | null };
+  data: BirdModalData;
 };
 
 export const BirdCard: React.FC<Props> = ({ data }) => {
-  const { openModal } = useModal();
+  const { openBirdModal } = useModal();
   const { t } = useTranslation();
+
+  const handleClick = () => {
+    openBirdModal(data);
+  };
+
+  // role="button" doesn't give a div keyboard support, so add it here
+  const handleKeyDown = (event: React.KeyboardEvent<HTMLDivElement>) => {
+    if (event.key !== "Enter" && event.key !== " ") return;
+
+    event.preventDefault();
+    openBirdModal(data);
+  };
 
   return (
     <div
       className={styles.card}
-      onClick={() => openModal("bird", data)}
+      onClick={handleClick}
+      onKeyDown={handleKeyDown}
       role="button"
       tabIndex={0}
     >

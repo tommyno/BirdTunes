@@ -1,8 +1,13 @@
 import React from "react";
 import { useRouter } from "next/router";
-import useSWR from "swr";
 
 import { API_BASE_URL } from "constants/birdweather";
+import { Species } from "types/api";
+import { useTranslation, TranslationKey } from "hooks/useTranslation";
+import { useQueryParams, setQueryParams } from "hooks/useQueryParams";
+import { useCachedSWR } from "hooks/useCachedSWR";
+import { getSortedSpeciesList } from "utils/species";
+import { fetchAllSpeciesPages } from "utils/fetcher";
 import { Spinner } from "components/Spinner";
 import { LastUpdated } from "components/LastUpdated";
 import { BirdCardGrid } from "components/BirdCardGrid";
@@ -12,15 +17,13 @@ import { StationTitle } from "components/StationTitle";
 import { Block } from "components/Block";
 import { NewSpecies } from "components/NewSpecies";
 import { Search } from "components/Search";
-import { useTranslation } from "hooks/useTranslation";
-import { useQueryParams, setQueryParams } from "hooks/useQueryParams";
-import { setItem } from "hooks/useLocalStorage";
-import { useLocalStorageCache } from "hooks/useLocalStorageCache";
-import { getSortedSpeciesList } from "utils/species";
-import { Species } from "types/api";
-import { fetchAllSpeciesPages } from "utils/fetcher";
-import styles from "./StationView.module.scss";
 import { LoadingDots } from "components/LoadingDots";
+
+const sortOptions: { value: string; label: TranslationKey }[] = [
+  { value: "active", label: "lastHeard" },
+  { value: "observations", label: "mostVisits" },
+  { value: "search", label: "search" },
+];
 
 type Props = {
   stationName?: string;
@@ -49,20 +52,21 @@ export const StationView: React.FC<Props> = ({ stationName }) => {
     ? `${API_BASE_URL}/stations/${stationId}/species?locale=${lang}&period=${period}`
     : null;
 
-  // Cache key for localStorage (per station + period)
-  const cacheKey = `birdtunes-species-${stationId}-${period}`;
-  const cachedData = useLocalStorageCache<Species>(cacheKey);
-
+  // Cached per station + period
   const {
-    data: speciesData,
+    data,
+    freshData: freshSpecies,
+    cachedData,
     isLoading: isLoadingSpecies,
     error: speciesError,
-  } = useSWR<Species[]>(speciesUrl, fetchAllSpeciesPages, {
-    onSuccess: (data) => setItem(cacheKey, JSON.stringify(data)),
+  } = useCachedSWR<Species[]>({
+    cacheKey: `birdtunes-species-${stationId}-${period}`,
+    url: speciesUrl,
+    fetcher: fetchAllSpeciesPages,
   });
 
-  // Use fresh data if available, otherwise show cached
-  const displayData = speciesData ?? cachedData;
+  const displayData = data ?? [];
+  const cachedSpecies = cachedData ?? [];
 
   const speciesList = getSortedSpeciesList({
     species: displayData,
@@ -92,38 +96,29 @@ export const StationView: React.FC<Props> = ({ stationName }) => {
       />
 
       <NewSpecies
-        cachedSpecies={cachedData}
-        freshSpecies={speciesData}
+        cachedSpecies={cachedSpecies}
+        freshSpecies={freshSpecies}
         stationId={stationId}
       />
 
       <Block top="4" bottom="5" center>
-        <Button
-          onClick={() => handleSortBy("active")}
-          isActive={sort === "active" || sort === null}
-        >
-          {t("lastHeard")}
-        </Button>
-        <Button
-          onClick={() => handleSortBy("observations")}
-          isActive={sort === "observations"}
-        >
-          {t("mostVisits")}
-        </Button>
-        <Button
-          onClick={() => handleSortBy("search")}
-          isActive={sort === "search"}
-        >
-          {t("search")}
-        </Button>
+        {sortOptions.map((option) => (
+          <Button
+            key={option.value}
+            onClick={() => handleSortBy(option.value)}
+            isActive={sort === option.value}
+          >
+            {t(option.label)}
+          </Button>
+        ))}
       </Block>
 
       {sort === "search" && <Search />}
 
       {isLoadingSpecies && (
         <Block center bottom="4">
-          {cachedData.length > 0 ? (
-            <p className="color-gray">
+          {cachedSpecies.length > 0 ? (
+            <p className="color-muted">
               {t("updating")}
               <LoadingDots />
             </p>
@@ -139,8 +134,6 @@ export const StationView: React.FC<Props> = ({ stationName }) => {
             <BirdCard key={species.id} data={{ ...species, stationId, lang }} />
           ))}
         </BirdCardGrid>
-
-        {speciesError && <p className="color-red">{speciesError.toString()}</p>}
 
         <LastUpdated lang={lang} isUpdating={isLoadingSpecies} />
       </div>

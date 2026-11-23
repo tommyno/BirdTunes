@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from "react";
-import styles from "./Search.module.scss";
-import { Input } from "components/Input/Input";
+
 import { useTranslation } from "hooks/useTranslation";
 import { useQueryParam } from "hooks/useQueryParams";
+import { Input } from "components/Input";
+import styles from "./Search.module.scss";
 
 export const Search: React.FC = () => {
   const { t } = useTranslation();

@@ -16,23 +16,34 @@ export const useStationSearch = (query: string) => {
   const [error, setError] = useState<Error | null>(null);
 
   useEffect(() => {
-    if (!query.trim()) {
+    const trimmedQuery = query.trim();
+
+    if (!trimmedQuery) {
       setData([]);
+      setIsLoading(false);
       return;
     }
+
+    // Set when the query changes, so a slow response for an older query
+    // doesn't overwrite the results for the newer one
+    let isStale = false;
 
     const searchStations = async () => {
       setIsLoading(true);
       setError(null);
 
       try {
-        const isNumeric = /^\d+$/.test(query.trim());
+        const isNumeric = /^\d+$/.test(trimmedQuery);
+        // JSON.stringify quotes and escapes the input, so characters like "
+        // can't break the GraphQL query
+        const quotedQuery = JSON.stringify(trimmedQuery);
 
         const graphqlQuery = isNumeric
-          ? `query { station(id: "${query}") { id name location } }`
-          : `query { stations(query: "${query}", first: 10) { nodes { id name location } } }`;
+          ? `query { station(id: ${quotedQuery}) { id name location } }`
+          : `query { stations(query: ${quotedQuery}, first: 10) { nodes { id name location } } }`;
 
         const result: SearchResponse = await fetchGraphQL(graphqlQuery);
+        if (isStale) return;
 
         if (isNumeric && result.data?.station) {
           setData([result.data.station]);
@@ -42,15 +53,19 @@ export const useStationSearch = (query: string) => {
           setData([]);
         }
       } catch (err) {
+        if (isStale) return;
         setError(err as Error);
         setData([]);
       } finally {
-        setIsLoading(false);
+        if (!isStale) setIsLoading(false);
       }
     };
 
     const timeoutId = setTimeout(searchStations, 300);
-    return () => clearTimeout(timeoutId);
+    return () => {
+      isStale = true;
+      clearTimeout(timeoutId);
+    };
   }, [query]);
 
   return { data, isLoading, error };

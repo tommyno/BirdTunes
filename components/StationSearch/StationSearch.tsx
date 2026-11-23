@@ -1,16 +1,19 @@
 import React, { useState, useRef, useEffect } from "react";
-import styles from "./StationSearch.module.scss";
 import { useRouter } from "next/router";
-import { useTranslation } from "hooks/useTranslation";
-import { setQueryParams } from "hooks/useQueryParams";
-import { useStationSearch } from "hooks/useStationSearch";
+
 import { SearchStation } from "types/api";
+import { useTranslation } from "hooks/useTranslation";
+import { getQueryParam } from "hooks/useQueryParams";
+import { useStationSearch } from "hooks/useStationSearch";
+import { buildHref } from "utils/url";
 import { Spinner } from "components/Spinner";
 import { MapLink } from "components/MapLink";
+import styles from "./StationSearch.module.scss";
 
 export const StationSearch: React.FC = () => {
   const router = useRouter();
   const [inputValue, setInputValue] = useState("");
+  // Only true while the input has text
   const [showResults, setShowResults] = useState(false);
   const wrapRef = useRef<HTMLDivElement>(null);
 
@@ -24,14 +27,11 @@ export const StationSearch: React.FC = () => {
     setShowResults(value.length > 0);
   };
 
-  const handleSelectStation = async (station: SearchStation) => {
-    await setQueryParams({
-      router,
-      params: { station: station.id },
-      options: { shallow: false },
-    });
-
-    window.location.reload();
+  // A regular navigation (like the station links below), so Back returns
+  // to the search
+  const handleSelectStation = (station: SearchStation) => {
+    const lang = getQueryParam({ value: router.query.lang });
+    router.push(buildHref("/", { station: station.id, lang }));
   };
 
   // Close dropdown when clicking outside
@@ -47,8 +47,6 @@ export const StationSearch: React.FC = () => {
   }, []);
 
   const hasResults = searchResults.length > 0;
-  const showDropdown =
-    showResults && (hasResults || isLoading || inputValue.length > 0);
 
   return (
     <div className={styles.row}>
@@ -71,7 +69,7 @@ export const StationSearch: React.FC = () => {
           />
         </div>
 
-        {showDropdown && (
+        {showResults && (
           <div className={styles.dropdown}>
             {hasResults && (
               <ul className={styles.results}>
@@ -96,7 +94,7 @@ export const StationSearch: React.FC = () => {
               </div>
             )}
 
-            {!hasResults && !isLoading && inputValue.length > 0 && (
+            {!hasResults && !isLoading && (
               <div className={styles.dropdownMessage}>{t("noResults")}</div>
             )}
           </div>

@@ -1,0 +1,1 @@
+export { BirdModal } from "./BirdModal";

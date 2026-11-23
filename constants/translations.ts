@@ -91,29 +91,11 @@ export const translations = {
     no: "Nullstill søk",
     sv: "Rensa sökning",
   },
-  changeStation: {
-    en: "Change station",
-    de: "Station ändern",
-    no: "Endre stasjon",
-    sv: "Byt station",
-  },
   species: {
     en: "species",
     de: "Arten",
     no: "arter",
     sv: "arter",
-  },
-  stationIdFrom: {
-    en: "Station ID from",
-    de: "Station ID von",
-    no: "Stasjon ID fra",
-    sv: "Stations-id från",
-  },
-  save: {
-    en: "Save",
-    de: "Speichern",
-    no: "Lagre",
-    sv: "Spara",
   },
   searchStation: {
     en: "Search for station name or ID",
@@ -282,5 +264,23 @@ export const translations = {
     de: "Aktiv",
     no: "Aktive",
     sv: "Aktiva",
+  },
+  fetchError: {
+    en: "Something went wrong while fetching data.",
+    de: "Beim Abrufen der Daten ist ein Fehler aufgetreten.",
+    no: "Det skjedde en feil ved henting av data.",
+    sv: "Något gick fel när data hämtades.",
+  },
+  refresh: {
+    en: "Refresh",
+    de: "Aktualisieren",
+    no: "Oppdater",
+    sv: "Uppdatera",
+  },
+  backToHomepage: {
+    en: "Go back to homepage",
+    de: "Zurück zur Startseite",
+    no: "Gå tilbake til forsiden",
+    sv: "Tillbaka till startsidan",
   },
 } as const;
