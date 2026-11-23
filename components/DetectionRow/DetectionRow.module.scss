@@ -1,0 +1,138 @@
+.row {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-3);
+  padding: var(--spacing-1) var(--spacing-3) var(--spacing-1) var(--spacing-1);
+  margin-bottom: var(--spacing-1);
+  border-radius: var(--border-radius);
+  background: var(--color-winter);
+  text-align: left;
+  transition: background-color 0.2s ease;
+
+  &.-active {
+    background: var(--color-lichen);
+  }
+}
+
+.playButton {
+  display: flex;
+  flex: none;
+  align-items: center;
+  gap: var(--spacing-3);
+}
+
+.icon {
+  display: flex;
+  flex: none;
+  align-items: center;
+  justify-content: center;
+  width: var(--spacing-6);
+  height: var(--spacing-6);
+  border-radius: 50%;
+  background: var(--color-forrest);
+
+  img {
+    width: 14px;
+    height: 14px;
+    filter: brightness(0) invert(1);
+  }
+
+  &.-empty {
+    background: none;
+  }
+}
+
+.spinner {
+  width: 14px;
+  height: 14px;
+  border: 2px solid var(--color-white);
+  border-right-color: transparent;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+.when {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.2;
+}
+
+.time {
+  font-size: 0.875rem;
+  font-variant-numeric: tabular-nums;
+}
+
+.date {
+  font-size: 0.75rem;
+  color: var(--color-gray-dark);
+}
+
+.waveform {
+  display: flex;
+  flex: 1;
+  align-items: center;
+  gap: calc(var(--spacing-1) / 2);
+  height: var(--spacing-6);
+  min-width: 0;
+  position: relative;
+  cursor: pointer;
+  // Let vertical swipes scroll the modal; horizontal drags scrub
+  touch-action: pan-y;
+
+  &.-loading {
+    animation: pulse 1s ease-in-out infinite;
+  }
+}
+
+// Marks where in the clip the bird was detected, behind the bars
+.detection {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  border-radius: var(--spacing-1);
+  background: var(--color-white);
+  pointer-events: none;
+}
+
+.bar {
+  position: relative;
+  flex: 1;
+  min-width: 1px;
+  border-radius: 1px;
+  background: var(--color-moss);
+
+  &.-detected {
+    background: var(--color-pine-needle);
+  }
+
+  &.-played {
+    background: var(--color-forrest);
+  }
+}
+
+.duration {
+  flex: none;
+  min-width: var(--spacing-6);
+  text-align: right;
+  font-size: 0.75rem;
+  font-variant-numeric: tabular-nums;
+  color: var(--color-gray-dark);
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes pulse {
+  50% {
+    opacity: 0.4;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .waveform.-loading {
+    animation: none;
+  }
+}

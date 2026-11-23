@@ -134,3 +134,42 @@ export const calculateNormalizationGain = ({
   // and never exceed maxGain× (protects against near-silent recordings).
   return Math.min(maxGain, Math.max(1, gain));
 };
+
+export const WAVEFORM_BAR_COUNT = 32;
+
+type CalculateWaveformPeaksProps = {
+  buffer: AudioBuffer;
+};
+
+// Splits the first channel into WAVEFORM_BAR_COUNT equal slices and returns the
+// loudest sample of each slice, scaled so the loudest bar in the file is 1.
+// Quiet recordings still get a visible shape because of the scaling.
+export const calculateWaveformPeaks = ({
+  buffer,
+}: CalculateWaveformPeaksProps): number[] => {
+  const data = buffer.getChannelData(0);
+  const samplesPerBar = Math.max(
+    1,
+    Math.floor(data.length / WAVEFORM_BAR_COUNT)
+  );
+  const peaks: number[] = [];
+
+  for (let bar = 0; bar < WAVEFORM_BAR_COUNT; bar++) {
+    const sliceStart = bar * samplesPerBar;
+    const sliceEnd = Math.min(sliceStart + samplesPerBar, data.length);
+    let peak = 0;
+
+    for (let i = sliceStart; i < sliceEnd; i++) {
+      const amplitude = Math.abs(data[i]);
+      if (amplitude > peak) {
+        peak = amplitude;
+      }
+    }
+
+    peaks.push(peak);
+  }
+
+  const loudestPeak = Math.max(...peaks, 1e-6);
+
+  return peaks.map((peak) => peak / loudestPeak);
+};

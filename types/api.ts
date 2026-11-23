@@ -21,8 +21,9 @@ export type Detection = {
   id: number;
   timestamp: string; // ISO date string
   soundscape: {
-    url: string;
-    startTime: number;
+    url: string | null; // null when the station didn't upload the recording
+    startTime: number; // seconds into the clip where the bird was detected
+    endTime: number;
   };
 };
 

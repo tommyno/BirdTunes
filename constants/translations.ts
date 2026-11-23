@@ -115,12 +115,6 @@ export const translations = {
     no: "Lagre",
     sv: "Spara",
   },
-  close: {
-    en: "Close",
-    de: "Schliessen",
-    no: "Lukk",
-    sv: "Stäng",
-  },
   searchStation: {
     en: "Search for station name or ID",
     de: "Nach Stationsname oder ID suchen",
@@ -187,17 +181,11 @@ export const translations = {
     no: "siden",
     sv: "sedan",
   },
-  detectedSeconds: {
-    en: "Detection started at",
-    de: "Erkennung startet ab",
-    no: "Fuglen oppdaget ved",
-    sv: "Fågeln upptäckt vid",
-  },
-  seconds: {
-    en: "seconds",
-    de: "Sekunden",
-    no: "sekunder",
-    sv: "sekunder",
+  audioPosition: {
+    en: "Position in recording",
+    de: "Position in der Aufnahme",
+    no: "Posisjon i opptaket",
+    sv: "Position i inspelningen",
   },
   noResults: {
     en: "No results",

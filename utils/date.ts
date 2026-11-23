@@ -23,41 +23,50 @@ export const timeAgo = (date: string, t: (key: TranslationKey) => string) => {
   }
 };
 
-// Ex: 11. sept 2024 14:20:46 (use local time, without timezone)
-export const dateDetailed = (date?: string, locale?: string | null) => {
+// Remove timezone (to use the local recorded time without converting to UTC)
+const toLocalRecordedDate = (date: string) => new Date(date.split(/[+]/)[0]);
+
+// undefined = use the browser's default locale, except for Norwegian
+const toDateLocale = (locale?: string | null) =>
+  locale === "no" ? "no" : undefined;
+
+// Ex: 11. sept (use local time, without timezone)
+export const dateShort = (date?: string, locale?: string | null) => {
   if (!date) {
     return;
   }
 
-  // Remove timezone (to use the local recorded time without converting to UTC)
-  const localDateTime = date.split(/[+]/)[0];
-  const dateObject = new Date(localDateTime);
-
-  // undefined = use the browser's default locale
-  // except for Norwegian
-  const dateLocale = locale === "no" ? "no" : undefined;
-
-  return new Intl.DateTimeFormat(dateLocale, {
-    year: "numeric",
+  return new Intl.DateTimeFormat(toDateLocale(locale), {
     month: "short",
-    day: "2-digit",
-    hour: "2-digit",
-    minute: "2-digit",
-    second: "2-digit",
-  }).format(dateObject);
+    day: "numeric",
+  }).format(toLocalRecordedDate(date));
 };
 
 // Ex: 14:20:46 or 2:20:46 PM
-export const timeDetailedNow = (locale?: string | null) => {
-  const dateObject = new Date();
-
-  // undefined = use the browser's default locale
-  // except for Norwegian
-  const dateLocale = locale === "no" ? "no" : undefined;
-
-  return new Intl.DateTimeFormat(dateLocale, {
+const formatTime = (dateObject: Date, locale?: string | null) =>
+  new Intl.DateTimeFormat(toDateLocale(locale), {
     hour: "2-digit",
     minute: "2-digit",
     second: "2-digit",
   }).format(dateObject);
+
+// Ex: 14:20:46 or 2:20:46 PM (use local time, without timezone)
+export const timeDetailed = (date?: string, locale?: string | null) => {
+  if (!date) {
+    return;
+  }
+
+  return formatTime(toLocalRecordedDate(date), locale);
 };
+
+// Ex: 0:07 or 1:15
+export const formatSeconds = (seconds: number) => {
+  const wholeSeconds = Math.max(0, Math.round(seconds));
+  const minutes = Math.floor(wholeSeconds / 60);
+  const remainingSeconds = String(wholeSeconds % 60).padStart(2, "0");
+
+  return `${minutes}:${remainingSeconds}`;
+};
+
+export const timeDetailedNow = (locale?: string | null) =>
+  formatTime(new Date(), locale);
